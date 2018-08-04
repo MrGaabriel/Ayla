@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id "com.github.johnrengelman.shadow" version "2.0.4"
 }
 
 group 'me.mrgaabriel'
@@ -34,4 +35,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'me.mrgaabriel.ayla.AylaLauncher'
+    }
 }

@@ -24,7 +24,7 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.5"
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "com.google.flogger:flogger-system-backend:0.2"
-    compile "com.google.guava:guava:25.1-jre"
+    compile "com.google.guava:guava:26.0-jre"
     compile "org.apache.commons:commons-lang3:3.7"
     compile "org.slf4j:jul-to-slf4j:1.7.25"
     compile "org.mongodb:mongo-java-driver:3.8.0"

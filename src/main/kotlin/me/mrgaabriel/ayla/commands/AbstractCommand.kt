@@ -13,12 +13,17 @@ abstract class AbstractCommand {
     val logger = FluentLogger.forEnclosingClass()
 
     var label = ""
-    var aliases = listOf<String>()
+    var aliases = mutableListOf<String>()
 
     var description = "Insira uma descrição"
     var usage = ""
 
     var category = CommandCategory.NONE
+
+    var onlyOwner = false
+
+    var botPermissions = mutableListOf<Permission>()
+    var memberPermissions = mutableListOf<Permission>()
 
     abstract fun execute(context: CommandContext)
 
@@ -45,6 +50,32 @@ abstract class AbstractCommand {
                 val args = ArrayUtils.remove(rawMessageArgs.toTypedArray(), 0)
 
                 val context = CommandContext(message, args, this)
+
+                if (onlyOwner && user.id != ayla.config.ownerId) {
+                    context.sendMessage(context.getAsMention(true) + "**Sem permissão!**")
+
+                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    return true
+                }
+
+                botPermissions.addAll(listOf(Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_EXT_EMOJI))
+                val missingBotPermissions = botPermissions.filter { !guild.selfMember.hasPermission(it) }
+
+                if (missingBotPermissions.isNotEmpty()) {
+                    context.sendMessage(context.getAsMention(true) + "Eu não consigo executar esse comando! Eu preciso das permissões ${missingBotPermissions.joinToString(", ", transform={"`$it`"})}! Peça a algum administrador para me conceder, obrigada!")
+
+                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    return true
+                }
+
+                val missingMemberPermissions = memberPermissions.filter { !guild.getMember(user).hasPermission(it) }
+                if (missingMemberPermissions.isNotEmpty()) {
+                    context.sendMessage(context.getAsMention(true) + "**Sem permissão!**")
+
+                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    return true
+                }
+
                 execute(context)
 
                 logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")

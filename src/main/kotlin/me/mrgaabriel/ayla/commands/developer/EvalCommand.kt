@@ -15,9 +15,11 @@ class EvalCommand : AbstractCommand() {
         this.description = "Executa códigos em Kotlin"
         this.usage = "código"
 
-        this.aliases = listOf("evaluate", "evalkt", "evaluatekt")
+        this.aliases = mutableListOf("evaluate", "evalkt", "evaluatekt")
 
         this.category = CommandCategory.DEVELOPER
+
+        this.onlyOwner = true
     }
 
     override fun execute(context: CommandContext) {

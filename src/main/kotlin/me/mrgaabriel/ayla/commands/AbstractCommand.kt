@@ -47,6 +47,8 @@ abstract class AbstractCommand {
                 val start = System.currentTimeMillis()
                 logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw}")
 
+                channel.sendTyping().complete()
+
                 val args = ArrayUtils.remove(rawMessageArgs.toTypedArray(), 0)
 
                 val context = CommandContext(message, args, this)

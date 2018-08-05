@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52cea9a3-ecaa-480e-93f1-6d090e2490b3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/ReloadCommand.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalCommand.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -69,7 +70,7 @@
         <counts>
           <entry key="gradle" value="4" />
           <entry key="json" value="3" />
-          <entry key="kt" value="22" />
+          <entry key="kt" value="23" />
           <entry key="xml" value="2" />
         </counts>
       </usages-collector>
@@ -77,7 +78,7 @@
         <counts>
           <entry key="Groovy" value="4" />
           <entry key="JSON" value="3" />
-          <entry key="Kotlin" value="22" />
+          <entry key="Kotlin" value="23" />
           <entry key="XML" value="2" />
         </counts>
       </usages-collector>
@@ -85,7 +86,7 @@
         <counts>
           <entry key="gradle" value="646" />
           <entry key="json" value="2" />
-          <entry key="kt" value="13234" />
+          <entry key="kt" value="13847" />
           <entry key="xml" value="37" />
         </counts>
       </usages-collector>
@@ -93,7 +94,7 @@
         <counts>
           <entry key="Groovy" value="646" />
           <entry key="JSON" value="2" />
-          <entry key="Kotlin" value="13234" />
+          <entry key="Kotlin" value="13847" />
           <entry key="XML" value="37" />
         </counts>
       </usages-collector>
@@ -107,8 +108,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="66" column="38" lean-forward="true" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
+            <state relative-caret-position="365">
+              <caret line="81" column="26" lean-forward="true" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -158,13 +159,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-161">
-              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="329">
+              <caret line="49" column="47" selection-start-line="49" selection-start-column="47" selection-end-line="49" selection-end-column="47" />
               <folding>
                 <element signature="e#37#207#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/ReloadCommand.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="40" lean-forward="true" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+              <folding>
+                <element signature="e#47#117#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -179,28 +192,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/utils/PingCommand.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="33" column="26" lean-forward="true" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
-              <folding>
-                <element signature="e#8#76#0" expanded="true" />
-                <element signature="e#157#193#0" expanded="true" />
-                <element signature="e#208#717#0" expanded="true" />
-                <element signature="e#1056#1089#0" expanded="true" />
-                <element signature="e#1071#1100#0" expanded="true" />
-                <element signature="e#1071#1100#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="221">
+              <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -224,8 +220,8 @@
       <list>
         <option value="Kotlin Object" />
         <option value="Kotlin File" />
-        <option value="Kotlin Class" />
         <option value="Kotlin Enum" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -607,15 +603,16 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/listeners/DiscordListeners.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/AylaLauncher.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" />
         <option value="$PROJECT_DIR$/config.json" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/CommandCategory.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Extensions.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/utils/PingCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/CommandContext.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/ReloadCommand.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/utils/PingCommand.kt" />
       </list>
     </option>
   </component>
@@ -743,12 +740,13 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1533426027917" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1533428295123" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="com.zeroturnaround.javarebel.idea.plugin.settings.RemoteServersConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -793,15 +791,16 @@
       <option name="presentableId" value="Default" />
       <updated>1533395610619</updated>
       <workItem from="1533395612431" duration="5198000" />
-      <workItem from="1533401005196" duration="18287000" />
+      <workItem from="1533401005196" duration="20292000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23485000" />
+    <option name="totallyTimeSpent" value="25490000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49954253" visible="true" weight="0.29104477" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -948,27 +947,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/rebel-remote.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="66" column="38" lean-forward="true" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/CommandCategory.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="32" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/utils/PingCommand.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalCommand.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
@@ -976,6 +954,33 @@
           <folding>
             <element signature="e#47#260#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="49" column="47" selection-start-line="49" selection-start-column="47" selection-end-line="49" selection-end-column="47" />
+          <folding>
+            <element signature="e#37#207#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/ReloadCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="40" lean-forward="true" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+          <folding>
+            <element signature="e#47#117#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/CommandCategory.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="32" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -989,13 +994,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-161">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#37#207#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="365">
+          <caret line="81" column="26" lean-forward="true" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/utils/PingCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
         </state>
       </provider>
     </entry>

@@ -10,6 +10,7 @@ class ReloadCommand : AbstractCommand() {
         this.description = "Recarrega o Barry"
         this.usage = "função"
 
+        this.category = CommandCategory.DEVELOPER
         this.onlyOwner = true
     }
 

@@ -84,6 +84,7 @@ class Ayla(val config: AylaConfig) {
         commandMap.add(PingCommand())
         commandMap.add(EvalCommand())
         commandMap.add(ReloadCommand())
+        commandMap.add(EvalJSCommand())
     }
 
 }

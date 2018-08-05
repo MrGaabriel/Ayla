@@ -1,7 +1,10 @@
 package me.mrgaabriel.ayla.commands.developer
 
+import com.google.gson.*
 import me.mrgaabriel.ayla.commands.*
+import me.mrgaabriel.ayla.data.*
 import me.mrgaabriel.ayla.utils.*
+import java.io.*
 
 class ReloadCommand : AbstractCommand() {
 
@@ -20,13 +23,25 @@ class ReloadCommand : AbstractCommand() {
             return
         }
 
-        if (context.args[0].toLowerCase() == "commands") {
-            val oldCommandMap = ayla.commandMap
+        when (context.args[0].toLowerCase()) {
+            "commands" -> {
+                val oldCommandMap = ayla.commandMap
 
-            ayla.loadCommands()
-            context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados & ${ayla.commandMap.size - oldCommandMap.size} comandos adicionados")
-        } else {
-            context.explain()
+                ayla.loadCommands()
+                context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados & ${ayla.commandMap.size - oldCommandMap.size} comandos adicionados")
+            }
+
+            "config" -> {
+                val file = File("config.json")
+                val config = Gson().fromJson(file.readText(), AylaConfig::class.java)
+
+                ayla.config = config
+                context.sendMessage(context.getAsMention(true) + "Configuração recarregada!")
+            }
+
+             else -> {
+                 context.explain()
+             }
         }
     }
 }

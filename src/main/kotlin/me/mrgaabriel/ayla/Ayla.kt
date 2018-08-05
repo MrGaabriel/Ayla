@@ -10,19 +10,22 @@ import me.mrgaabriel.ayla.commands.developer.*
 import me.mrgaabriel.ayla.commands.utils.*
 import me.mrgaabriel.ayla.data.*
 import me.mrgaabriel.ayla.listeners.*
+import me.mrgaabriel.ayla.threads.*
 import net.dv8tion.jda.core.*
+import net.dv8tion.jda.core.entities.*
 import org.bson.codecs.configuration.*
 import org.bson.codecs.pojo.*
 import org.slf4j.*
 import java.util.concurrent.*
 
-class Ayla(val config: AylaConfig) {
+class Ayla(var config: AylaConfig) {
 
     val logger = FluentLogger.forEnclosingClass()
 
     private lateinit var builder: JDABuilder
 
     val commandMap = mutableListOf<AbstractCommand>()
+    val shards = mutableListOf<JDA>()
 
     lateinit var mongo: MongoClient
     lateinit var mongoDatabase: MongoDatabase
@@ -48,9 +51,12 @@ class Ayla(val config: AylaConfig) {
         for (idx in 0..(config.shardCount - 1)) {
             logger.atInfo().log("Iniciando shard $idx...")
 
-            builder.useSharding(idx, config.shardCount)
+            val shard = builder.useSharding(idx, config.shardCount)
                     .buildBlocking()
+            shards.add(shard)
         }
+
+        GameUpdateThread().start()
 
         logger.atInfo().log("OK! - Ayla inicializada com sucesso!")
     }
@@ -85,6 +91,32 @@ class Ayla(val config: AylaConfig) {
         commandMap.add(EvalCommand())
         commandMap.add(ReloadCommand())
         commandMap.add(EvalJSCommand())
+    }
+
+    fun setGame(game: Game) {
+        shards.forEach {
+            it.presence.game = game
+        }
+    }
+
+    fun getUserById(id: String): User? {
+        var user: User? = null
+
+        shards.forEach {
+            user = it.retrieveUserById(id).complete()
+        }
+
+        return user
+    }
+
+    fun getGuildById(id: String): Guild? {
+        var guild: Guild? = null
+
+        shards.forEach {
+            guild = it.getGuildById(id)
+        }
+
+        return guild
     }
 
 }

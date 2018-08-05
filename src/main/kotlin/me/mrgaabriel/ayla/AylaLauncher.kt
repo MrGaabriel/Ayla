@@ -23,7 +23,8 @@ object AylaLauncher {
                             "Token do Bot",
                             "ID do bot",
                             "ID do dono do bot, usado para comandos especiais",
-                            1
+                            1,
+                            listOf()
                     )
             ))
 

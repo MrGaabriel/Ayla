@@ -11,6 +11,7 @@ import java.time.*
 import java.util.jar.*
 import javax.script.*
 
+
 class EvalCommand : AbstractCommand() {
 
     init {
@@ -48,8 +49,6 @@ class EvalCommand : AbstractCommand() {
         // Now we set it to our own classpath
         System.setProperty("kotlin.script.classpath", propClassPath)
 
-        val scriptEngine = KotlinJsr223JvmDaemonLocalEvalScriptEngineFactory().scriptEngine
-
         val code = """
             import me.mrgaabriel.ayla.*
             import me.mrgaabriel.ayla.commands.*
@@ -67,6 +66,7 @@ class EvalCommand : AbstractCommand() {
             }
         """.trimIndent()
 
+        val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")
         try {
             val start = System.currentTimeMillis()
 
@@ -93,11 +93,11 @@ class EvalCommand : AbstractCommand() {
 
             val builder = EmbedBuilder()
 
-            builder.setTitle("oopsie woopsie")
+            builder.setTitle("Oopsie Woopsie")
             builder.setDescription("```$message```")
             builder.setColor(Color.RED)
 
-            builder.setFooter("we made a fucky wucky \uD83D\uDE22", null)
+            builder.setFooter("We made a Fucky Wucky \uD83D\uDE22", null)
             builder.setTimestamp(OffsetDateTime.now())
 
             context.sendMessage(builder.build(), context.getAsMention())

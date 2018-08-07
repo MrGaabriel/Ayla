@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.2.51'
-    id "com.github.johnrengelman.shadow" version "2.0.4"
+//    id "com.github.johnrengelman.shadow" version "2.0.4"
 }
 
 group 'me.mrgaabriel'
@@ -17,7 +17,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-compiler"
-    compile "org.jetbrains.kotlin:kotlin-script-util:1.2.60"
+    compile "org.jetbrains.kotlin:kotlin-script-util"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     compile "net.dv8tion:JDA:3.7.1_385"
@@ -39,6 +39,13 @@ compileTestKotlin {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'me.mrgaabriel.ayla.AylaLauncher'
+        attributes 'Main-Class': 'me.mrgaabriel.ayla.AylaLauncher', "Class-Path": configurations.compile.collect { "dependencies/" +  it.getName() }.join(' ')
     }
 }
+
+task copyDependencies(type: Copy) {
+    from configurations.compile
+    into 'dependencies'
+}
+
+jar.finalizedBy copyDependencies

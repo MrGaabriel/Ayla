@@ -1,11 +1,14 @@
 package me.mrgaabriel.ayla.commands.developer
 
+import me.mrgaabriel.ayla.*
 import me.mrgaabriel.ayla.commands.*
 import net.dv8tion.jda.core.*
 import org.apache.commons.lang3.exception.*
 import org.jetbrains.kotlin.script.jsr223.*
 import java.awt.*
+import java.nio.file.*
 import java.time.*
+import java.util.jar.*
 import javax.script.*
 
 class EvalCommand : AbstractCommand() {
@@ -28,6 +31,23 @@ class EvalCommand : AbstractCommand() {
             return
         }
 
+        // https://www.reddit.com/r/Kotlin/comments/8qdd4x/kotlin_script_engine_and_your_classpaths_what/
+        val path = this::class.java.protectionDomain.codeSource.location.path
+        val jar = JarFile(path)
+        val mf = jar.manifest
+        val mattr = mf.mainAttributes
+        // Yes, you SHOULD USE Attributes.Name.CLASS_PATH! Don't try using "Class-Path", it won't work!
+        val manifestClassPath = mattr[Attributes.Name.CLASS_PATH] as String
+
+        // The format within the Class-Path attribute is different than the one expected by the property, so let's fix it!
+        // By the way, don't forget to append your original JAR at the end of the string!
+        val clazz = AylaLauncher::class.java
+        val protectionDomain = clazz.protectionDomain
+        val propClassPath = manifestClassPath.replace(" ", ":") + ":${Paths.get(protectionDomain.codeSource.location.toURI()).fileName}"
+
+        // Now we set it to our own classpath
+        System.setProperty("kotlin.script.classpath", propClassPath)
+
         val scriptEngine = KotlinJsr223JvmDaemonLocalEvalScriptEngineFactory().scriptEngine
 
         val code = """
@@ -36,6 +56,7 @@ class EvalCommand : AbstractCommand() {
             import me.mrgaabriel.ayla.data.*
             import me.mrgaabriel.ayla.listeners.*
             import me.mrgaabriel.ayla.utils.*
+            import me.mrgaabriel.ayla.threads.*
 
             import kotlin.concurrent.*
 

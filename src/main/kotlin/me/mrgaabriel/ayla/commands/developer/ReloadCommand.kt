@@ -3,6 +3,7 @@ package me.mrgaabriel.ayla.commands.developer
 import com.google.gson.*
 import me.mrgaabriel.ayla.commands.*
 import me.mrgaabriel.ayla.data.*
+import me.mrgaabriel.ayla.listeners.*
 import me.mrgaabriel.ayla.utils.*
 import java.io.*
 
@@ -10,7 +11,7 @@ class ReloadCommand : AbstractCommand() {
 
     init {
         this.label = "reload"
-        this.description = "Recarrega o Barry"
+        this.description = "Recarrega a Ayla"
         this.usage = "função"
 
         this.category = CommandCategory.DEVELOPER
@@ -37,6 +38,27 @@ class ReloadCommand : AbstractCommand() {
 
                 ayla.config = config
                 context.sendMessage(context.getAsMention(true) + "Configuração recarregada!")
+            }
+
+            "listeners" -> {
+                ayla.shards.forEach { shard ->
+                    shard.registeredListeners.forEach {
+                        shard.removeEventListener(it)
+                    }
+                }
+
+                ayla.shards.forEach { shard ->
+                    shard.addEventListener(DiscordListeners())
+                    shard.addEventListener(EventLogListeners())
+                }
+
+                context.sendMessage(context.getAsMention(true) + "Listeners recarregados com sucesso!")
+            }
+
+            "mongo" -> {
+                ayla.loadMongo()
+
+                context.sendMessage(context.getAsMention(true) + "MongoDB recarregado com sucesso!")
             }
 
              else -> {

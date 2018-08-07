@@ -3,14 +3,17 @@ package me.mrgaabriel.ayla
 import ch.qos.logback.classic.*
 import com.google.common.flogger.*
 import com.google.common.util.concurrent.*
+import com.mongodb.*
 import com.mongodb.MongoClient
 import com.mongodb.client.*
 import me.mrgaabriel.ayla.commands.*
+import me.mrgaabriel.ayla.commands.config.*
 import me.mrgaabriel.ayla.commands.developer.*
 import me.mrgaabriel.ayla.commands.utils.*
 import me.mrgaabriel.ayla.data.*
 import me.mrgaabriel.ayla.listeners.*
 import me.mrgaabriel.ayla.threads.*
+import me.mrgaabriel.ayla.utils.eventlog.*
 import net.dv8tion.jda.core.*
 import net.dv8tion.jda.core.entities.*
 import org.bson.codecs.configuration.*
@@ -32,6 +35,7 @@ class Ayla(var config: AylaConfig) {
 
     lateinit var usersColl: MongoCollection<AylaUser>
     lateinit var guildsColl: MongoCollection<AylaGuildConfig>
+    lateinit var storedMessagesColl: MongoCollection<StoredMessage>
 
     fun createThreadPool(name: String): ExecutorService {
         return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())
@@ -47,6 +51,7 @@ class Ayla(var config: AylaConfig) {
                 .setToken(config.clientToken)
                 .setStatus(OnlineStatus.ONLINE)
                 .addEventListener(DiscordListeners())
+                .addEventListener(EventLogListeners())
 
         for (idx in 0..(config.shardCount - 1)) {
             logger.atInfo().log("Iniciando shard $idx...")
@@ -57,6 +62,7 @@ class Ayla(var config: AylaConfig) {
         }
 
         GameUpdateThread().start()
+        RemoveCachedMessagesThread().start()
 
         logger.atInfo().log("OK! - Ayla inicializada com sucesso!")
     }
@@ -70,18 +76,27 @@ class Ayla(var config: AylaConfig) {
         val pojoCodecRegistry = CodecRegistries.fromRegistries(MongoClient.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()))
 
-        val client = MongoClient("127.0.0.1:27017")
+        val options = MongoClientOptions.builder()
+                .codecRegistry(pojoCodecRegistry)
+                .build()
+
+        val client = MongoClient("127.0.0.1:27017", options)
         mongo = client
 
         val database = client.getDatabase("ayla")
-                .withCodecRegistry(pojoCodecRegistry)
         mongoDatabase = database
 
         val users = database.getCollection("users", AylaUser::class.java)
+                .withCodecRegistry(pojoCodecRegistry)
         usersColl = users
 
         val guilds = database.getCollection("guilds", AylaGuildConfig::class.java)
+                .withCodecRegistry(pojoCodecRegistry)
         guildsColl = guilds
+
+        val storedMessages = database.getCollection("storedMessages", StoredMessage::class.java)
+                .withCodecRegistry(pojoCodecRegistry)
+        storedMessagesColl = storedMessages
     }
 
     fun loadCommands() {
@@ -91,6 +106,7 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(EvalCommand())
         commandMap.add(ReloadCommand())
         commandMap.add(EvalJSCommand())
+        commandMap.add(EventLogCommand())
     }
 
     fun setGame(game: Game) {

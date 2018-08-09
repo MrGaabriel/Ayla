@@ -48,4 +48,9 @@ task copyDependencies(type: Copy) {
     into 'dependencies'
 }
 
+clean {
+    delete 'dependencies'
+    followSymlinks = true
+}
+
 jar.finalizedBy copyDependencies

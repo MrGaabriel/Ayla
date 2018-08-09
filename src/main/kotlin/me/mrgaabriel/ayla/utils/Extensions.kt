@@ -4,6 +4,7 @@ import com.mongodb.client.model.*
 import me.mrgaabriel.ayla.*
 import me.mrgaabriel.ayla.data.*
 import net.dv8tion.jda.core.entities.*
+import net.dv8tion.jda.core.events.message.react.*
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -60,3 +61,25 @@ var Guild.config: AylaGuildConfig get() {
 val String.fancy: String get() = this.substring(0, 1).toUpperCase() + this.substring(1).toLowerCase()
 
 val ayla = AylaLauncher.ayla
+
+fun Message.collectReactionAdd(removeWhenExecuted: Boolean = false, function: (MessageReactionAddEvent) -> Unit) {
+    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+
+    wrapper.onReactionAdd = function
+}
+
+fun Message.collectReactionRemove(removeWhenExecuted: Boolean = false, function: (MessageReactionRemoveEvent) -> Unit) {
+    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+
+    wrapper.onReactionRemove = function
+}
+
+class MessageInteractionWrapper(
+        val messageId: String,
+        val removeWhenExecuted: Boolean
+) {
+
+    var onReactionAdd: ((MessageReactionAddEvent) -> Unit)? = null
+    var onReactionRemove: ((MessageReactionRemoveEvent) -> Unit)? = null
+
+}

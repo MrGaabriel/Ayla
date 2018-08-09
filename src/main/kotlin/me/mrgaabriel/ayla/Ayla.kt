@@ -13,6 +13,7 @@ import me.mrgaabriel.ayla.commands.utils.*
 import me.mrgaabriel.ayla.data.*
 import me.mrgaabriel.ayla.listeners.*
 import me.mrgaabriel.ayla.threads.*
+import me.mrgaabriel.ayla.utils.*
 import me.mrgaabriel.ayla.utils.eventlog.*
 import net.dv8tion.jda.core.*
 import net.dv8tion.jda.core.entities.*
@@ -36,6 +37,8 @@ class Ayla(var config: AylaConfig) {
     lateinit var usersColl: MongoCollection<AylaUser>
     lateinit var guildsColl: MongoCollection<AylaGuildConfig>
     lateinit var storedMessagesColl: MongoCollection<StoredMessage>
+
+    val messageInteractionCache = mutableMapOf<String, MessageInteractionWrapper>()
 
     fun createThreadPool(name: String): ExecutorService {
         return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())

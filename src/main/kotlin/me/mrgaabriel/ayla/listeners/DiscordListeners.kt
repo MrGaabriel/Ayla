@@ -1,12 +1,59 @@
 package me.mrgaabriel.ayla.listeners
 
+import com.google.common.flogger.*
 import com.mongodb.client.model.*
 import me.mrgaabriel.ayla.utils.*
 import me.mrgaabriel.ayla.utils.eventlog.*
 import net.dv8tion.jda.core.events.message.guild.*
+import net.dv8tion.jda.core.events.message.react.*
 import net.dv8tion.jda.core.hooks.*
+import org.apache.commons.lang3.exception.*
 
 class DiscordListeners : ListenerAdapter() {
+
+    val logger = FluentLogger.forEnclosingClass()
+
+    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
+        if (event is MessageReactionAddEvent) {
+            ayla.messageInteractionCache.forEach { id, wrapper ->
+                if (event.messageId == id) {
+                    if (wrapper.onReactionAdd != null) {
+                        ayla.executor.execute {
+                            try {
+                                wrapper.onReactionAdd!!.invoke(event)
+
+                                if (wrapper.removeWhenExecuted) {
+                                    ayla.messageInteractionCache.remove(id)
+                                }
+                            } catch (e: Exception) {
+                                logger.atSevere().log("Erro ao processar onReactionAdd para a mensagem ${event.messageId}")
+                                logger.atSevere().log(ExceptionUtils.getStackTrace(e))
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (event is MessageReactionRemoveEvent) {
+            ayla.messageInteractionCache.forEach { id, wrapper ->
+                if (event.messageId == id) {
+                    if (wrapper.onReactionRemove != null) {
+                        ayla.executor.execute {
+                            try {
+                                wrapper.onReactionRemove!!.invoke(event)
+
+                                if (wrapper.removeWhenExecuted) {
+                                    ayla.messageInteractionCache.remove(id)
+                                }
+                            } catch (e: Exception) {
+                                logger.atSevere().log("Erro ao processar onReactionRemove para a mensagem ${event.messageId}")
+                                logger.atSevere().log(ExceptionUtils.getStackTrace(e))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         ayla.executor.execute {

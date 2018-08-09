@@ -45,8 +45,8 @@ class EventLogListeners : ListenerAdapter() {
                             Filters.eq("_id", event.messageId)
                     ).firstOrNull() ?: return@execute
 
-                    val oldContent = storedMessage.content.replace("`", "`")
-                    val newContent = event.message.contentDisplay.replace("`", "`")
+                    val oldContent = storedMessage.content.replace("`", "")
+                    val newContent = event.message.contentDisplay.replace("`", "")
 
                     val builder = EmbedBuilder()
 
@@ -76,7 +76,7 @@ class EventLogListeners : ListenerAdapter() {
                             Filters.eq("_id", event.messageId)
                     ).firstOrNull() ?: return@execute
 
-                    val oldContent = storedMessage.content.replace("`", "`")
+                    val oldContent = storedMessage.content.replace("`", "")
 
                     val builder = EmbedBuilder()
 

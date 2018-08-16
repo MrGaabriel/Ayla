@@ -49,7 +49,7 @@ abstract class AbstractCommand {
 
                 channel.sendTyping().complete()
 
-                val args = ArrayUtils.remove(rawMessageArgs.toTypedArray(), 0)
+                val args = ArrayUtils.remove(rawMessageArgs.joinToString(" ").trim().split(" ").toTypedArray(), 0)
 
                 val context = CommandContext(message, args, this)
 

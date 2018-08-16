@@ -111,6 +111,7 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(EvalJSCommand())
         commandMap.add(EventLogCommand())
         commandMap.add(PrefixCommand())
+        commandMap.add(WelcomeCommand())
     }
 
     fun setGame(game: Game) {

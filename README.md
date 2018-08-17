@@ -1,4 +1,11 @@
 <h1 align="center">Ayla</h1>
+
+<p align="center">
+  <a href="https://teamcity.barrybot.xyz/viewType.html?buildTypeId=Ayla_Build">
+    <img align="center" src="https://teamcity.barrybot.xyz/app/rest/builds/buildType:Ayla_Build/statusIcon"/>
+  </a>
+</p>
+
 :wave: Olá! Como vai você!? Procurando um bot de terras tupiniquins para alegrar seu servidor!?
 
 Vou me apresentar: Eu me chamo Ayla, cujo nome significa "luar" em Havaiano (eu amo o meu nome!) e eu sou um bot criado em terras tupiniquins para alegrar o seu servidor, com funções de A até Z! 

@@ -50,7 +50,7 @@ class EventLogListeners : ListenerAdapter() {
 
                     val builder = EmbedBuilder()
 
-                    builder.setAuthor(event.author.name, null, event.author.effectiveAvatarUrl)
+                    builder.setAuthor(event.author.tag, null, event.author.effectiveAvatarUrl)
                     builder.setDescription("**Uma mensagem foi editada no canal ${event.channel.asMention}**\n\nConteúdo antigo: ```\u200b$oldContent```\n\nConteúdo atual: ```\u200b$newContent```")
                     builder.setColor(Color.RED)
 
@@ -81,7 +81,7 @@ class EventLogListeners : ListenerAdapter() {
                     val builder = EmbedBuilder()
 
                     val author = ayla.getUserById(storedMessage.authorId) ?: return@execute
-                    builder.setAuthor(author.name, null, author.effectiveAvatarUrl)
+                    builder.setAuthor(author.tag, null, author.effectiveAvatarUrl)
                     builder.setDescription("**Uma mensagem foi apagada no canal ${event.channel.asMention}**\n\nConteúdo: ```\u200b$oldContent```")
                     builder.setColor(Color.RED)
 
@@ -104,7 +104,7 @@ class EventLogListeners : ListenerAdapter() {
                     if (now.dayOfYear - timestamp.dayOfYear < 4 && now.year == timestamp.year) {
                         val builder = EmbedBuilder()
 
-                        builder.setAuthor(event.user.name, null, event.user.effectiveAvatarUrl)
+                        builder.setAuthor(event.user.tag, null, event.user.effectiveAvatarUrl)
                         builder.setDescription("**Um usuário suspeito acabou de entrar no servidor...\nConta criada há menos de 4 dias!**\n\nUsuário: `${event.user.tag}`")
 
                         builder.addField("Data de criação da conta", timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss")), true)

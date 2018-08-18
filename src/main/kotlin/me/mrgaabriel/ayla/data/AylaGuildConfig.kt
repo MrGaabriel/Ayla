@@ -14,4 +14,7 @@ class AylaGuildConfig @BsonCreator constructor(@BsonProperty("_id") _id: String)
 
     var welcomeEnabled = false
     var welcomeChannel = ""
+
+    var redditSubs = mutableMapOf<String, String>() // Sub reddit e ID do canal que vai ser avisado
+    var lastRedditPostCreation = mutableMapOf<String, String>()
 }

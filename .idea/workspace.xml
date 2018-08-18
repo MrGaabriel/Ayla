@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52cea9a3-ecaa-480e-93f1-6d090e2490b3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/GameUpdateThread.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/GameUpdateThread.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -81,17 +87,17 @@
         <counts>
           <entry key="MF" value="1" />
           <entry key="ScriptEngineFactory" value="1" />
-          <entry key="gradle" value="9" />
+          <entry key="gradle" value="10" />
           <entry key="json" value="7" />
-          <entry key="kt" value="93" />
+          <entry key="kt" value="99" />
           <entry key="xml" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Groovy" value="9" />
+          <entry key="Groovy" value="10" />
           <entry key="JSON" value="7" />
-          <entry key="Kotlin" value="93" />
+          <entry key="Kotlin" value="99" />
           <entry key="Manifest" value="1" />
           <entry key="SPI" value="1" />
           <entry key="XML" value="4" />
@@ -101,17 +107,17 @@
         <counts>
           <entry key="Kotlin Console" value="51" />
           <entry key="ScriptEngineFactory" value="15" />
-          <entry key="gradle" value="937" />
+          <entry key="gradle" value="1025" />
           <entry key="json" value="162" />
-          <entry key="kt" value="31724" />
+          <entry key="kt" value="38209" />
           <entry key="xml" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Groovy" value="937" />
+          <entry key="Groovy" value="1025" />
           <entry key="JSON" value="162" />
-          <entry key="Kotlin" value="31775" />
+          <entry key="Kotlin" value="38260" />
           <entry key="SPI" value="15" />
           <entry key="XML" value="37" />
         </counts>
@@ -124,19 +130,86 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/GameUpdateThread.kt">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7">
-              <caret line="16" column="28" lean-forward="true" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
+            <state relative-caret-position="167">
+              <caret line="86" column="69" selection-start-line="86" selection-start-column="69" selection-end-line="86" selection-end-column="69" />
+              <folding>
+                <element signature="e#36#299#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+            <state relative-caret-position="133">
+              <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
+              <folding>
+                <element signature="e#44#182#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="475">
+              <caret line="60" column="9" selection-start-line="23" selection-start-column="8" selection-end-line="60" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="509">
+              <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="5" selection-start-column="5" selection-end-column="5" />
+              <folding>
+                <element signature="e#34#85#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+              <folding>
+                <element signature="e#8#135#0" expanded="true" />
+                <element signature="e#267#892#0" expanded="true" />
+                <element signature="e#908#947#0" expanded="true" />
+                <element signature="e#908#947#0" expanded="true" />
+                <element signature="e#966#1005#0" expanded="true" />
+                <element signature="e#966#1005#0" expanded="true" />
+                <element signature="e#1011#1194#0" expanded="true" />
+                <element signature="e#1026#1192#0" expanded="true" />
+                <element signature="e#1026#1192#0" expanded="true" />
+                <element signature="e#1230#1289#0" expanded="true" />
+                <element signature="e#1297#1352#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="60" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -352,9 +425,9 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="6134052739106" />
+        <entry key="$PROJECT_DIR$" value="6134834205794" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="4111503224" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="3508615395" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2007532874" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="2015364858" />
       </map>
@@ -523,18 +596,14 @@
         <option value="$PROJECT_DIR$/config.json" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/CommandCategory.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaUser.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/ReloadCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/eventlog/StoredMessage.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/EventLogCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/resources/META-INF/services/javax.script.ScriptEngineFactory" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalCommand.kt" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Extensions.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/PrefixCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/developer/EvalJSCommand.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/listeners/DiscordListeners.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/AbstractCommand.kt" />
@@ -542,6 +611,12 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostsSyncThread.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/GameUpdateThread.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt" />
       </list>
     </option>
   </component>
@@ -657,6 +732,15 @@
               <item name="ayla" type="462c0819:PsiDirectoryNode" />
               <item name="threads" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Ayla" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="ayla" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -667,7 +751,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534467255320" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534632381836" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -675,7 +759,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Kotlin" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -736,18 +820,17 @@
       <workItem from="1534448581334" duration="7477000" />
       <workItem from="1534525255789" duration="1905000" />
       <workItem from="1534544180369" duration="1770000" />
-      <workItem from="1534620263679" duration="1541000" />
+      <workItem from="1534620263679" duration="12315000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99233000" />
+    <option name="totallyTimeSpent" value="110007000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49954253" visible="true" weight="0.24886535" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49954253" visible="true" weight="0.24886535" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="JRebel" order="3" sideWeight="0.50045747" side_tool="true" weight="0.29104477" />
@@ -762,14 +845,14 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4991289" weight="0.3286119" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.48841894" visible="true" weight="0.30605564" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4991289" weight="0.32733223" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.48439074" visible="true" weight="0.30605564" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5070994" side_tool="true" weight="0.32850242" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4837728" weight="0.32569557" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4612286" weight="0.32569557" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
-      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.51158106" side_tool="true" visible="true" weight="0.30605564" />
+      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.51560926" side_tool="true" visible="true" weight="0.30605564" />
       <window_info anchor="right" x="212" y="108" width="1350" height="638" id="Byte Code Viewer" order="0" type="FLOATING" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
@@ -777,7 +860,7 @@
       <window_info anchor="right" id="Palette" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="right" id="Maven Projects" order="6" />
-      <window_info anchor="right" id="Gradle" order="7" weight="0.25302014" />
+      <window_info anchor="right" id="Gradle" order="7" weight="0.2526475" />
       <window_info anchor="right" id="Database" order="8" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
       <window_info anchor="right" id="Theme Preview" order="10" />
@@ -836,13 +919,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="52" selection-start-line="6" selection-start-column="52" selection-end-line="6" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -968,27 +1044,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="113" column="38" selection-start-line="113" selection-start-column="38" selection-end-line="113" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/listeners/DiscordListeners.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1741">
@@ -1027,13 +1082,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="46" column="31" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostsSyncThread.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1041,17 +1089,88 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/GameUpdateThread.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7">
+        <state relative-caret-position="34">
           <caret line="16" column="28" lean-forward="true" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+        <state relative-caret-position="108">
+          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+          <folding>
+            <element signature="e#8#135#0" expanded="true" />
+            <element signature="e#267#892#0" expanded="true" />
+            <element signature="e#908#947#0" expanded="true" />
+            <element signature="e#908#947#0" expanded="true" />
+            <element signature="e#966#1005#0" expanded="true" />
+            <element signature="e#966#1005#0" expanded="true" />
+            <element signature="e#1011#1194#0" expanded="true" />
+            <element signature="e#1026#1192#0" expanded="true" />
+            <element signature="e#1026#1192#0" expanded="true" />
+            <element signature="e#1230#1289#0" expanded="true" />
+            <element signature="e#1297#1352#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/utils/Constants.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="5" selection-start-column="5" selection-end-column="5" />
+          <folding>
+            <element signature="e#34#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="60" column="9" selection-start-line="23" selection-start-column="8" selection-end-line="60" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/data/AylaGuildConfig.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="60" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="86" column="69" selection-start-line="86" selection-start-column="69" selection-end-line="86" selection-end-column="69" />
+          <folding>
+            <element signature="e#36#299#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
+          <folding>
+            <element signature="e#44#182#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

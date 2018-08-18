@@ -66,6 +66,7 @@ class Ayla(var config: AylaConfig) {
 
         GameUpdateThread().start()
         RemoveCachedMessagesThread().start()
+        RedditPostSyncThread().start()
 
         logger.atInfo().log("OK! - Ayla inicializada com sucesso!")
     }
@@ -112,6 +113,7 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(EventLogCommand())
         commandMap.add(PrefixCommand())
         commandMap.add(WelcomeCommand())
+        commandMap.add(RedditCommand())
     }
 
     fun setGame(game: Game) {

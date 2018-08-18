@@ -7,21 +7,19 @@ import org.apache.commons.lang3.exception.*
 import java.util.*
 import kotlin.concurrent.*
 
-class GameUpdateThread {
+class GameUpdateThread : Thread("Game Update Thread") {
 
     val logger = FluentLogger.forEnclosingClass()
 
-    fun start() {
-        thread(name="Game Update Thread") {
-            while (true) {
-                try {
-                    updateGame()
+    override fun run() {
+        while (true) {
+            try {
+                updateGame()
 
-                    Thread.sleep(30000)
-                } catch (e: Exception) {
-                    logger.atWarning().log("Erro ao processar o GameUpdateThread")
-                    logger.atWarning().log(ExceptionUtils.getStackTrace(e))
-                }
+                Thread.sleep(30000)
+            } catch (e: Exception) {
+                logger.atWarning().log("Erro ao processar o GameUpdateThread")
+                logger.atWarning().log(ExceptionUtils.getStackTrace(e))
             }
         }
     }

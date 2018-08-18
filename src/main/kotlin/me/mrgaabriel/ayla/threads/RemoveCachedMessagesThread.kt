@@ -5,17 +5,15 @@ import com.mongodb.client.model.*
 import me.mrgaabriel.ayla.utils.*
 import kotlin.concurrent.*
 
-class RemoveCachedMessagesThread {
+class RemoveCachedMessagesThread : Thread("Remove Cached Messages Thread") {
 
     val logger = FluentLogger.forEnclosingClass()
 
-    fun start() {
-        thread(name="Remove Cached Messages Thread") {
-            while (true) {
-                deleteOldMessages()
+    override fun run() {
+        while (true) {
+            deleteOldMessages()
 
-                Thread.sleep(60*1000)
-            }
+            Thread.sleep(60 * 1000)
         }
     }
 

@@ -96,7 +96,7 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                             if (!channel.canTalk())
                                 continue
 
-                            channel.sendMessage(builder.build()).complete()
+                            channel.sendMessage(builder.build()).queue()
 
                             it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()
                             guildHandle.config = it

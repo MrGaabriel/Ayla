@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52cea9a3-ecaa-480e-93f1-6d090e2490b3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -57,13 +58,14 @@
     <session id="1595329421">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.101" value="1" />
           <entry key="project.open.time.120" value="1" />
           <entry key="project.open.time.15" value="2" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.64" value="1" />
           <entry key="project.open.time.72" value="1" />
           <entry key="project.open.time.73" value="2" />
           <entry key="project.open.time.79" value="1" />
@@ -72,7 +74,7 @@
           <entry key="project.open.time.88" value="2" />
           <entry key="project.open.time.89" value="1" />
           <entry key="project.open.time.93" value="1" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.opened" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -101,7 +103,7 @@
           <entry key="ScriptEngineFactory" value="15" />
           <entry key="gradle" value="1025" />
           <entry key="json" value="162" />
-          <entry key="kt" value="38416" />
+          <entry key="kt" value="38455" />
           <entry key="xml" value="37" />
         </counts>
       </usages-collector>
@@ -109,7 +111,7 @@
         <counts>
           <entry key="Groovy" value="1025" />
           <entry key="JSON" value="162" />
-          <entry key="Kotlin" value="38467" />
+          <entry key="Kotlin" value="38506" />
           <entry key="SPI" value="15" />
           <entry key="XML" value="37" />
         </counts>
@@ -124,11 +126,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-              <folding>
-                <element signature="e#36#299#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="302">
+              <caret line="103" lean-forward="true" selection-start-line="103" selection-end-line="103" />
             </state>
           </provider>
         </entry>
@@ -136,11 +135,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
+            <state relative-caret-position="731">
               <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
-              <folding>
-                <element signature="e#44#182#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -148,7 +144,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
+            <state relative-caret-position="986">
               <caret line="60" column="9" selection-start-line="23" selection-start-column="8" selection-end-line="60" selection-end-column="9" />
             </state>
           </provider>
@@ -157,7 +153,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="509">
+            <state relative-caret-position="816">
               <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="38" />
             </state>
           </provider>
@@ -178,20 +174,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
+            <state relative-caret-position="170">
               <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
               <folding>
                 <element signature="e#8#135#0" expanded="true" />
-                <element signature="e#267#892#0" expanded="true" />
-                <element signature="e#908#947#0" expanded="true" />
-                <element signature="e#908#947#0" expanded="true" />
-                <element signature="e#966#1005#0" expanded="true" />
-                <element signature="e#966#1005#0" expanded="true" />
-                <element signature="e#1011#1194#0" expanded="true" />
-                <element signature="e#1026#1192#0" expanded="true" />
-                <element signature="e#1026#1192#0" expanded="true" />
-                <element signature="e#1230#1289#0" expanded="true" />
-                <element signature="e#1297#1352#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -419,7 +405,7 @@
       <map>
         <entry key="$PROJECT_DIR$" value="6134834205794" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="3508615395" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="287590665" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2007532874" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="2015364858" />
       </map>
@@ -632,8 +618,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -737,13 +723,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534640982661" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534643423048" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -812,17 +798,18 @@
       <workItem from="1534448581334" duration="7477000" />
       <workItem from="1534525255789" duration="1905000" />
       <workItem from="1534544180369" duration="1770000" />
-      <workItem from="1534620263679" duration="17898000" />
+      <workItem from="1534620263679" duration="18703000" />
+      <workItem from="1534687939073" duration="800000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115590000" />
+    <option name="totallyTimeSpent" value="117195000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49954253" visible="true" weight="0.24886535" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49954253" visible="true" weight="0.2526475" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="JRebel" order="3" sideWeight="0.50045747" side_tool="true" weight="0.29104477" />
@@ -838,13 +825,13 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4991289" weight="0.32733223" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.48237664" visible="true" weight="0.30605564" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.48178136" visible="true" weight="0.30605564" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5070994" side_tool="true" weight="0.32850242" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.45619336" weight="0.32569557" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.45546558" weight="0.32569557" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
-      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.51762336" side_tool="true" visible="true" weight="0.30605564" />
+      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.51821864" side_tool="true" visible="true" weight="0.30605564" />
       <window_info anchor="right" x="212" y="108" width="1350" height="638" id="Byte Code Viewer" order="0" type="FLOATING" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
@@ -1009,9 +996,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="88" column="24" lean-forward="true" selection-start-line="88" selection-start-column="24" selection-end-line="88" selection-end-column="24" />
-          <folding>
-            <element signature="e#47#334#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1074,13 +1058,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostsSyncThread.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostsSyncThread.kt" />
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RemoveCachedMessagesThread.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1095,23 +1073,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
-          <folding>
-            <element signature="e#8#135#0" expanded="true" />
-            <element signature="e#267#892#0" expanded="true" />
-            <element signature="e#908#947#0" expanded="true" />
-            <element signature="e#908#947#0" expanded="true" />
-            <element signature="e#966#1005#0" expanded="true" />
-            <element signature="e#966#1005#0" expanded="true" />
-            <element signature="e#1011#1194#0" expanded="true" />
-            <element signature="e#1026#1192#0" expanded="true" />
-            <element signature="e#1026#1192#0" expanded="true" />
-            <element signature="e#1230#1289#0" expanded="true" />
-            <element signature="e#1297#1352#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="302">
+          <caret line="103" lean-forward="true" selection-start-line="103" selection-end-line="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="986">
+          <caret line="60" column="9" selection-start-line="23" selection-start-column="8" selection-end-line="60" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -1125,17 +1111,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/WelcomeCommand.kt">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="60" column="9" selection-start-line="23" selection-start-column="8" selection-end-line="60" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/Ayla.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="38" />
+        <state relative-caret-position="170">
+          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+          <folding>
+            <element signature="e#8#135#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1143,26 +1125,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="60" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/commands/config/RedditCommand.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
-          <folding>
-            <element signature="e#44#182#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-          <folding>
-            <element signature="e#36#299#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

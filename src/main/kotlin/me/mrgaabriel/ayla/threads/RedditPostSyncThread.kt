@@ -93,6 +93,9 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                                 builder.setFooter("u/" + comment["author"].string, null)
                                 builder.setTimestamp(OffsetDateTime.now())
 
+                                if (!channel.canTalk())
+                                    continue
+
                                 channel.sendMessage(builder.build()).complete()
 
                                 it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()

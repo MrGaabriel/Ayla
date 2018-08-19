@@ -1,8 +1,8 @@
 <h1 align="center">Ayla</h1>
 
 <p align="center">
-  <a href="https://teamcity.barrybot.xyz/viewType.html?buildTypeId=Ayla_Build">
-    <img align="center" src="https://teamcity.barrybot.xyz/app/rest/builds/buildType:Ayla_Build/statusIcon"/>
+  <a href="https://ci.barrybot.xyz/viewType.html?buildTypeId=Ayla_Build">
+    <img align="center" src="https://ci.barrybot.xyz/app/rest/builds/buildType:Ayla_Build/statusIcon"/>
   </a>
 </p>
 

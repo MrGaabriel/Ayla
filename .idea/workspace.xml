@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52cea9a3-ecaa-480e-93f1-6d090e2490b3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -102,7 +101,7 @@
           <entry key="ScriptEngineFactory" value="15" />
           <entry key="gradle" value="1025" />
           <entry key="json" value="162" />
-          <entry key="kt" value="38340" />
+          <entry key="kt" value="38416" />
           <entry key="xml" value="37" />
         </counts>
       </usages-collector>
@@ -110,7 +109,7 @@
         <counts>
           <entry key="Groovy" value="1025" />
           <entry key="JSON" value="162" />
-          <entry key="Kotlin" value="38391" />
+          <entry key="Kotlin" value="38467" />
           <entry key="SPI" value="15" />
           <entry key="XML" value="37" />
         </counts>
@@ -125,8 +124,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="63" column="77" selection-start-line="63" selection-start-column="77" selection-end-line="63" selection-end-column="77" />
+            <state relative-caret-position="173">
+              <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
               <folding>
                 <element signature="e#36#299#0" expanded="true" />
               </folding>
@@ -744,7 +743,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534636914200" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534640982661" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -813,12 +812,12 @@
       <workItem from="1534448581334" duration="7477000" />
       <workItem from="1534525255789" duration="1905000" />
       <workItem from="1534544180369" duration="1770000" />
-      <workItem from="1534620263679" duration="15195000" />
+      <workItem from="1534620263679" duration="17898000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112887000" />
+    <option name="totallyTimeSpent" value="115590000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -839,13 +838,13 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4991289" weight="0.32733223" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4833837" visible="true" weight="0.30605564" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.48237664" visible="true" weight="0.30605564" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5070994" side_tool="true" weight="0.32850242" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4592145" weight="0.32569557" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.45619336" weight="0.32569557" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
-      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.5166163" side_tool="true" visible="true" weight="0.30605564" />
+      <window_info anchor="bottom" id="JRebel Console" order="14" sideWeight="0.51762336" side_tool="true" visible="true" weight="0.30605564" />
       <window_info anchor="right" x="212" y="108" width="1350" height="638" id="Byte Code Viewer" order="0" type="FLOATING" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
@@ -1159,8 +1158,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/me/mrgaabriel/ayla/threads/RedditPostSyncThread.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="63" column="77" selection-start-line="63" selection-start-column="77" selection-end-line="63" selection-end-column="77" />
+        <state relative-caret-position="173">
+          <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
           <folding>
             <element signature="e#36#299#0" expanded="true" />
           </folding>

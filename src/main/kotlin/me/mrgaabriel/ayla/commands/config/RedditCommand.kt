@@ -35,6 +35,9 @@ class RedditCommand : AbstractCommand() {
         if (payload["error"] != null && payload["error"].int == 404 && payload["message"].string == "Not Found") {
             context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` não encontrado!")
             return
+        } else if (payload["error"] != null && payload["error"].int == 403 && payload["message"].string == "Forbidden") {
+            context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` é privada!")
+            return
         }
 
         val config = context.guild.config

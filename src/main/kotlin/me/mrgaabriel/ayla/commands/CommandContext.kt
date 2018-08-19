@@ -14,6 +14,10 @@ class CommandContext(val message: Message,
 
     val guild = message.guild
 
+    fun sendMessage(message: Any): Message {
+        return channel.sendMessage(message.toString()).complete()
+    }
+
     fun sendMessage(message: String): Message {
         return channel.sendMessage(message).complete()
     }
@@ -30,6 +34,14 @@ class CommandContext(val message: Message,
         val builder = MessageBuilder()
 
         return channel.sendMessage(builder.setContent(content)
+                .setEmbed(message)
+                .build()).complete()
+    }
+
+    fun sendMessage(message: MessageEmbed, content: Any): Message {
+        val builder = MessageBuilder()
+
+        return channel.sendMessage(builder.setContent(content.toString())
                 .setEmbed(message)
                 .build()).complete()
     }

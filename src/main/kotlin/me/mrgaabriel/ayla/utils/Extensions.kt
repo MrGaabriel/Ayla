@@ -5,6 +5,7 @@ import me.mrgaabriel.ayla.*
 import me.mrgaabriel.ayla.data.*
 import net.dv8tion.jda.core.entities.*
 import net.dv8tion.jda.core.events.message.react.*
+import net.dv8tion.jda.core.utils.*
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -81,5 +82,14 @@ class MessageInteractionWrapper(
 
     var onReactionAdd: ((MessageReactionAddEvent) -> Unit)? = null
     var onReactionRemove: ((MessageReactionRemoveEvent) -> Unit)? = null
+}
 
+fun String.isValidSnowflake(): Boolean {
+    try {
+        MiscUtil.parseSnowflake(this)
+
+        return true
+    } catch (e: NumberFormatException) {
+        return false
+    }
 }

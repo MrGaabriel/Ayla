@@ -47,7 +47,7 @@ abstract class AbstractCommand {
                 val start = System.currentTimeMillis()
                 logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw}")
 
-                channel.sendTyping().complete()
+                channel.sendTyping().queue()
 
                 val args = ArrayUtils.remove(rawMessageArgs.joinToString(" ").trim().split(" ").toTypedArray(), 0)
 
@@ -97,7 +97,7 @@ abstract class AbstractCommand {
                         "Contate o `MrGaabriel#2430` e mande o erro!"
                 )
 
-                channel.sendMessage(errorMessage.joinToString("\n")).complete()
+                channel.sendMessage(errorMessage.joinToString("\n")).queue()
                 return true
             }
         }

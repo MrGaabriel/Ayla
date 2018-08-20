@@ -57,7 +57,7 @@ class EventLogListeners : ListenerAdapter() {
                     builder.setTimestamp(OffsetDateTime.now())
                     builder.setFooter("ID do usuário: ${event.author.id}", null)
 
-                    channel.sendMessage(builder.build()).complete()
+                    channel.sendMessage(builder.build()).queue()
 
                     val newStoredMessage = StoredMessage(
                             event.messageId,
@@ -88,7 +88,7 @@ class EventLogListeners : ListenerAdapter() {
                     builder.setTimestamp(OffsetDateTime.now())
                     builder.setFooter("ID do usuário: ${author.id}", null)
 
-                    channel.sendMessage(builder.build()).complete()
+                    channel.sendMessage(builder.build()).queue()
 
                     ayla.storedMessagesColl.deleteOne(
                             Filters.eq("_id", event.messageId)
@@ -112,7 +112,7 @@ class EventLogListeners : ListenerAdapter() {
 
                         builder.setFooter("ID do usuário: ${event.user.id}", null)
 
-                        channel.sendMessage(builder.build()).complete()
+                        channel.sendMessage(builder.build()).queue()
                     }
                 }
             }

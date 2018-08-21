@@ -28,7 +28,7 @@ dependencies {
     compile "com.google.guava:guava:26.0-jre"
     compile "org.apache.commons:commons-lang3:3.8"
     compile "org.slf4j:jul-to-slf4j:1.7.25"
-    compile "org.mongodb:mongo-java-driver:3.8.0"
+    compile "org.mongodb:mongo-java-driver:3.8.1"
     compile "com.github.kevinsawicki:http-request:6.0"
 }
 

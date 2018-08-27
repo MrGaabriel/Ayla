@@ -14,36 +14,61 @@ class CommandContext(val message: Message,
 
     val guild = message.guild
 
-    fun sendMessage(message: Any): Message {
-        return channel.sendMessage(message.toString()).complete()
+    fun sendMessage(content: Any, success: ((Message) -> Unit)? = null) {
+        channel.sendMessage(content.toString()).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
+
     }
 
-    fun sendMessage(message: String): Message {
-        return channel.sendMessage(message).complete()
+    fun sendMessage(content: String, success: ((Message) -> Unit)? = null) {
+        channel.sendMessage(content).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
     }
 
-    fun sendMessage(message: Message): Message {
-        return channel.sendMessage(message).complete()
+    fun sendMessage(content: Message, success: ((Message) -> Unit)? = null) {
+        channel.sendMessage(content).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
     }
 
-    fun sendMessage(message: MessageEmbed): Message {
-        return channel.sendMessage(message).complete()
+    fun sendMessage(embed: MessageEmbed, success: ((Message) -> Unit)? = null) {
+        channel.sendMessage(embed).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
     }
 
-    fun sendMessage(message: MessageEmbed, content: String): Message {
+    fun sendMessage(embed: MessageEmbed, content: String, success: ((Message) -> Unit)? = null) {
         val builder = MessageBuilder()
 
         return channel.sendMessage(builder.setContent(content)
-                .setEmbed(message)
-                .build()).complete()
+                .setEmbed(embed)
+                .build()).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
     }
 
-    fun sendMessage(message: MessageEmbed, content: Any): Message {
+    fun sendMessage(embed: MessageEmbed, content: Any, success: ((Message) -> Unit)? = null) {
         val builder = MessageBuilder()
 
-        return channel.sendMessage(builder.setContent(content.toString())
-                .setEmbed(message)
-                .build()).complete()
+        channel.sendMessage(builder.setContent(content.toString())
+                .setEmbed(embed)
+                .build()).queue({ message ->
+            if (success != null) {
+                success.invoke(message)
+            }
+        })
     }
 
     fun getAsMention(withSpace: Boolean = true): String {

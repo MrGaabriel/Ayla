@@ -24,7 +24,6 @@ dependencies {
     compile "net.dv8tion:JDA:3.7.1_385"
     compile "com.github.salomonbrys.kotson:kotson:2.5.0"
     compile "ch.qos.logback:logback-classic:1.2.3"
-    compile "com.google.flogger:flogger-system-backend:0.3"
     compile "com.google.guava:guava:26.0-jre"
     compile "org.apache.commons:commons-lang3:3.8"
     compile "org.slf4j:jul-to-slf4j:1.7.25"

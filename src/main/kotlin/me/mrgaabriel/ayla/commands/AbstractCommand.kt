@@ -1,16 +1,16 @@
 package me.mrgaabriel.ayla.commands
 
-import com.google.common.flogger.*
 import me.mrgaabriel.ayla.utils.*
 import net.dv8tion.jda.core.*
 import net.dv8tion.jda.core.entities.*
 import org.apache.commons.lang3.*
 import org.apache.commons.lang3.exception.*
+import org.slf4j.*
 import java.util.*
 
 abstract class AbstractCommand {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(AbstractCommand::class.java)
 
     var label = ""
     var aliases = mutableListOf<String>()
@@ -45,7 +45,7 @@ abstract class AbstractCommand {
         if (valid) {
             try {
                 val start = System.currentTimeMillis()
-                logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw}")
+                logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw}")
 
                 channel.sendTyping().queue()
 
@@ -56,7 +56,7 @@ abstract class AbstractCommand {
                 if (onlyOwner && user.id != ayla.config.ownerId) {
                     context.sendMessage(context.getAsMention(true) + "**Sem permissão!**")
 
-                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    logger.info("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
                     return true
                 }
 
@@ -66,7 +66,7 @@ abstract class AbstractCommand {
                 if (missingBotPermissions.isNotEmpty()) {
                     context.sendMessage(context.getAsMention(true) + "Eu não consigo executar esse comando! Eu preciso das permissões ${missingBotPermissions.joinToString(", ", transform={"`$it`"})}! Peça a algum administrador para me conceder, obrigada!")
 
-                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    logger.info("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
                     return true
                 }
 
@@ -74,16 +74,16 @@ abstract class AbstractCommand {
                 if (missingMemberPermissions.isNotEmpty()) {
                     context.sendMessage(context.getAsMention(true) + "**Sem permissão!**")
 
-                    logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                    logger.info("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
                     return true
                 }
 
                 execute(context)
 
-                logger.atInfo().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
+                logger.info("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - OK! Finalizado em ${System.currentTimeMillis() - start}ms")
                 return true
             } catch (e: Exception) {
-                logger.atSevere().log("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - ERROR! ${e.message?: ""}")
+                logger.info("${ConsoleColors.YELLOW}[COMMAND STATUS]${ConsoleColors.RESET} (${guild.name} -> #${channel.name}) ${user.tag}: ${message.contentRaw} - ERROR! ${e.message?: ""}")
                 e.printStackTrace()
 
                 val stacktrace = ExceptionUtils.getStackTrace(e)

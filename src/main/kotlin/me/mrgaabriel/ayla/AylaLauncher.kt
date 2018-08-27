@@ -1,6 +1,5 @@
 package me.mrgaabriel.ayla
 
-import com.google.common.flogger.*
 import com.google.gson.*
 import me.mrgaabriel.ayla.data.*
 import org.slf4j.*

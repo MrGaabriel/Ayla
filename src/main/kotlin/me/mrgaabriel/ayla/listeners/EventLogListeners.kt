@@ -1,6 +1,5 @@
 package me.mrgaabriel.ayla.listeners
 
-import com.google.common.flogger.*
 import com.mongodb.client.model.*
 import me.mrgaabriel.ayla.utils.*
 import me.mrgaabriel.ayla.utils.eventlog.*
@@ -10,20 +9,21 @@ import net.dv8tion.jda.core.events.guild.member.*
 import net.dv8tion.jda.core.events.message.guild.*
 import net.dv8tion.jda.core.hooks.*
 import org.apache.commons.lang3.exception.*
+import org.slf4j.*
 import java.awt.*
 import java.time.*
 import java.time.format.*
 
 class EventLogListeners : ListenerAdapter() {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(EventLogListeners::class.java)
 
     override fun onGenericGuild(event: GenericGuildEvent) {
         try {
             handleEvent(event)
         } catch (e: Exception) {
-            logger.atSevere().log("Erro ao processar \"handleEvent()\" para o evento $event na guild ${event.guild}")
-            logger.atSevere().log(ExceptionUtils.getStackTrace(e))
+            logger.error("Erro ao processar \"handleEvent()\" para o evento $event na guild ${event.guild}")
+            logger.error(ExceptionUtils.getStackTrace(e))
         }
     }
 

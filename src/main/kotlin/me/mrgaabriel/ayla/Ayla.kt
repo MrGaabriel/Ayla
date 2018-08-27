@@ -1,7 +1,6 @@
 package me.mrgaabriel.ayla
 
 import ch.qos.logback.classic.*
-import com.google.common.flogger.*
 import com.google.common.util.concurrent.*
 import com.mongodb.*
 import com.mongodb.MongoClient
@@ -24,7 +23,7 @@ import java.util.concurrent.*
 
 class Ayla(var config: AylaConfig) {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(Ayla::class.java)
 
     private lateinit var builder: JDABuilder
 
@@ -57,7 +56,7 @@ class Ayla(var config: AylaConfig) {
                 .addEventListener(EventLogListeners())
 
         for (idx in 0..(config.shardCount - 1)) {
-            logger.atInfo().log("Iniciando shard $idx...")
+            logger.info("Iniciando shard $idx...")
 
             val shard = builder.useSharding(idx, config.shardCount)
                     .buildBlocking()
@@ -68,7 +67,7 @@ class Ayla(var config: AylaConfig) {
         RemoveCachedMessagesThread().start()
         RedditPostSyncThread().start()
 
-        logger.atInfo().log("OK! - Ayla inicializada com sucesso!")
+        logger.info("OK! - Ayla inicializada com sucesso!")
     }
 
     fun loadMongo() {

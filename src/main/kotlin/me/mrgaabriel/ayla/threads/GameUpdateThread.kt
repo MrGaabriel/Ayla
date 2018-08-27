@@ -1,15 +1,14 @@
 package me.mrgaabriel.ayla.threads
 
-import com.google.common.flogger.*
 import me.mrgaabriel.ayla.utils.*
 import net.dv8tion.jda.core.entities.*
 import org.apache.commons.lang3.exception.*
+import org.slf4j.*
 import java.util.*
-import kotlin.concurrent.*
 
 class GameUpdateThread : Thread("Game Update Thread") {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(GameUpdateThread::class.java)
 
     override fun run() {
         while (true) {
@@ -18,8 +17,8 @@ class GameUpdateThread : Thread("Game Update Thread") {
 
                 Thread.sleep(30000)
             } catch (e: Exception) {
-                logger.atWarning().log("Erro ao processar o GameUpdateThread")
-                logger.atWarning().log(ExceptionUtils.getStackTrace(e))
+                logger.error("Erro ao processar o GameUpdateThread")
+                logger.error(ExceptionUtils.getStackTrace(e))
             }
         }
     }

@@ -1,13 +1,12 @@
 package me.mrgaabriel.ayla.threads
 
-import com.google.common.flogger.*
 import com.mongodb.client.model.*
 import me.mrgaabriel.ayla.utils.*
-import kotlin.concurrent.*
+import org.slf4j.*
 
 class RemoveCachedMessagesThread : Thread("Remove Cached Messages Thread") {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(RemoveCachedMessagesThread::class.java)
 
     override fun run() {
         while (true) {
@@ -27,7 +26,7 @@ class RemoveCachedMessagesThread : Thread("Remove Cached Messages Thread") {
         }
 
         if (oldMessages.isNotEmpty()) {
-            logger.atInfo().log("${oldMessages.size} mensagens guardadas antigas deletadas com sucesso")
+            logger.info("${oldMessages.size} mensagens guardadas antigas deletadas com sucesso")
         }
     }
 }

@@ -2,17 +2,18 @@ package me.mrgaabriel.ayla.threads
 
 import com.github.kevinsawicki.http.*
 import com.github.salomonbrys.kotson.*
-import com.google.common.flogger.*
 import com.google.gson.*
 import kotlinx.coroutines.experimental.*
 import me.mrgaabriel.ayla.utils.*
 import net.dv8tion.jda.core.*
+import net.dv8tion.jda.core.exceptions.*
 import org.apache.commons.lang3.exception.*
+import org.slf4j.*
 import java.time.*
 
 class RedditPostSyncThread : Thread("Reddit Posts Sync") {
 
-    val logger = FluentLogger.forEnclosingClass()
+    val logger = LoggerFactory.getLogger(RedditPostSyncThread::class.java)
 
     override fun run() {
         while (true) {
@@ -21,8 +22,8 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
 
                 Thread.sleep(60 * 1000)
             } catch (e: Exception) {
-                logger.atSevere().log("Erro ao sincronizar posts do reddit!")
-                logger.atSevere().log(ExceptionUtils.getStackTrace(e))
+                logger.error("Erro ao sincronizar posts do reddit!")
+                logger.error(ExceptionUtils.getStackTrace(e))
 
                 Thread.sleep(60 * 1000)
             }
@@ -96,7 +97,13 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                             if (!channel.canTalk())
                                 continue
 
-                            channel.sendMessage(builder.build()).queue()
+                            channel.sendMessage(builder.build()).queue({}, { e ->
+                                if (e is ErrorResponseException) {
+                                    if (e.errorCode == 400) {
+                                        return@queue
+                                    }
+                                }
+                            })
 
                             it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()
                             guildHandle.config = it

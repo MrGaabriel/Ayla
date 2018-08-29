@@ -15,6 +15,7 @@ import org.slf4j.*
 import java.lang.reflect.*
 import java.lang.reflect.Member
 import java.net.*
+import java.time.*
 import java.util.*
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.*
@@ -136,7 +137,16 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
             payload["public"] = false
 
             val error = JsonObject()
-            error["content"] = ExceptionUtils.getStackTrace(e)
+            error["content"] = """
+                |Message: ${message.contentRaw} (ID: ${message.id})
+                |Channel: ${message.channel}
+                |
+                |Author: ${message.author}
+                |Guild: ${message.guild}
+                |Timestamp: ${OffsetDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault())}
+                |
+                |${ExceptionUtils.getStackTrace(e)}
+            """.trimMargin()
 
             val files = JsonObject()
             files["error.txt"] = error
@@ -152,6 +162,16 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
             val receivedPayload = JsonParser().parse(requestBody)
 
             val url = receivedPayload["html_url"].string
+
+            val guild = ayla.getGuildById("443916597728378882") // Minha guild de testes
+
+            if (guild != null) {
+                val channel = guild.getTextChannelById("484490644681654274")
+
+                if (channel != null) {
+                    channel.sendMessage("<@418340363946819604> $url").queue()
+                }
+            }
 
             val errorMessage = arrayOf(
                     message.author.asMention,

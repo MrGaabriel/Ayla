@@ -1,24 +1,23 @@
 package me.mrgaabriel.ayla.commands.developer
 
-import me.mrgaabriel.ayla.commands.*
+import me.mrgaabriel.ayla.utils.commands.*
+import me.mrgaabriel.ayla.utils.commands.annotations.*
 import net.dv8tion.jda.core.*
 import org.apache.commons.lang3.exception.*
 import java.awt.*
 import java.time.*
 import javax.script.*
 
-class EvalJSCommand : AbstractCommand() {
+class EvalJSCommand : AbstractCommand(
+        "evaljs",
+        CommandCategory.DEVELOPER,
+        "Executa códigos em JavaScript",
+        "código"
+) {
 
-    init {
-        this.label = "evaljs"
-        this.description = "Executa códigos em JavaScript"
-        this.usage = "código"
-
-        this.category = CommandCategory.DEVELOPER
-        this.onlyOwner = true
-    }
-
-    override fun execute(context: CommandContext) {
+    @Subcommand
+    @SubcommandPermissions([], true)
+    fun onExecute(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) code: String) {
         if (context.args.isEmpty()) {
             context.explain()
             return
@@ -26,25 +25,13 @@ class EvalJSCommand : AbstractCommand() {
 
         val scriptEngine = ScriptEngineManager().getEngineByName("nashorn")
 
-        val code = """
-            function eval(context) {
-            ${context.args.joinToString(" ")}
-            }
-        """.trimIndent()
-
         try {
             val start = System.currentTimeMillis()
+            scriptEngine.put("context", context)
 
-            scriptEngine.eval(code)
+            val evaluated = scriptEngine.eval(code)
 
-            val invocable = scriptEngine as Invocable
-            val value = invocable.invokeFunction("eval", context)
-
-            if (value != null) {
-                context.sendMessage("```$value\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
-            } else {
-                context.sendMessage("```OK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
-            }
+            context.sendMessage("```diff\n+ $evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message
@@ -58,11 +45,11 @@ class EvalJSCommand : AbstractCommand() {
 
             val builder = EmbedBuilder()
 
-            builder.setTitle("oopsie woopsie")
+            builder.setTitle("Oopsie Woopsie")
             builder.setDescription("```$message```")
             builder.setColor(Color.RED)
 
-            builder.setFooter("we made a fucky wucky \uD83D\uDE22", null)
+            builder.setFooter("We made a Fucky Wucky \uD83D\uDE22", null)
             builder.setTimestamp(OffsetDateTime.now())
 
             context.sendMessage(builder.build(), context.getAsMention())

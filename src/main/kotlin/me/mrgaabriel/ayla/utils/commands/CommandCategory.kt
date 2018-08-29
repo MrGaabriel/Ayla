@@ -1,4 +1,4 @@
-package me.mrgaabriel.ayla.commands
+package me.mrgaabriel.ayla.utils.commands
 
 enum class CommandCategory {
 

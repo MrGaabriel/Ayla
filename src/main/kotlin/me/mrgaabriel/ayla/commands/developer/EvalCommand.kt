@@ -1,32 +1,29 @@
 package me.mrgaabriel.ayla.commands.developer
 
+import com.github.kevinsawicki.http.*
 import me.mrgaabriel.ayla.*
-import me.mrgaabriel.ayla.commands.*
+import me.mrgaabriel.ayla.utils.commands.*
+import me.mrgaabriel.ayla.utils.commands.annotations.*
 import net.dv8tion.jda.core.*
 import org.apache.commons.lang3.exception.*
-import org.jetbrains.kotlin.script.jsr223.*
 import java.awt.*
 import java.nio.file.*
 import java.time.*
+import java.util.*
 import java.util.jar.*
 import javax.script.*
 
+class EvalCommand : AbstractCommand(
+        "eval",
+        CommandCategory.DEVELOPER,
+        "Executa códigos em Kotlin",
+        "código",
+        listOf("evaluate", "evalkt", "evaluatekt")
+) {
 
-class EvalCommand : AbstractCommand() {
-
-    init {
-        this.label = "eval"
-        this.description = "Executa códigos em Kotlin"
-        this.usage = "código"
-
-        this.aliases = mutableListOf("evaluate", "evalkt", "evaluatekt")
-
-        this.category = CommandCategory.DEVELOPER
-
-        this.onlyOwner = true
-    }
-
-    override fun execute(context: CommandContext) {
+    @Subcommand
+    @SubcommandPermissions([], true)
+    fun onExecute(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) code: String) {
         if (context.args.isEmpty()) {
             context.explain()
             return
@@ -49,37 +46,28 @@ class EvalCommand : AbstractCommand() {
         // Now we set it to our own classpath
         System.setProperty("kotlin.script.classpath", propClassPath)
 
-        val code = """
-            import me.mrgaabriel.ayla.*
+        val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")!!
+
+        val script = """
             import me.mrgaabriel.ayla.commands.*
             import me.mrgaabriel.ayla.data.*
             import me.mrgaabriel.ayla.listeners.*
-            import me.mrgaabriel.ayla.utils.*
             import me.mrgaabriel.ayla.threads.*
+            import me.mrgaabriel.ayla.utils.*
 
-            import kotlin.concurrent.*
-
-            fun eval(context: CommandContext): Any? {
-            ${context.args.joinToString(" ")}
-
-            return null
+            fun eval(context: me.mrgaabriel.ayla.utils.commands.CommandContext): Any? {
+                return $code
             }
         """.trimIndent()
 
-        val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")
         try {
             val start = System.currentTimeMillis()
-
-            scriptEngine.eval(code)
+            scriptEngine.eval(script)
 
             val invocable = scriptEngine as Invocable
-            val value = invocable.invokeFunction("eval", context)
+            val evaluated = invocable.invokeMethod(this, "eval", context)
 
-            if (value != null) {
-                context.sendMessage("```$value\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
-            } else {
-                context.sendMessage("```OK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
-            }
+            context.sendMessage("```diff\n+ $evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message

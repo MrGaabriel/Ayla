@@ -1,29 +1,25 @@
 package me.mrgaabriel.ayla.commands.config
 
-import me.mrgaabriel.ayla.commands.*
 import me.mrgaabriel.ayla.utils.*
+import me.mrgaabriel.ayla.utils.commands.*
+import me.mrgaabriel.ayla.utils.commands.annotations.*
 import net.dv8tion.jda.core.*
 
-class PrefixCommand : AbstractCommand() {
+class PrefixCommand : AbstractCommand(
+        "prefix",
+        CommandCategory.CONFIG,
+        "Altere o prefixo usado para os comandos",
+        "prefixo",
+        listOf("setprefix", "prefixo")
+) {
 
-    init {
-        this.label = "prefix"
-        this.usage = "prefixo"
-        this.description = "Altere o prefixo usado para os comandos"
-
-        this.memberPermissions = mutableListOf(Permission.MANAGE_SERVER)
-        this.aliases = mutableListOf("setprefix", "prefixo")
-
-        this.category = CommandCategory.CONFIG
-    }
-
-    override fun execute(context: CommandContext) {
+    @Subcommand
+    @SubcommandPermissions([Permission.MANAGE_SERVER])
+    fun onExecute(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) prefix: String) {
         if (context.args.isEmpty()) {
             context.explain()
             return
         }
-
-        val prefix = context.args.joinToString(" ") // Permitir definir prefixos com espaços
 
         val config = context.guild.config
 

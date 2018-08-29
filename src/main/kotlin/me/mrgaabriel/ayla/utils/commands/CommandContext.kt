@@ -1,4 +1,4 @@
-package me.mrgaabriel.ayla.commands
+package me.mrgaabriel.ayla.utils.commands
 
 import me.mrgaabriel.ayla.utils.*
 import net.dv8tion.jda.core.*

@@ -1,30 +1,29 @@
 package me.mrgaabriel.ayla.commands.developer
 
 import com.google.gson.*
-import me.mrgaabriel.ayla.commands.*
 import me.mrgaabriel.ayla.data.*
 import me.mrgaabriel.ayla.listeners.*
 import me.mrgaabriel.ayla.utils.*
+import me.mrgaabriel.ayla.utils.commands.*
+import me.mrgaabriel.ayla.utils.commands.annotations.*
 import java.io.*
 
-class ReloadCommand : AbstractCommand() {
+class ReloadCommand : AbstractCommand(
+        "reload",
+        CommandCategory.DEVELOPER,
+        "Recarrega a Ayla",
+        "função"
+) {
 
-    init {
-        this.label = "reload"
-        this.description = "Recarrega a Ayla"
-        this.usage = "função"
-
-        this.category = CommandCategory.DEVELOPER
-        this.onlyOwner = true
-    }
-
-    override fun execute(context: CommandContext) {
+    @Subcommand
+    @SubcommandPermissions([], true)
+    fun onExecute(context: CommandContext, function: String) {
         if (context.args.isEmpty()) {
             context.explain()
             return
         }
 
-        when (context.args[0].toLowerCase()) {
+        when (function) {
             "commands" -> {
                 val oldCommandMap = ayla.commandMap
 

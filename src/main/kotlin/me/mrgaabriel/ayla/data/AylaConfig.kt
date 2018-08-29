@@ -6,5 +6,4 @@ class AylaConfig(val clientToken: String,
                  val clientId: String,
                  val ownerId: String,
                  val shardCount: Int,
-                 val games: List<AylaGameWrapper>,
-                 val gistToken: String)
+                 val games: List<AylaGameWrapper>)

@@ -56,9 +56,7 @@ class EvalCommand : AbstractCommand(
             import me.mrgaabriel.ayla.utils.*
 
             fun eval(context: me.mrgaabriel.ayla.utils.commands.CommandContext): Any? {
-                $code
-
-                return null
+                return $code
             }
         """.trimIndent()
 
@@ -69,7 +67,7 @@ class EvalCommand : AbstractCommand(
             val invocable = scriptEngine as Invocable
             val evaluated = invocable.invokeMethod(this, "eval", context)
 
-            context.sendMessage("```\n$evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
+            context.sendMessage("```diff\n+ $evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message

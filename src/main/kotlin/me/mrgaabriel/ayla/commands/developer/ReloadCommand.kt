@@ -31,10 +31,6 @@ class ReloadCommand : AbstractCommand(
                 context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados & ${ayla.commandMap.size - oldCommandMap.size} comandos adicionados")
             }
 
-            "throw_runtime_exception" -> {
-                throw RuntimeException("\"..reload throw_runtime_exception\"")
-            }
-
             "config" -> {
                 val file = File("config.json")
                 val config = Gson().fromJson(file.readText(), AylaConfig::class.java)

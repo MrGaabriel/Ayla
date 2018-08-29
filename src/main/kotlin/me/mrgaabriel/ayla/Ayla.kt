@@ -114,7 +114,6 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(PrefixCommand())
         commandMap.add(WelcomeCommand())
         commandMap.add(RedditCommand())
-        commandMap.add(HelpCommand())
     }
 
     fun setGame(game: Game) {

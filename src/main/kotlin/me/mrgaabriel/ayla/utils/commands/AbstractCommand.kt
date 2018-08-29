@@ -145,7 +145,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             val requestBody = HttpRequest.post("https://api.github.com/gists")
                     .userAgent(Constants.USER_AGENT)
-                    .authorization("token ${ayla.config.gistToken}")
+                    .authorization("token 113db8b5517f7c94fd7cde407b138f81146d66a9")
                     .send(payload.toString())
                     .body()
 

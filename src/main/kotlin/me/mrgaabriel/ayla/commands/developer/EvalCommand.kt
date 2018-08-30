@@ -6,6 +6,7 @@ import me.mrgaabriel.ayla.utils.commands.*
 import me.mrgaabriel.ayla.utils.commands.annotations.*
 import net.dv8tion.jda.core.*
 import org.apache.commons.lang3.exception.*
+import org.jetbrains.kotlin.script.jsr223.*
 import java.awt.*
 import java.nio.file.*
 import java.time.*
@@ -46,7 +47,7 @@ class EvalCommand : AbstractCommand(
         // Now we set it to our own classpath
         System.setProperty("kotlin.script.classpath", propClassPath)
 
-        val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")!!
+        val scriptEngine = ScriptEngineManager().getEngineByName("kotlin") as KotlinJsr223JvmLocalScriptEngine
 
         val script = """
             import me.mrgaabriel.ayla.commands.*
@@ -56,7 +57,9 @@ class EvalCommand : AbstractCommand(
             import me.mrgaabriel.ayla.utils.*
 
             fun eval(context: me.mrgaabriel.ayla.utils.commands.CommandContext): Any? {
-                return $code
+                $code
+
+                return null
             }
         """.trimIndent()
 
@@ -67,7 +70,7 @@ class EvalCommand : AbstractCommand(
             val invocable = scriptEngine as Invocable
             val evaluated = invocable.invokeMethod(this, "eval", context)
 
-            context.sendMessage("```diff\n+ $evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
+            context.sendMessage("```\n$evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message

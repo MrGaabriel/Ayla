@@ -25,7 +25,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
     val logger = LoggerFactory.getLogger(AbstractCommand::class.java)
 
     fun matches(msg: Message): Boolean {
-        val message = msg.contentDisplay
+        val message = msg.contentRaw
 
         val config = msg.guild.config
 

@@ -4,5 +4,7 @@ enum class ArgumentType {
     ARGUMENT_LIST,
     COMMAND_LABEL,
     CUSTOM,
-    CUSTOM_ARGUMENT
+    CUSTOM_ARGUMENT,
+    USER,
+    TEXT_CHANNEL
 }

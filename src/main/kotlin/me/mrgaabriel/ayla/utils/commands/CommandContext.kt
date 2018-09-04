@@ -121,6 +121,110 @@ class CommandContext(val message: Message,
         sendMessage(builder.build(), getAsMention())
     }
 
+    fun getTextChannel(input: String?): TextChannel? {
+        if (input == null)
+            return null
+
+        val arg = input
+
+        val channels = guild.getTextChannelsByName(arg, false)
+        if (channels.isNotEmpty()) {
+            return channels.get(0)
+        }
+
+        val id = arg
+                .replace("<", "")
+                .replace("#", "")
+                .replace(">", "")
+
+        if (!id.isValidSnowflake())
+            return null
+
+        val channel = guild.getTextChannelById(id)
+
+        if (channel != null) {
+            return channel
+        }
+
+        return null
+    }
+
+    fun getTextChannelAt(argument: Int): TextChannel? {
+        if (args.size - 1 < argument) {
+            return null
+        }
+
+        val arg = args[argument]
+
+        val channels = guild.getTextChannelsByName(arg, false)
+        if (channels.isNotEmpty()) {
+            return channels.get(0)
+        }
+
+        val id = arg
+                .replace("<", "")
+                .replace("#", "")
+                .replace(">", "")
+
+        if (!id.isValidSnowflake())
+            return null
+
+        val channel = guild.getTextChannelById(id)
+
+        if (channel != null) {
+            return channel
+        }
+
+        return null
+    }
+
+    fun getUser(input: String?): User? {
+        if (input == null)
+            return null
+
+        val arg = input
+
+        val splitted = arg.split("#")
+        if (splitted.size == 2) {
+            val users = mutableListOf<User>()
+            ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
+
+            val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
+
+            if (matchedUser.isPresent) {
+                return matchedUser.get()
+            }
+        }
+
+        val members = guild.getMembersByEffectiveName(arg, true)
+        if (members.isNotEmpty()) {
+            return members.get(0).user
+        }
+
+        val users = mutableListOf<User>()
+        ayla.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
+
+        if (users.isNotEmpty()) {
+            return users.get(0)
+        }
+
+        val id = arg.replace("<", "")
+                .replace("@", "")
+                .replace("!", "")
+                .replace(">", "") // Se for uma menção, retirar <, @, ! e >
+
+        if (!id.isValidSnowflake())
+            return null
+
+        val user = ayla.getUserById(id)
+
+        if (user != null) {
+            return user
+        }
+
+        return null
+    }
+
     fun getUserAt(argument: Int): User? {
         if (args.size - 1 < argument) {
             return null

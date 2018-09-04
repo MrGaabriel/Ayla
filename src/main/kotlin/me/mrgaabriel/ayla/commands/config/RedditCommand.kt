@@ -7,6 +7,7 @@ import me.mrgaabriel.ayla.utils.*
 import me.mrgaabriel.ayla.utils.commands.*
 import me.mrgaabriel.ayla.utils.commands.annotations.*
 import net.dv8tion.jda.core.*
+import net.dv8tion.jda.core.entities.TextChannel
 
 class RedditCommand : AbstractCommand(
         "reddit",
@@ -17,7 +18,7 @@ class RedditCommand : AbstractCommand(
 
     @Subcommand()
     @SubcommandPermissions([Permission.MANAGE_SERVER])
-    fun onExecute(context: CommandContext, subreddit: String, channel: String) {
+    fun onExecute(context: CommandContext, subreddit: String, @InjectArgument(ArgumentType.TEXT_CHANNEL) textChannel: TextChannel?) {
         if (context.args.size != 2) {
             context.explain()
             return
@@ -38,20 +39,15 @@ class RedditCommand : AbstractCommand(
 
         val config = context.guild.config
 
-        val channelId = channel
-                .replace("<", "")
-                .replace("#", "")
-                .replace(">", "")
-
-        if (context.guild.getTextChannelById(channelId) == null) {
+        if (textChannel == null) {
             context.sendMessage(context.getAsMention(true) + "Canal inexistente!")
             return
         }
 
-        config.redditSubs[subreddit] = channelId
+        config.redditSubs[subreddit] = textChannel.id
 
         context.guild.config = config
-        context.sendMessage(context.getAsMention(true) + "Agora as novidades do sub-reddit `r/$subreddit` serão postadas no canal <#${channelId}>!")
+        context.sendMessage(context.getAsMention(true) + "Agora as novidades do sub-reddit `r/$subreddit` serão postadas no canal ${textChannel.asMention}!")
     }
 
     @Subcommand(["off"])

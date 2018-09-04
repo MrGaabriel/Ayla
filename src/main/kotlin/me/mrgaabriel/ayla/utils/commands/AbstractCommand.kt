@@ -203,6 +203,12 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
                     params.add(arguments.joinToString(" "))
                 }
+                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.USER -> {
+                    params.add(context.getUser(arguments.getOrNull(dynamicArgIdx)))
+                }
+                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.TEXT_CHANNEL -> {
+                    params.add(context.getTextChannel(arguments.getOrNull(dynamicArgIdx)))
+                }
                 param.type.isAssignableFrom(Member::class.java) && sender is Member -> { params.add(sender) }
                 param.type.isAssignableFrom(User::class.java) && sender is User -> { params.add(sender) }
                 param.type.isAssignableFrom(String::class.java) -> {

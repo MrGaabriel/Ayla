@@ -11,6 +11,7 @@ class AylaGuildConfig @BsonCreator constructor(@BsonProperty("_id") _id: String)
 
     var eventLogEnabled = false
     var eventLogChannel = ""
+    var eventLogIgnoredChannels = mutableListOf<String>()
 
     var welcomeEnabled = false
     var welcomeChannel = ""

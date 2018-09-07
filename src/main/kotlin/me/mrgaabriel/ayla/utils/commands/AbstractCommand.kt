@@ -114,6 +114,26 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                     return true
                 }
 
+                val defaultBotPermissions = arrayOf(
+                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_EXT_EMOJI,
+                        Permission.MESSAGE_EMBED_LINKS,
+                        Permission.MESSAGE_ATTACH_FILES,
+                        Permission.MESSAGE_ADD_REACTION
+                )
+                val allBotPermissions = mutableListOf<Permission>()
+                allBotPermissions.addAll(defaultBotPermissions)
+                allBotPermissions.addAll(permissions.botPermissions)
+
+                val missingBotPermissions = mutableListOf<Permission>()
+                missingBotPermissions.addAll(allBotPermissions.filter { !context.guild.selfMember.hasPermission(it) })
+                if (missingBotPermissions.isNotEmpty()) {
+                    context.sendMessage(context.getAsMention(true) + "Eu não posso executar este comando porque eu não tenho acesso a `${missingBotPermissions.joinToString(" ")}`! :cry:")
+
+                    logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
+                    return true
+                }
+
                 val missingPermissions = mutableListOf<Permission>()
                 missingPermissions.addAll(permissions.permissions.filter { !message.member.hasPermission(it) })
 

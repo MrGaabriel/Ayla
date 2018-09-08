@@ -221,6 +221,11 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                     params.add(commandLabel)
                 }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
+                    val duplicated = arguments.toMutableList()
+                    for (idx in 0 until dynamicArgIdx) {
+                        duplicated.removeAt(0)
+                    }
+
                     params.add(arguments.joinToString(" "))
                 }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.USER -> {

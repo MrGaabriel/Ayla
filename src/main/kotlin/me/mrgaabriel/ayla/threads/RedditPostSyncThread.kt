@@ -55,6 +55,11 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                                     ?: "0").toLong()) { // É um post novo!
                             val guildHandle = ayla.getGuildById(it.id) ?: return@forEach
 
+                            if (comment["over_18"].bool) { // Se o comentário estiver marcado como NSFW... iremos simplesmente ignorá-lo!
+                                it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()
+                                return@forEach
+                            }
+
                             val channel = guildHandle.getTextChannelById(channelId) ?: return@forEach
 
                             val builder = EmbedBuilder()

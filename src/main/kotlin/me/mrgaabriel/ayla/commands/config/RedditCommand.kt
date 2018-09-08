@@ -24,7 +24,7 @@ class RedditCommand : AbstractCommand(
             return
         }
 
-        val request = HttpRequest.get("https://reddit.com/r/$subreddit/.json")
+        val request = HttpRequest.get("https://reddit.com/r/$subreddit/about.json")
                 .userAgent(Constants.USER_AGENT)
                 .body()
         val payload = JsonParser().parse(request).obj
@@ -34,6 +34,9 @@ class RedditCommand : AbstractCommand(
             return
         } else if (payload["error"] != null && payload["error"].int == 403 && payload["message"].string == "Forbidden") {
             context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` é privada!")
+            return
+        } else if (payload["data"] != null && payload["data"]["over18"].bool == true) {
+            context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` é marcado como NSFW... e eu não quero postar este tipo de coisa por aqui.")
             return
         }
 

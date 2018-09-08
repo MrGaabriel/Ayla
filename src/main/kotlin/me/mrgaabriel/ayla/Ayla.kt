@@ -44,7 +44,7 @@ class Ayla(var config: AylaConfig) {
         return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())
     }
 
-    val executor = createThreadPool("Executor Thread %d")
+    val executor = createThreadPool("Executor Thread %d") // Testando as builds do TeamCity, ignore
 
     fun start() {
         loadMongo()

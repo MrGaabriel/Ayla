@@ -1,7 +1,7 @@
 <h1 align="center">Ayla</h1>
 
 <p align="center">
-  <a href="https://ci.mrgaabriel.space/viewType.html?buildTypeId=Public_Ayla_Build">
+  <a href="https://ci.mrgaabriel.space/viewType.html?buildTypeId=Public_Ayla_Build?guest=1">
     <img align="center" src="https://ci.mrgaabriel.space/app/rest/builds/buildType:Public_Ayla_Build/statusIcon"/>
   </a>
 </p>

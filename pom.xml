@@ -134,7 +134,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>dependencies/</classpathPrefix>
-                            <mainClass>me.mrgaabriel.ayla.Ayla</mainClass>
+                            <mainClass>me.mrgaabriel.ayla.AylaLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

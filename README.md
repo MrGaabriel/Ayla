@@ -31,9 +31,9 @@ Como eu nunca pensei que as pessoas iriam fazer self-hosting, há várias coisas
 1. Use `git clone https://github.com/MrGaabriel/Ayla` em qualquer pasta para clonar o repositório da Ayla
 2. Abra o código com sua IDE de preferência (eu uso o [IntelliJ IDEA](https://jetbrains.com/idea))
 3. Substitua os códigos hard-coded para adequar o bot a você
-4. Compile-a usando `gradle jar`
-5. Pegue o jar que foi gerado na pasta `build/libs/`
-6. Execute-o usando `java -Xms512M -Xmx512M -jar Ayla-x.x.x.jar` substituindo a memória alocada por qual você quiser (eu aloco 1GB)
+4. Compile-a usando `mvn package`
+5. Pegue o arquivo jar que foi gerado na pasta `target`, junto com a pasta `libs` 
+6. Execute-o usando `java -Xms512M -Xmx512M -jar Ayla-(versão).jar` substituindo a memória alocada por qual você quiser (eu aloco 1GB)
 7. Configure-o pelo arquivo gerado `config.json` com todas as informações necessárias
 8. Re-execute-o!
 

@@ -8,6 +8,7 @@ import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.MessageBuilder
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -139,6 +140,14 @@ class DiscordListeners : ListenerAdapter() {
 
                 channelHandle.sendMessage(message).queue()
             }
+        }
+    }
+
+    override fun onGuildLeave(event: GuildLeaveEvent) {
+        ayla.executor.execute {
+            ayla.guildsColl.deleteOne(
+                    Filters.eq("_id", event.guild.id)
+            )
         }
     }
 

@@ -17,17 +17,7 @@ object AylaLauncher {
 
         if (!file.exists()) {
             file.createNewFile()
-            file.writeText(Gson().toJson(
-                    AylaConfig(
-                            "Token do Bot",
-                            "ID do bot",
-                            "ID do dono do bot, usado para comandos especiais",
-                            1,
-                            listOf(),
-                            "Token usado para criar Gists no GitHub",
-                            "Token do Vespertine Bot List"
-                    )
-            ))
+            file.writeText(Gson().toJson(AylaConfig()))
 
             println("Parece que é a primeira vez que você está rodando a Ayla!")
             println("Configure-a no arquivo \"config.json\"")

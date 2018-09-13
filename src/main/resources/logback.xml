@@ -1,0 +1,14 @@
+<configuration scan="true" scanPeriod="15 seconds">
+    <timestamp key="byDay" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>false</withJansi>
+        <encoder>
+            <pattern>%yellow([%d{HH:mm:ss.SSS}]) [%magenta(%thread)/%highlight(%level)]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

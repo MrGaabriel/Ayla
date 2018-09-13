@@ -27,6 +27,8 @@ class UpdateBotStatsThread : Thread("Update Bot Stats") {
     fun updateStats() {
         logger.info("Atualizando os dados do bot...")
 
+        val guildsCount = ayla.shards.sumBy { it.guilds.size }
+
         // Vespertine Bots List (https://bots.perfectdreams.net)
         val vespertine = HttpRequest.put("https://bots.perfectdreams.net/api/v1/bot/${ayla.config.clientId}/stats")
                 .userAgent(Constants.USER_AGENT)
@@ -34,8 +36,19 @@ class UpdateBotStatsThread : Thread("Update Bot Stats") {
                 .acceptJson()
                 .contentType("application/json")
                 .send(jsonObject(
-                        "guildCount" to ayla.shards.sumBy { it.guilds.size }
+                        "guildCount" to guildsCount
                 ).toString())
         logger.info("Vespertine Bots List -> Código ${vespertine.code()}")
+
+        // Discord Bots List (https://discordbots.org)
+        val dbl = HttpRequest.post("https://discordbots.org/api/bots/${ayla.config.clientId}/stats")
+                .userAgent(Constants.USER_AGENT)
+                .authorization(ayla.config.discordBotListToken)
+                .acceptJson()
+                .contentType("application/json")
+                .send(jsonObject(
+                        "server_count" to guildsCount
+                ).toString())
+        logger.info("Discord Bots List -> Código ${dbl.code()}")
     }
 }

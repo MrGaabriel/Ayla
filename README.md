@@ -4,6 +4,9 @@
   <a href="https://ci.mrgaabriel.space/viewType.html?buildTypeId=Public_Ayla_Build?guest=1">
     <img align="center" src="https://ci.mrgaabriel.space/app/rest/builds/buildType:Public_Ayla_Build/statusIcon"/>
   </a>
+  <a href="https://dependabot.com">
+    <img align="center" src="https://api.dependabot.com/badges/status?host=github&repo=MrGaabriel/Ayla">
+  </a>
 </p>
 
 :wave: Olá! Como vai você!? Procurando um bot de terras tupiniquins para alegrar seu servidor!?

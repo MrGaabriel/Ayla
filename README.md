@@ -9,6 +9,15 @@
   </a>
 </p>
 
+<p align="center">
+    <a href="https://github.com/MrGaabriel/Ayla/stargazers">
+    <img align="center" src="https://img.shields.io/github/stars/MrGaabriel/Ayla.svg?style=social&label=Stars">
+  </a>
+  <a href="https://github.com/MrGaabriel/Ayla/watchers">
+    <img align="center" src="https://img.shields.io/github/watchers/MrGaabriel/Ayla.svg?style=social&label=Watch">
+  </a>
+</p>
+
 :wave: Olá! Como vai você!? Procurando um bot de terras tupiniquins para alegrar seu servidor!?
 
 Vou me apresentar: Eu me chamo Ayla, cujo nome significa "luar" em Havaiano (eu amo o meu nome!) e eu sou um bot criado em terras tupiniquins para alegrar o seu servidor, com funções de A até Z! 
@@ -53,5 +62,10 @@ mas **NÃO** te garante:
 
 ...e te **OBRIGA** a:
 - Ter a mesma licença desse aqui, sem NENHUMA mudança.
+
+<h1></h1>
+<p align="center">
+  <img align="center" src="https://discordbots.org/api/widget/475312446156832768.svg">
+</p>
 
 <p align="center">Discord", "DiscordApp" and any associated logos are registered trademarks of Discord Inc.</p>

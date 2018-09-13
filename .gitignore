@@ -97,3 +97,4 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 src/main/resources/rebel.xml
+*.iml

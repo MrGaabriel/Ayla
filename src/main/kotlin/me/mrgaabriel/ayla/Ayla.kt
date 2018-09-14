@@ -106,10 +106,10 @@ class Ayla(var config: AylaConfig) {
                 .codecRegistry(pojoCodecRegistry)
                 .build()
 
-        val client = MongoClient("127.0.0.1:27017", options)
+        val client = MongoClient(config.mongoHostname, options)
         mongo = client
 
-        val database = client.getDatabase("ayla")
+        val database = client.getDatabase(config.mongoDatabaseName)
         mongoDatabase = database
 
         val users = database.getCollection("users", AylaUser::class.java)

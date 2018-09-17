@@ -109,6 +109,7 @@ class Ayla(var config: AylaConfig) {
         val client = MongoClient(config.mongoHostname, options)
         mongo = client
 
+
         val database = client.getDatabase(config.mongoDatabaseName)
         mongoDatabase = database
 

@@ -191,15 +191,11 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             val url = receivedPayload["html_url"].string
 
-            val guild = ayla.getGuildById("443916597728378882") // Minha guild de testes
+            // TODO: Fazer com que isto seja configurável
+            val guild = ayla.getGuildById("451537296441737216") // Minha guild de testes
+            val channel = guild?.getTextChannelById("491339383904010240")
 
-            if (guild != null) {
-                val channel = guild.getTextChannelById("484490644681654274")
-
-                if (channel != null) {
-                    channel.sendMessage("<@418340363946819604> $url").queue()
-                }
-            }
+            channel?.sendMessage("<@${ayla.config.ownerId}> $url")?.queue()
 
             val errorMessage = arrayOf(
                     message.author.asMention,

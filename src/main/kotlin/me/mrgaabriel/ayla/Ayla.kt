@@ -81,7 +81,7 @@ class Ayla(var config: AylaConfig) {
             logger.info("Iniciando shard $idx...")
 
             val shard = builder.useSharding(idx, config.shardCount)
-                    .buildBlocking()
+                    .build().awaitReady()
             shards.add(shard)
         }
 

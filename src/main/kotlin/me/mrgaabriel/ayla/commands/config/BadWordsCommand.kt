@@ -4,7 +4,7 @@ import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
 import me.mrgaabriel.ayla.utils.commands.CommandContext
 import me.mrgaabriel.ayla.utils.commands.annotations.ArgumentType
-import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument
+import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument // Testando
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 import me.mrgaabriel.ayla.utils.config

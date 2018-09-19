@@ -98,3 +98,11 @@ fun String.isValidSnowflake(): Boolean {
         return false
     }
 }
+
+fun User.saveProfile(aylaUser: AylaUser) {
+    this.aylaUser = aylaUser
+}
+
+fun Guild.saveConfig(config: AylaGuildConfig) {
+    this.config = config
+}

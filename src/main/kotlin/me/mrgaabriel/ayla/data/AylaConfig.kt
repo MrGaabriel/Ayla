@@ -10,4 +10,5 @@ class AylaConfig(val clientToken: String = "Token do Bot",
                  val gistToken: String = "Token do GitHub",
                  val vespertineBotsToken: String = "Token do Vespertine's Bot List",
                  val discordBotListToken: String = "Token do Discord Bot List",
-                 val mongoDatabase: String = "Nome da database do MongoDB")
+                 val mongoHostname: String = "Hostname do MongoDB",
+                 val mongoDatabaseName: String = "Nome do banco de dados do MongoDB")

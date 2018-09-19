@@ -36,6 +36,7 @@ import net.dv8tion.jda.core.JDABuilder
 import net.dv8tion.jda.core.OnlineStatus
 import net.dv8tion.jda.core.entities.Game
 import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
 import org.bson.codecs.configuration.CodecRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
@@ -155,6 +156,16 @@ class Ayla(var config: AylaConfig) {
         }
 
         return user
+    }
+
+    fun getTextChannelById(id: String): TextChannel? {
+        var channel: TextChannel? = null
+
+        shards.forEach {
+            channel = it.getTextChannelById(id)
+        }
+
+        return channel
     }
 
     fun getGuildById(id: String): Guild? {

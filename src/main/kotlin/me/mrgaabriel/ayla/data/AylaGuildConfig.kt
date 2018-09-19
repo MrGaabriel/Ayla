@@ -17,10 +17,13 @@ class AylaGuildConfig @BsonCreator constructor(@BsonProperty("_id") _id: String)
     var welcomeEnabled = false
     var welcomeChannel = ""
 
-    var redditSubs = mutableMapOf<String, String>() // Sub reddit e ID do canal que vai ser avisado
-    var lastRedditPostCreation = mutableMapOf<String, String>()
+    var redditSubs = mutableListOf<SubRedditWrapper>()
+    var redditSubsLastPost = mutableMapOf<String, Long>()
 
     var badWordsEnabled = true
     var badWords = mutableListOf<String>()
     var badWordsIgnoredChannels = mutableListOf<String>()
+
+    class SubRedditWrapper @BsonCreator constructor(@BsonProperty("subReddit") val subReddit: String,
+                                                    @BsonProperty("channelId") val channelId: String)
 }

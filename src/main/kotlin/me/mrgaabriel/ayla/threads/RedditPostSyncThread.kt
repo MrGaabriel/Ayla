@@ -5,19 +5,27 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.bool
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.long
+import com.github.salomonbrys.kotson.nullObj
 import com.github.salomonbrys.kotson.nullString
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonParser
+import com.mongodb.client.model.Filters
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
+import me.mrgaabriel.ayla.utils.saveConfig
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.exceptions.ErrorResponseException
 import org.apache.commons.lang3.exception.ExceptionUtils
+import org.bson.Document
 import org.slf4j.LoggerFactory
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import kotlin.collections.filter
 import kotlin.collections.forEach
 import kotlin.collections.isNotEmpty
@@ -45,45 +53,62 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
     fun syncRedditPosts() {
         val guilds = ayla.guildsColl.find().filter { it.redditSubs.isNotEmpty() }
 
+        val redditSubs = mutableMapOf<AylaGuildConfig.SubRedditWrapper, AylaGuildConfig>()
+
+        guilds.forEach {
+            val subs = it.redditSubs
+
+            for (sub in subs) {
+                redditSubs.put(sub, it)
+            }
+        }
+
         async {
-            guilds.forEach {
-                it.redditSubs.forEach { subReddit, channelId ->
-                    val request = HttpRequest.get("https://reddit.com/r/$subReddit/new/.json")
+            try {
+                logger.info("Verificando sub-reddits! Atualmente eu estou verificando ${redditSubs.keys.size} sub-reddits!")
+
+                var posts = 0
+                redditSubs.forEach { sub, guild ->
+                    val request = HttpRequest.get("https://reddit.com/r/${sub.subReddit}/new/.json")
                             .userAgent(Constants.USER_AGENT)
 
-                    if (request.code() != 200) {
-                        throw RuntimeException("Request code for https://reddit.com/r/$subReddit/new/.json is not 200!")
+                    if (!request.ok()) {
+                        throw RuntimeException("Request for \"https://reddit.com/r/${sub.subReddit}/new/.json\" is not OK!")
                     }
 
                     val payload = JsonParser().parse(request.body())
-                    val data = payload["data"].obj
 
+                    val data = payload["data"].obj
                     val children = data["children"].array
 
-                    for (child in children) {
-                        val comment = child["data"]
+                    val post = children[0]?.get("data")?.obj
 
-                        if (comment["created"].long > (it.lastRedditPostCreation[subReddit]
-                                    ?: "0").toLong()) { // É um post novo!
-                            val guildHandle = ayla.getGuildById(it.id) ?: return@forEach
+                    if (post != null) {
+                        val lastCachedPostCreation = guild.redditSubsLastPost[sub.subReddit] ?: 0 // Elvis operator
+                        val creationTime = post["created_utc"].long
 
-                            if (comment["over_18"].bool) { // Se o comentário estiver marcado como NSFW... iremos simplesmente ignorá-lo!
-                                it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()
+                        if (creationTime > lastCachedPostCreation) {
+                            val guildHandle = ayla.getGuildById(guild.id)
+                                ?: throw RuntimeException("Guild ID is null") // what the fuck
+                            val channel = ayla.getTextChannelById(sub.channelId) ?: return@forEach // :rolling_eyes:
+
+                            if (post["over_18"].bool) { // Não, não e não
+                                guild.redditSubsLastPost[sub.subReddit] = creationTime
+                                guildHandle.saveConfig(guild)
+
                                 return@forEach
                             }
 
-                            val channel = guildHandle.getTextChannelById(channelId) ?: return@forEach
-
                             val builder = EmbedBuilder()
 
-                            builder.setAuthor((comment["title"].nullString
-                                ?: "Sem título") + " - r/$subReddit", "https://reddit.com" + comment["permalink"].nullString, "https://pbs.twimg.com/profile_images/868147475852312577/fjCSPU-a_400x400.jpg")
+                            builder.setAuthor((post["title"].nullString
+                                ?: "Sem título") + " - r/${sub.subReddit}", "https://reddit.com" + post["permalink"].nullString, "https://pbs.twimg.com/profile_images/868147475852312577/fjCSPU-a_400x400.jpg") // TODO: Parar de usar os assets do Twitter
                             builder.setColor(Constants.REDDIT_ORANGE_RED)
 
-                            val content = comment["selftext"].nullString
+                            val content = post["selftext"].nullString
                             if (content != null) {
                                 val contentSubstringed = if (content.length > 2000) {
-                                    content.substring(0, 2030) + "... [Leia mais aqui](https;//reddit.com${comment["permalink"].string})"
+                                    content.substring(0, 2030) + "... [Leia mais aqui](https;//reddit.com${post["permalink"].string})"
                                 } else {
                                     content
                                 }
@@ -91,45 +116,135 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                                 builder.setDescription(contentSubstringed)
                             }
 
-                            try {
-                                val images = comment["preview"].obj["images"].array.iterator().next()
+                            val images = post["preview"]?.obj?.get("images")?.array?.iterator()?.next()
+
+                            val url = post["url"].nullString
+
+                            if (images != null) {
                                 val imageContent = images.obj
 
-                                val url = comment["url"].nullString
+                                val imageUrl = imageContent["source"].obj["url"].string
 
-                                if (images != null) {
-                                    val imageUrl = imageContent["source"].obj["url"].string
-
-                                    builder.setImage(imageUrl)
-                                } else if (url != null) {
-                                    builder.setImage(url)
-                                }
-                            } catch (e: NoSuchElementException) {
-                                // Não tem imagens
+                                builder.setImage(imageUrl)
+                            } else if (url != null) {
+                                builder.setImage(url)
                             }
 
-                            builder.setFooter("u/" + comment["author"].string, null)
-                            builder.setTimestamp(OffsetDateTime.now())
+                            builder.setFooter("u/" + post["author"].string, null)
+                            builder.setTimestamp(Instant.ofEpochMilli(creationTime).atZone(ZoneId.systemDefault()))
 
-                            if (!channel.canTalk())
-                                continue
+                            if (!channel.canTalk()) { // :rolling_eyes:
+                                return@forEach
+                            }
 
-                            channel.sendMessage(builder.build()).queue({}, { e ->
-                                if (e is ErrorResponseException) {
-                                    if (e.errorCode == 400) {
-                                        return@queue
-                                    }
-                                }
-                            })
+                            channel.sendMessage(builder.build()).queue()
 
-                            it.lastRedditPostCreation[subReddit] = comment["created"].long.toString()
-                            guildHandle.config = it
+                            guild.redditSubsLastPost[sub.subReddit] = creationTime
+                            guildHandle.saveConfig(guild)
+
+                            posts++
+                        }
+                    }
+                }
+
+                logger.info("Sucesso! Encontrei e enviei $posts posts!")
+            } catch (e: Exception) {
+                logger.info("ih serjão sujou")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    /*fun _syncRedditPosts() {
+        val guilds = ayla.guildsColl.find().filter { it.redditSubs.isNotEmpty() }
+
+        async {
+            val toBeChecked = mutableListOf<AylaGuildConfig.SubRedditWrapper>() // Sub-reddits que vão ser verificados
+            guilds.forEach { toBeChecked.addAll(it.redditSubs) } // Adicionar todos os sub-reddits que deverão ser verificados
+
+            logger.info("Verificando ${toBeChecked.distinctBy { it.subReddit }.size} sub-reddits...")
+            toBeChecked.forEach {
+                val sub = it.subReddit
+
+                val request = HttpRequest.get("https://reddit.com/r/$sub/new/.json")
+                        .userAgent(Constants.USER_AGENT)
+
+                if (!request.ok()) {
+                    throw RuntimeException("Request to https://reddit.com/r/$sub/new/.json is not OK!")
+                }
+
+                val payload = JsonParser().parse(request.body())
+
+                val data = payload["data"].obj
+                val children = data["children"].array
+
+                children.forEach { element ->
+                    val post  = element["data"].obj
+
+                    if (post["created"].long > ) {
+                        logger.info("Achei um post novo no /r/$sub!")
+
+                        if (post["over_18"].bool) { // Se o comentário estiver marcado como NSFW... iremos simplesmente ignorá-lo!
+                            it.lastPostCreation = post["created"].long
+                            return@forEach
                         }
 
-                        break
+                        val channel = ayla.getTextChannelById(it.channelId) ?: return@forEach
+
+                        val builder = EmbedBuilder()
+
+                        builder.setAuthor((post["title"].nullString
+                            ?: "Sem título") + " - r/$sub", "https://reddit.com" + post["permalink"].nullString, "https://pbs.twimg.com/profile_images/868147475852312577/fjCSPU-a_400x400.jpg")
+                        builder.setColor(Constants.REDDIT_ORANGE_RED)
+
+                        val content = post["selftext"].nullString
+                        if (content != null) {
+                            val contentSubstringed = if (content.length > 2000) {
+                                content.substring(0, 2030) + "... [Leia mais aqui](https;//reddit.com${post["permalink"].string})"
+                            } else {
+                                content
+                            }
+
+                            builder.setDescription(contentSubstringed)
+                        }
+
+                        try {
+                            val images = post["preview"].obj["images"].array.iterator().next()
+                            val imageContent = images.obj
+
+                            val url = post["url"].nullString
+
+                            if (images != null) {
+                                val imageUrl = imageContent["source"].obj["url"].string
+
+                                builder.setImage(imageUrl)
+                            } else if (url != null) {
+                                builder.setImage(url)
+                            }
+                        } catch (e: NoSuchElementException) {
+                            // Não tem imagens
+                        }
+
+                        builder.setFooter("u/" + post["author"].string, null)
+                        builder.setTimestamp(OffsetDateTime.now())
+
+                        if (!channel.canTalk())
+                            return@forEach
+
+                        channel.sendMessage(builder.build()).queue({
+                            logger.info("Consegui mandar o post novo na guild ${channel.guild.name} - Canal ${channel.id}")
+                        }, {
+                            logger.error("Não consegui mandar o post novo na guild ${channel.guild.name} - Canal ${channel.id}")
+                            logger.error(ExceptionUtils.getStackTrace(it))
+                        })
+
+                        val config = channel.guild.config
+
+                        config.redditSubsLastPost[it] = post["created"].long
+                        channel.guild.config = config
                     }
                 }
             }
         }
-    }
+    }*/
 }

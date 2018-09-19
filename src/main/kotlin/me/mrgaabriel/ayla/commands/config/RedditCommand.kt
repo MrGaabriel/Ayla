@@ -7,6 +7,7 @@ import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonParser
+import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
@@ -65,7 +66,7 @@ class RedditCommand : AbstractCommand(
             return
         }
 
-        config.redditSubs[subreddit] = textChannel.id
+        config.redditSubs.add(AylaGuildConfig.SubRedditWrapper(subreddit, textChannel.id))
 
         context.guild.config = config
         context.sendMessage(context.getAsMention(true) + "Agora as novidades do sub-reddit `r/$subreddit` serão postadas no canal ${textChannel.asMention}!")
@@ -76,13 +77,12 @@ class RedditCommand : AbstractCommand(
     fun onOff(context: CommandContext, subreddit: String) {
         val config = context.guild.config
 
-        if (config.redditSubs[subreddit] == null) {
+        if (!config.redditSubs.any { it.subReddit == subreddit }) {
             context.sendMessage(context.getAsMention(true) + "O sub-reddit `r/$subreddit` não está configurado para postar em nenhum canal!")
             return
         }
 
-        config.redditSubs.remove(subreddit)
-        config.lastRedditPostCreation.remove(subreddit)
+        config.redditSubs.remove(config.redditSubs.firstOrNull { it.subReddit == subreddit })
         context.guild.config = config
 
         context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` removido!")

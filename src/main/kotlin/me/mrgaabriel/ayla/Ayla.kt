@@ -142,10 +142,12 @@ class Ayla(var config: AylaConfig) {
 
         AylaUtils.getClasses("me.mrgaabriel.ayla.commands").forEach { clazz ->
             try {
-                val command = clazz.newInstance() as AbstractCommand
+                if (AbstractCommand::class.java.isAssignableFrom(clazz)) {
+                    val command = clazz.newInstance() as AbstractCommand
 
-                commandMap.add(command)
-                logger.info("Comando ${clazz.simpleName} carregado com sucesso")
+                    commandMap.add(command)
+                    logger.info("Comando ${clazz.simpleName} carregado com sucesso")
+                }
             } catch (e: Exception) {
                 logger.warn("Erro ao carregar o comando ${clazz.simpleName}!")
             }

@@ -11,6 +11,10 @@ import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.core.utils.MiscUtil
+import java.awt.Color
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.*
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -95,6 +99,16 @@ fun String.isValidSnowflake(): Boolean {
 
         return true
     } catch (e: NumberFormatException) {
+        return false
+    }
+}
+
+fun String.isValidUrl(): Boolean {
+    try {
+        val url = URL(this)
+
+        return true
+    } catch (e: MalformedURLException) {
         return false
     }
 }

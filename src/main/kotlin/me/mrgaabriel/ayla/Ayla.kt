@@ -7,6 +7,9 @@ import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
+import me.mrgaabriel.ayla.audio.AudioManager
 import me.mrgaabriel.ayla.commands.config.BadWordsCommand
 import me.mrgaabriel.ayla.commands.config.EventLogCommand
 import me.mrgaabriel.ayla.commands.config.PrefixCommand
@@ -16,6 +19,8 @@ import me.mrgaabriel.ayla.commands.developer.BashCommand
 import me.mrgaabriel.ayla.commands.developer.EvalCommand
 import me.mrgaabriel.ayla.commands.developer.EvalJSCommand
 import me.mrgaabriel.ayla.commands.developer.ReloadCommand
+import me.mrgaabriel.ayla.commands.music.PlayCommand
+import me.mrgaabriel.ayla.commands.music.SkipCommand
 import me.mrgaabriel.ayla.commands.utils.HelpCommand
 import me.mrgaabriel.ayla.commands.utils.PingCommand
 import me.mrgaabriel.ayla.data.AylaConfig
@@ -27,6 +32,7 @@ import me.mrgaabriel.ayla.threads.GameUpdateThread
 import me.mrgaabriel.ayla.threads.RedditPostSyncThread
 import me.mrgaabriel.ayla.threads.RemoveCachedMessagesThread
 import me.mrgaabriel.ayla.threads.UpdateBotStatsThread
+import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.MessageInteractionWrapper
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
@@ -48,7 +54,8 @@ class Ayla(var config: AylaConfig) {
 
     val logger = LoggerFactory.getLogger(Ayla::class.java)
 
-    private lateinit var builder: JDABuilder
+    lateinit var builder: JDABuilder
+    lateinit var audioManager: AudioManager
 
     val commandMap = mutableListOf<AbstractCommand>()
     val shards = mutableListOf<JDA>()
@@ -85,6 +92,9 @@ class Ayla(var config: AylaConfig) {
                     .build().awaitReady()
             shards.add(shard)
         }
+
+        audioManager = AudioManager()
+        AudioSourceManagers.registerRemoteSources(audioManager.playerManager)
 
         GameUpdateThread().start()
         RemoveCachedMessagesThread().start()
@@ -130,17 +140,16 @@ class Ayla(var config: AylaConfig) {
     fun loadCommands() {
         commandMap.clear()
 
-        commandMap.add(PingCommand())
-        commandMap.add(EvalCommand())
-        commandMap.add(ReloadCommand())
-        commandMap.add(EvalJSCommand())
-        commandMap.add(EventLogCommand())
-        commandMap.add(PrefixCommand())
-        commandMap.add(WelcomeCommand())
-        commandMap.add(RedditCommand())
-        commandMap.add(HelpCommand())
-        commandMap.add(BashCommand())
-        commandMap.add(BadWordsCommand())
+        AylaUtils.getClasses("me.mrgaabriel.ayla.commands").forEach { clazz ->
+            try {
+                val command = clazz.newInstance() as AbstractCommand
+
+                commandMap.add(command)
+                logger.info("Comando ${clazz.simpleName} carregado com sucesso")
+            } catch (e: Exception) {
+                logger.warn("Erro ao carregar o comando ${clazz.simpleName}!")
+            }
+        }
     }
 
     fun setGame(game: Game) {

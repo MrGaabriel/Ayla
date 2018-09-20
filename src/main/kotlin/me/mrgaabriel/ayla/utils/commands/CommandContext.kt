@@ -20,6 +20,7 @@ class CommandContext(val message: Message,
     val user = message.author
 
     val guild = message.guild
+    val member = guild.getMember(user)
 
     fun sendMessage(content: Any, success: ((Message) -> Unit)? = null) {
         channel.sendMessage(content.toString()).queue({ message ->
@@ -88,7 +89,13 @@ class CommandContext(val message: Message,
 
         val color = member.color
 
-        val usedLabel = message.contentDisplay.split(" ")[0]
+        val splitted = message.contentRaw.split(" ")
+
+        val usedLabel = if (splitted[0] == "<@${ayla.config.clientId}>" || splitted[0] == "<@!${ayla.config.clientId}>")
+            splitted[1]
+        else
+            splitted[0]
+
 
         var description = """
             ${this.command.description}

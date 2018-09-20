@@ -32,7 +32,7 @@ class ReloadCommand : AbstractCommand(
                 val oldCommandMap = ayla.commandMap
 
                 ayla.loadCommands()
-                context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados & ${ayla.commandMap.size - oldCommandMap.size} comandos adicionados")
+                context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados")
             }
 
             "throw_runtime_exception" -> {

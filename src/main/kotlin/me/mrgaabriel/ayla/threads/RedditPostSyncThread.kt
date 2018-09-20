@@ -130,7 +130,7 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                         }
 
                         builder.setFooter("u/" + post["author"].string, null)
-                        builder.setTimestamp(Instant.ofEpochMilli(creationTime).atZone(ZoneId.systemDefault()))
+                        builder.setTimestamp(OffsetDateTime.now())
 
                         if (!channel.canTalk()) { // :rolling_eyes:
                             return@forEach

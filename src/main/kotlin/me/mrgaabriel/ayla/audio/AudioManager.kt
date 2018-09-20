@@ -52,7 +52,12 @@ class AudioManager {
             override fun trackLoaded(track: AudioTrack) {
                 context.guild.audioManager.openAudioConnection(channel)
 
-                musicPlayer.scheduler.queue(track)
+                if (override) {
+                    musicPlayer.player.playTrack(track)
+                } else {
+                    musicPlayer.scheduler.queue(track)
+                }
+
                 context.sendMessage(context.getAsMention(true) + "Adicionado na fila `${track.info.title}` de `${track.info.author}`! :notes:")
             }
 

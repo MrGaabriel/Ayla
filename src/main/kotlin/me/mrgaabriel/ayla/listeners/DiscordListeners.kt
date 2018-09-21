@@ -80,6 +80,10 @@ class DiscordListeners : ListenerAdapter() {
                 if (player.playingTrack != null) {
                     player.stopTrack()
                 }
+
+                player.destroy()
+                ayla.audioManager.players.remove(event.guild.id)
+                ayla.audioManager.musicPlayers.remove(event.guild.id)
                 
                 event.guild.audioManager.closeAudioConnection()
             }

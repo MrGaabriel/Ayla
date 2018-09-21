@@ -21,6 +21,6 @@ class PauseCommand : AbstractCommand("pause", aliases = listOf("pausar"), catego
         }
 
         player.isPaused = true
-        context.sendMessage(context.getAsMention(true) + "Música pulada!")
+        context.sendMessage(context.getAsMention(true) + "Música pausada!")
     }
 }

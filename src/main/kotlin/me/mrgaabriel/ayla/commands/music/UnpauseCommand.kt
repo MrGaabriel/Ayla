@@ -21,6 +21,6 @@ class UnpauseCommand : AbstractCommand("unpause", aliases = listOf("despausar"),
         }
 
         player.isPaused = false
-        context.sendMessage(context.getAsMention(true) + "Música pulada!")
+        context.sendMessage(context.getAsMention(true) + "Música despausada!")
     }
 }

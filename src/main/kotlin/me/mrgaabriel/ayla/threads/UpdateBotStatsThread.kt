@@ -52,7 +52,7 @@ class UpdateBotStatsThread : Thread("Update Bot Stats") {
         logger.info("Discord Bots List -> Código ${dbl.code()}")
 
         //  Bots on Discord (https://bots.ondiscord.xyz)
-        val botsOnDiscord = HttpRequest.get("https://bots.ondiscord.xyz/bot-api/bots/${ayla.config.clientId}/guilds")
+        val botsOnDiscord = HttpRequest.post("https://bots.ondiscord.xyz/bot-api/bots/${ayla.config.clientId}/guilds")
                 .userAgent(Constants.USER_AGENT)
                 .authorization(ayla.config.botsOnDiscordToken)
                 .acceptJson()

@@ -5,16 +5,18 @@ import com.mongodb.client.model.UpdateOptions
 import me.mrgaabriel.ayla.AylaLauncher
 import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.data.AylaUser
+import net.dv8tion.jda.core.OnlineStatus
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
+import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent
 import net.dv8tion.jda.core.utils.MiscUtil
-import java.awt.Color
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.*
+import java.time.Month
+import java.time.OffsetDateTime
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -119,4 +121,38 @@ fun User.saveProfile(aylaUser: AylaUser) {
 
 fun Guild.saveConfig(config: AylaGuildConfig) {
     this.config = config
+}
+
+fun OffsetDateTime.humanize(): String {
+    val month = when (this.month) {
+        Month.JANUARY -> "Janeiro"
+        Month.FEBRUARY -> "Fevereiro"
+        Month.MARCH -> "Março"
+        Month.APRIL -> "Abril"
+        Month.MAY -> "Maio"
+        Month.JUNE -> "Junho"
+        Month.JULY -> "Julho"
+        Month.AUGUST -> "Agosto"
+        Month.SEPTEMBER -> "Setembro"
+        Month.OCTOBER -> "Outubro"
+        Month.NOVEMBER -> "Novembro"
+        Month.DECEMBER -> "Dezembro"
+
+        else -> "Irineu, você não sabe e nem eu!"
+    }
+
+    return "${this.dayOfMonth} de $month de ${this.year} às ${this.hour}:${this.minute}:${this.second}"
+}
+
+fun OnlineStatus.humanize(): String {
+    return when(this) {
+        OnlineStatus.ONLINE -> "Online"
+        OnlineStatus.DO_NOT_DISTURB -> "Não incomode"
+        OnlineStatus.IDLE -> "Ausente"
+        OnlineStatus.INVISIBLE -> "Invisível"
+        OnlineStatus.OFFLINE -> "Offline"
+
+        OnlineStatus.UNKNOWN -> "Irineu, você não sabe e nem eu!"
+        else -> "Irineu, você não sabe e nem eu!"
+    }
 }

@@ -65,7 +65,8 @@ mas **NÃO** te garante:
 
 <h1></h1>
 <p align="center">
-  <img align="center" src="https://discordbots.org/api/widget/475312446156832768.svg">
+  <a href="https://discordbots.org/bot/475312446156832768"> <img align="center" src="https://discordbots.org/api/widget/475312446156832768.svg"></a>
+  <a href="https://bots.ondiscord.xyz/bots/475312446156832768"> <img align="center" src="https://bots.ondiscord.xyz/bots/475312446156832768/embed?showGuilds=true"></a>
 </p>
 
 <p align="center">Discord", "DiscordApp" and any associated logos are registered trademarks of Discord Inc.</p>

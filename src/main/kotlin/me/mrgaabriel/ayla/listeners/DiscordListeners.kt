@@ -12,6 +12,8 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent
+import net.dv8tion.jda.core.events.message.GenericMessageEvent
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent
@@ -27,42 +29,78 @@ class DiscordListeners : ListenerAdapter() {
 
     val logger = LoggerFactory.getLogger(DiscordListeners::class.java)
 
-    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
-        if (event is MessageReactionAddEvent) {
-            ayla.messageInteractionCache.forEach { id, wrapper ->
-                if (event.messageId == id) {
-                    if (wrapper.onReactionAdd != null) {
-                        ayla.executor.execute {
-                            try {
-                                wrapper.onReactionAdd!!.invoke(event)
+    override fun onGenericMessage(event: GenericMessageEvent) {
+        if (event is MessageReceivedEvent) {
+            if (event.author.isBot) {
+                return
+            }
 
-                                if (wrapper.removeWhenExecuted) {
-                                    ayla.messageInteractionCache.remove(id)
-                                }
-                            } catch (e: Exception) {
-                                logger.error("Erro ao processar onReactionAdd para a mensagem ${event.messageId}")
-                                logger.error(ExceptionUtils.getStackTrace(e))
+            ayla.messageInteractionCache.filter { it.key == event.textChannel.id }.forEach {
+                val interaction = it.value
+                val onResponse = interaction.onResponse
+
+                if (onResponse != null) {
+                    ayla.executor.execute {
+                        try {
+                            onResponse.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
                             }
+                        } catch (e: Exception) {
+                            logger.error("Erro ao processar onResponse para a mensagem ${event.messageId}!")
+                            logger.error(ExceptionUtils.getStackTrace(e))
                         }
                     }
                 }
             }
-        } else if (event is MessageReactionRemoveEvent) {
-            ayla.messageInteractionCache.forEach { id, wrapper ->
-                if (event.messageId == id) {
-                    if (wrapper.onReactionRemove != null) {
-                        ayla.executor.execute {
-                            try {
-                                wrapper.onReactionRemove!!.invoke(event)
+        }
+    }
 
-                                if (wrapper.removeWhenExecuted) {
-                                    ayla.messageInteractionCache.remove(id)
-                                }
-                            } catch (e: Exception) {
-                                logger.error("Erro ao processar onReactionRemove para a mensagem ${event.messageId}")
-                                logger.error(ExceptionUtils.getStackTrace(e))
+    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
+        if (event.user.isBot) {
+            return
+        }
+
+        if (event is MessageReactionAddEvent) {
+            ayla.messageInteractionCache.filter { it.value.id == event.messageId }.forEach {
+                val interaction = it.value
+                val onReactionAdd = interaction.onReactionAdd
+
+                ayla.executor.execute {
+                    try {
+                        if (onReactionAdd != null) {
+                            onReactionAdd.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
                             }
                         }
+                    } catch (e: Exception) {
+                        logger.error("Erro ao executar onReactionAdd para a mensagem ${event.messageId}!")
+                        logger.error(ExceptionUtils.getStackTrace(e))
+                    }
+                }
+            }
+        }
+
+        if (event is MessageReactionRemoveEvent) {
+            ayla.messageInteractionCache.filter { it.value.id == event.messageId }.forEach {
+                val interaction = it.value
+                val onReactionRemove = interaction.onReactionRemove
+
+                ayla.executor.execute {
+                    try {
+                        if (onReactionRemove != null) {
+                            onReactionRemove.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Erro ao executar onReactionRemove para a mensagem ${event.messageId}!")
+                        logger.error(ExceptionUtils.getStackTrace(e))
                     }
                 }
             }

@@ -2,6 +2,7 @@ package me.mrgaabriel.ayla
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
@@ -33,7 +34,7 @@ import me.mrgaabriel.ayla.threads.RedditPostSyncThread
 import me.mrgaabriel.ayla.threads.RemoveCachedMessagesThread
 import me.mrgaabriel.ayla.threads.UpdateBotStatsThread
 import me.mrgaabriel.ayla.utils.AylaUtils
-import me.mrgaabriel.ayla.utils.MessageInteractionWrapper
+import me.mrgaabriel.ayla.utils.MessageInteraction
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
 import net.dv8tion.jda.core.AccountType
@@ -49,6 +50,7 @@ import org.bson.codecs.pojo.PojoCodecProvider
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class Ayla(var config: AylaConfig) {
 
@@ -67,7 +69,11 @@ class Ayla(var config: AylaConfig) {
     lateinit var guildsColl: MongoCollection<AylaGuildConfig>
     lateinit var storedMessagesColl: MongoCollection<StoredMessage>
 
-    val messageInteractionCache = mutableMapOf<String, MessageInteractionWrapper>()
+    val messageInteractionCache = Caffeine.newBuilder()
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .maximumSize(2000)
+            .build<String, MessageInteraction>()
+            .asMap()
 
     fun createThreadPool(name: String): ExecutorService {
         return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())

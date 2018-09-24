@@ -8,7 +8,11 @@ import me.mrgaabriel.ayla.data.AylaUser
 import net.dv8tion.jda.core.OnlineStatus
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.entities.MessageChannel
+import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent
@@ -74,25 +78,28 @@ val String.fancy: String get() = this.substring(0, 1).toUpperCase() + this.subst
 
 val ayla = AylaLauncher.ayla
 
-fun Message.collectReactionAdd(removeWhenExecuted: Boolean = false, function: (MessageReactionAddEvent) -> Unit) {
-    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+fun Message.onReactionAdd(remove: Boolean = false, function: (MessageReactionAddEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
-    wrapper.onReactionAdd = function
+    interaction.onReactionAdd = function
 }
 
-fun Message.collectReactionRemove(removeWhenExecuted: Boolean = false, function: (MessageReactionRemoveEvent) -> Unit) {
-    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+fun Message.onReactionRemove(remove: Boolean = false, function: (MessageReactionRemoveEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
-    wrapper.onReactionRemove = function
+    interaction.onReactionRemove = function
 }
 
-class MessageInteractionWrapper(
-        val messageId: String,
-        val removeWhenExecuted: Boolean
-) {
+fun TextChannel.onMessage(remove: Boolean = false, function: (MessageReceivedEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
+    interaction.onResponse = function
+}
+
+class MessageInteraction(val id: String, val remove: Boolean) {
     var onReactionAdd: ((MessageReactionAddEvent) -> Unit)? = null
     var onReactionRemove: ((MessageReactionRemoveEvent) -> Unit)? = null
+    var onResponse: ((MessageReceivedEvent) -> Unit)? = null
 }
 
 fun String.isValidSnowflake(): Boolean {
@@ -155,4 +162,8 @@ fun OnlineStatus.humanize(): String {
         OnlineStatus.UNKNOWN -> "Irineu, você não sabe e nem eu!"
         else -> "Irineu, você não sabe e nem eu!"
     }
+}
+
+fun String.escapeMentions(): String {
+    return this.replace("@", "@\u200B")
 }

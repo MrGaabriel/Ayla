@@ -16,7 +16,7 @@ class CommandContext(val message: Message,
                      val args: Array<String>,
                      val command: AbstractCommand) {
 
-    val channel = message.channel
+    val channel = message.textChannel
     val user = message.author
 
     val guild = message.guild

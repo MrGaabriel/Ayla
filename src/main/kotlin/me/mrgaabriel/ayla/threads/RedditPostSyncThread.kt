@@ -5,30 +5,19 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.bool
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.long
-import com.github.salomonbrys.kotson.nullObj
 import com.github.salomonbrys.kotson.nullString
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonParser
-import com.mongodb.client.model.Filters
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
-import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.saveConfig
 import net.dv8tion.jda.core.EmbedBuilder
-import net.dv8tion.jda.core.exceptions.ErrorResponseException
 import org.apache.commons.lang3.exception.ExceptionUtils
-import org.bson.Document
 import org.slf4j.LoggerFactory
-import java.time.Instant
 import java.time.OffsetDateTime
-import java.time.ZoneId
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
 import kotlin.collections.set
 
 class RedditPostSyncThread : Thread("Reddit Posts Sync") {

@@ -75,12 +75,6 @@ class Ayla(var config: AylaConfig) {
             .build<String, MessageInteraction>()
             .asMap()
 
-    fun createThreadPool(name: String): ExecutorService {
-        return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())
-    }
-
-    val executor = createThreadPool("Executor Thread %d")
-
     fun start() {
         loadMongo()
         loadCommands()

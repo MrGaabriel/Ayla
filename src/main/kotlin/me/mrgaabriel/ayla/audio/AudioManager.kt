@@ -1,8 +1,11 @@
 package me.mrgaabriel.ayla.audio
 
+import com.github.benmanes.caffeine.cache.Caffeine
+import com.google.common.cache.CacheBuilder
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
@@ -11,38 +14,29 @@ import me.mrgaabriel.ayla.utils.isValidUrl
 import me.mrgaabriel.ayla.utils.youtube.TemmieYouTube
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
+import java.util.concurrent.TimeUnit
 
 class AudioManager {
 
     val playerManager = DefaultAudioPlayerManager()
 
-    val musicPlayers = mutableMapOf<String, MusicPlayer>()
-    val players = mutableMapOf<String, AudioPlayer>()
+    val musicPlayers = Caffeine.newBuilder().expireAfterAccess(30, TimeUnit.SECONDS)
+            .build<String, MusicPlayer>()
+            .asMap()
 
-    fun getPlayer(guild: Guild): AudioPlayer {
-        val found = players[guild.id]
+    init {
+        playerManager.frameBufferDuration = 1000
+        playerManager.setItemLoaderThreadPoolSize(1000)
 
-        if (found != null) {
-            return found
-        }
-
-        val player = playerManager.createPlayer()
-        guild.audioManager.sendingHandler = AudioPlayerSendHandler(player)
-
-        players[guild.id] = player
-
-        return player
+        AudioSourceManagers.registerRemoteSources(playerManager)
     }
 
     fun getMusicPlayer(guild: Guild): MusicPlayer {
-        if (musicPlayers[guild.id] != null) {
-            return musicPlayers[guild.id]!!
-        }
+        return musicPlayers.getOrPut(guild.id) { MusicPlayer(guild) }
+    }
 
-        val musicPlayer = MusicPlayer(guild)
-        musicPlayers[guild.id] = musicPlayer
-
-        return musicPlayer
+    fun getAudioPlayer(guild: Guild): AudioPlayer {
+        return getMusicPlayer(guild).player
     }
 
     fun loadAndPlay(context: CommandContext, identifier: String, channel: VoiceChannel, override: Boolean = false) {

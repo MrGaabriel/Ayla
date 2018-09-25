@@ -100,7 +100,6 @@ class Ayla(var config: AylaConfig) {
         }
 
         audioManager = AudioManager()
-        AudioSourceManagers.registerRemoteSources(audioManager.playerManager)
 
         GameUpdateThread().start()
         RemoveCachedMessagesThread().start()

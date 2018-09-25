@@ -113,14 +113,13 @@ class DiscordListeners : ListenerAdapter() {
         val channel = event.channelLeft
         if (channel == selfMember.voiceState.channel) {
             if (channel.members.size == 1) { // Só tem o bot?
-                val player = ayla.audioManager.getPlayer(event.guild)
+                val player = ayla.audioManager.getAudioPlayer(event.guild)
 
                 if (player.playingTrack != null) {
                     player.stopTrack()
                 }
 
                 player.destroy()
-                ayla.audioManager.players.remove(event.guild.id)
                 ayla.audioManager.musicPlayers.remove(event.guild.id)
                 
                 event.guild.audioManager.closeAudioConnection()

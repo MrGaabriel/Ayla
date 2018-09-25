@@ -27,7 +27,7 @@ class PlayNowCommand : AbstractCommand("playnow", aliases = listOf("tocaragora",
             return
         }
 
-        val player = ayla.audioManager.getPlayer(context.guild)
+        val player = ayla.audioManager.getAudioPlayer(context.guild)
 
         if (member.voiceState.channel != context.guild.selfMember.voiceState.channel && player.playingTrack != null) {
             context.sendMessage(context.getAsMention(true) + "Você não está no mesmo canal que o bot!")

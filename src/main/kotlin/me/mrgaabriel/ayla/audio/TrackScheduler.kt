@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
+import me.mrgaabriel.ayla.utils.ayla
 import net.dv8tion.jda.core.entities.Guild
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -37,6 +38,12 @@ class TrackScheduler(val player: AudioPlayer, val guild: Guild) : AudioEventAdap
             return
         }
 
-        player.stopTrack()
+        // Destruir o player se não houver nenhuma música para tocar, já que isto economiza muita CPU
+        if (player.playingTrack != null) {
+            player.stopTrack()
+        }
+
+        player.destroy()
+        ayla.audioManager.musicPlayers.remove(guild.id)
     }
 }

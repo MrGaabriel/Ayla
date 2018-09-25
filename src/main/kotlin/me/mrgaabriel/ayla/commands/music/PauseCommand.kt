@@ -13,7 +13,7 @@ class PauseCommand : AbstractCommand("pause", aliases = listOf("pausar"), catego
     @Subcommand
     @SubcommandPermissions([Permission.VOICE_MOVE_OTHERS])
     fun pause(context: CommandContext) {
-        val player = ayla.audioManager.getPlayer(context.guild)
+        val player = ayla.audioManager.getAudioPlayer(context.guild)
 
         if (player.playingTrack == null) {
             context.sendMessage(context.getAsMention(true) + "Não há nenhuma música tocando!")

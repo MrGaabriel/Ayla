@@ -13,7 +13,7 @@ class UnpauseCommand : AbstractCommand("unpause", aliases = listOf("despausar"),
     @Subcommand
     @SubcommandPermissions([Permission.VOICE_MOVE_OTHERS])
     fun unpause(context: CommandContext) {
-        val player = ayla.audioManager.getPlayer(context.guild)
+        val player = ayla.audioManager.getAudioPlayer(context.guild)
 
         if (player.playingTrack == null) {
             context.sendMessage(context.getAsMention(true) + "Não há nenhuma música tocando!")

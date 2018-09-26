@@ -1,6 +1,7 @@
 package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
+import kotlinx.coroutines.experimental.async
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
@@ -31,7 +32,7 @@ class EventLogListeners : ListenerAdapter() {
     }
 
     fun handleEvent(event: GenericGuildEvent) {
-        ayla.executor.execute {
+        async {
             val guild = event.guild
             val config = guild.config
 
@@ -40,13 +41,13 @@ class EventLogListeners : ListenerAdapter() {
 
                 if (channel == null) {
                     config.eventLogEnabled = false
-                    return@execute
+                    return@async
                 }
 
                 if (event is GuildMessageUpdateEvent) {
                     val storedMessage = ayla.storedMessagesColl.find(
                             Filters.eq("_id", event.messageId)
-                    ).firstOrNull() ?: return@execute
+                    ).firstOrNull() ?: return@async
 
                     val oldContent = storedMessage.content.replace("`", "")
                     val newContent = event.message.contentDisplay.replace("`", "")
@@ -77,13 +78,13 @@ class EventLogListeners : ListenerAdapter() {
                 if (event is GuildMessageDeleteEvent) {
                     val storedMessage = ayla.storedMessagesColl.find(
                             Filters.eq("_id", event.messageId)
-                    ).firstOrNull() ?: return@execute
+                    ).firstOrNull() ?: return@async
 
                     val oldContent = storedMessage.content.replace("`", "")
 
                     val builder = EmbedBuilder()
 
-                    val author = ayla.getUserById(storedMessage.authorId) ?: return@execute
+                    val author = ayla.getUserById(storedMessage.authorId) ?: return@async
                     builder.setAuthor(author.tag, null, author.effectiveAvatarUrl)
                     builder.setDescription("**Uma mensagem foi apagada no canal ${event.channel.asMention}**\n\nConteúdo: ```\u200b$oldContent```")
                     builder.setColor(Color.RED)

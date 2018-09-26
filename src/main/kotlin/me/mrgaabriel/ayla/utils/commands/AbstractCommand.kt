@@ -38,13 +38,25 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         val config = msg.guild.config
 
         val args = message.trim().replace(Regex(" +"), " ").split(" ").toMutableList()
-        val command = args[0]
+
+        var byMention = false
+        if (args[0] == "<@${ayla.config.clientId}>" || args[0] == "<@!${ayla.config.clientId}>") {
+            byMention = true
+        }
+
+        val command = if (byMention) args[1] else args[0]
         args.removeAt(0)
 
         val labels = mutableListOf(label)
         labels.addAll(aliases)
 
-        val valid = labels.any { command == config.prefix + it }
+        var valid = labels.any { command.equals(config.prefix + it, true) }
+
+        if (byMention) {
+            valid = labels.any { command.equals(it, true) }
+
+            args.removeAt(0)
+        }
 
         if (!valid)
             return false

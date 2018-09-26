@@ -1,6 +1,7 @@
 package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
+import kotlinx.coroutines.experimental.async
 import me.mrgaabriel.ayla.modules.BadWordModule
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -11,6 +12,9 @@ import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent
+import net.dv8tion.jda.core.events.message.GenericMessageEvent
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent
@@ -26,41 +30,27 @@ class DiscordListeners : ListenerAdapter() {
 
     val logger = LoggerFactory.getLogger(DiscordListeners::class.java)
 
-    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
-        if (event is MessageReactionAddEvent) {
-            ayla.messageInteractionCache.forEach { id, wrapper ->
-                if (event.messageId == id) {
-                    if (wrapper.onReactionAdd != null) {
-                        ayla.executor.execute {
-                            try {
-                                wrapper.onReactionAdd!!.invoke(event)
-
-                                if (wrapper.removeWhenExecuted) {
-                                    ayla.messageInteractionCache.remove(id)
-                                }
-                            } catch (e: Exception) {
-                                logger.error("Erro ao processar onReactionAdd para a mensagem ${event.messageId}")
-                                logger.error(ExceptionUtils.getStackTrace(e))
-                            }
-                        }
-                    }
-                }
+    override fun onGenericMessage(event: GenericMessageEvent) {
+        if (event is MessageReceivedEvent) {
+            if (event.author.isBot) {
+                return
             }
-        } else if (event is MessageReactionRemoveEvent) {
-            ayla.messageInteractionCache.forEach { id, wrapper ->
-                if (event.messageId == id) {
-                    if (wrapper.onReactionRemove != null) {
-                        ayla.executor.execute {
-                            try {
-                                wrapper.onReactionRemove!!.invoke(event)
 
-                                if (wrapper.removeWhenExecuted) {
-                                    ayla.messageInteractionCache.remove(id)
-                                }
-                            } catch (e: Exception) {
-                                logger.error("Erro ao processar onReactionRemove para a mensagem ${event.messageId}")
-                                logger.error(ExceptionUtils.getStackTrace(e))
+            ayla.messageInteractionCache.filter { it.key == event.textChannel.id }.forEach {
+                val interaction = it.value
+                val onResponse = interaction.onResponse
+
+                if (onResponse != null) {
+                    async {
+                        try {
+                            onResponse.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
                             }
+                        } catch (e: Exception) {
+                            logger.error("Erro ao processar onResponse para a mensagem ${event.messageId}!")
+                            logger.error(ExceptionUtils.getStackTrace(e))
                         }
                     }
                 }
@@ -68,8 +58,78 @@ class DiscordListeners : ListenerAdapter() {
         }
     }
 
+    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
+        if (event.user.isBot) {
+            return
+        }
+
+        if (event is MessageReactionAddEvent) {
+            ayla.messageInteractionCache.filter { it.value.id == event.messageId }.forEach {
+                val interaction = it.value
+                val onReactionAdd = interaction.onReactionAdd
+
+                async {
+                    try {
+                        if (onReactionAdd != null) {
+                            onReactionAdd.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Erro ao executar onReactionAdd para a mensagem ${event.messageId}!")
+                        logger.error(ExceptionUtils.getStackTrace(e))
+                    }
+                }
+            }
+        }
+
+        if (event is MessageReactionRemoveEvent) {
+            ayla.messageInteractionCache.filter { it.value.id == event.messageId }.forEach {
+                val interaction = it.value
+                val onReactionRemove = interaction.onReactionRemove
+
+                async {
+                    try {
+                        if (onReactionRemove != null) {
+                            onReactionRemove.invoke(event)
+
+                            if (interaction.remove) {
+                                ayla.messageInteractionCache.remove(it.key)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Erro ao executar onReactionRemove para a mensagem ${event.messageId}!")
+                        logger.error(ExceptionUtils.getStackTrace(e))
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onGuildVoiceLeave(event: GuildVoiceLeaveEvent) {
+        val selfMember = event.guild.selfMember
+
+        val channel = event.channelLeft
+        if (channel == selfMember.voiceState.channel) {
+            if (channel.members.size == 1) { // Só tem o bot?
+                val player = ayla.audioManager.getAudioPlayer(event.guild)
+
+                if (player.playingTrack != null) {
+                    player.stopTrack()
+                }
+
+                player.destroy()
+                ayla.audioManager.musicPlayers.remove(event.guild.id)
+                
+                event.guild.audioManager.closeAudioConnection()
+            }
+        }
+    }
+
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
-        ayla.executor.execute {
+        async {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -80,7 +140,7 @@ class DiscordListeners : ListenerAdapter() {
                     config.welcomeEnabled = false
                     event.guild.config = config
 
-                    return@execute
+                    return@async
                 }
 
                 val builder = EmbedBuilder()
@@ -108,7 +168,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMemberLeave(event: GuildMemberLeaveEvent) {
-        ayla.executor.execute {
+        async {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -119,7 +179,7 @@ class DiscordListeners : ListenerAdapter() {
                     config.welcomeEnabled = false
                     event.guild.config = config
 
-                    return@execute
+                    return@async
                 }
 
                 val builder = EmbedBuilder()
@@ -144,7 +204,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        ayla.executor.execute {
+        async {
             ayla.guildsColl.deleteOne(
                     Filters.eq("_id", event.guild.id)
             )
@@ -152,7 +212,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        ayla.executor.execute {
+        async {
             // Porque guardar mensagens!? Você está me espionando!?
             // - Isso serve para o event-log, já que a API não fornece a mensagem que foi apagada/editada, nós temos que guardar elas para pegar o conteúdo!
             if (event.guild.config.eventLogEnabled) {
@@ -171,16 +231,16 @@ class DiscordListeners : ListenerAdapter() {
             }
 
             if (event.author.isBot)
-                return@execute
+                return@async
             
             if (event.message.contentRaw == "<@${ayla.config.clientId}>" || event.message.contentRaw == "<@!${ayla.config.clientId}>") {
                 event.channel.sendMessage("Olá, ${event.author.asMention}! Meu nome é Ayla e o meu prefixo para comandos neste servidor é `${event.guild.config.prefix}`! Para saber o que eu posso fazer, use `${event.guild.config.prefix}help`").queue()
-                return@execute
+                return@async
             }
 
             ayla.commandMap.forEach {
                 if (it.matches(event.message))
-                    return@execute
+                    return@async
             }
 
             BadWordModule.handleMessage(event.message)
@@ -188,15 +248,15 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
-        ayla.executor.execute {
+        async {
             if (event.message.contentRaw == "<@${ayla.config.clientId}>" || event.message.contentRaw == "<@!${ayla.config.clientId}>") {
                 event.channel.sendMessage("Olá, ${event.author.asMention}! Meu nome é Ayla e o meu prefixo para comandos neste servidor é `${event.guild.config.prefix}`! Para saber o que eu posso fazer, use `${event.guild.config.prefix}help`").queue()
-                return@execute
+                return@async
             }
 
             ayla.commandMap.forEach {
                 if (it.matches(event.message))
-                    return@execute
+                    return@async
             }
 
             BadWordModule.handleMessage(event.message)

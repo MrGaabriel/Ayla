@@ -5,12 +5,22 @@ import com.mongodb.client.model.UpdateOptions
 import me.mrgaabriel.ayla.AylaLauncher
 import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.data.AylaUser
+import net.dv8tion.jda.core.OnlineStatus
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.entities.MessageChannel
+import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
+import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent
 import net.dv8tion.jda.core.utils.MiscUtil
+import java.net.MalformedURLException
+import java.net.URL
+import java.time.Month
+import java.time.OffsetDateTime
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -68,25 +78,28 @@ val String.fancy: String get() = this.substring(0, 1).toUpperCase() + this.subst
 
 val ayla = AylaLauncher.ayla
 
-fun Message.collectReactionAdd(removeWhenExecuted: Boolean = false, function: (MessageReactionAddEvent) -> Unit) {
-    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+fun Message.onReactionAdd(remove: Boolean = false, function: (MessageReactionAddEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
-    wrapper.onReactionAdd = function
+    interaction.onReactionAdd = function
 }
 
-fun Message.collectReactionRemove(removeWhenExecuted: Boolean = false, function: (MessageReactionRemoveEvent) -> Unit) {
-    val wrapper = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteractionWrapper(this.id, removeWhenExecuted) }
+fun Message.onReactionRemove(remove: Boolean = false, function: (MessageReactionRemoveEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
-    wrapper.onReactionRemove = function
+    interaction.onReactionRemove = function
 }
 
-class MessageInteractionWrapper(
-        val messageId: String,
-        val removeWhenExecuted: Boolean
-) {
+fun TextChannel.onMessage(remove: Boolean = false, function: (MessageReceivedEvent) -> Unit) {
+    val interaction = ayla.messageInteractionCache.getOrPut(this.id) { MessageInteraction(this.id, remove) }
 
+    interaction.onResponse = function
+}
+
+class MessageInteraction(val id: String, val remove: Boolean) {
     var onReactionAdd: ((MessageReactionAddEvent) -> Unit)? = null
     var onReactionRemove: ((MessageReactionRemoveEvent) -> Unit)? = null
+    var onResponse: ((MessageReceivedEvent) -> Unit)? = null
 }
 
 fun String.isValidSnowflake(): Boolean {
@@ -99,10 +112,62 @@ fun String.isValidSnowflake(): Boolean {
     }
 }
 
+fun String.isValidUrl(): Boolean {
+    try {
+        val url = URL(this)
+
+        return true
+    } catch (e: MalformedURLException) {
+        return false
+    }
+}
+
 fun User.saveProfile(aylaUser: AylaUser) {
     this.aylaUser = aylaUser
 }
 
 fun Guild.saveConfig(config: AylaGuildConfig) {
     this.config = config
+}
+
+fun OffsetDateTime.humanize(): String {
+    val month = when (this.month) {
+        Month.JANUARY -> "Janeiro"
+        Month.FEBRUARY -> "Fevereiro"
+        Month.MARCH -> "Março"
+        Month.APRIL -> "Abril"
+        Month.MAY -> "Maio"
+        Month.JUNE -> "Junho"
+        Month.JULY -> "Julho"
+        Month.AUGUST -> "Agosto"
+        Month.SEPTEMBER -> "Setembro"
+        Month.OCTOBER -> "Outubro"
+        Month.NOVEMBER -> "Novembro"
+        Month.DECEMBER -> "Dezembro"
+
+        else -> "Irineu, você não sabe e nem eu!"
+    }
+
+    return "${this.dayOfMonth} de $month de ${this.year} às ${this.hour}:${this.minute}:${this.second}"
+}
+
+fun OnlineStatus.humanize(): String {
+    return when(this) {
+        OnlineStatus.ONLINE -> "Online"
+        OnlineStatus.DO_NOT_DISTURB -> "Não incomode"
+        OnlineStatus.IDLE -> "Ausente"
+        OnlineStatus.INVISIBLE -> "Invisível"
+        OnlineStatus.OFFLINE -> "Offline"
+
+        OnlineStatus.UNKNOWN -> "Irineu, você não sabe e nem eu!"
+        else -> "Irineu, você não sabe e nem eu!"
+    }
+}
+
+fun String.escapeMentions(): String {
+    return this.replace("@", "@\u200B")
+}
+
+fun String.stripCodeMarks(): String {
+    return this.replace("`", "")
 }

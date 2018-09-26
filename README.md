@@ -63,9 +63,21 @@ mas **NÃO** te garante:
 ...e te **OBRIGA** a:
 - Ter a mesma licença desse aqui, sem NENHUMA mudança.
 
+## YourKit 
+YourKit supports open source projects with its full-featured Java Profiler.
+
+YourKit, LLC is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler/)
+
+and [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/),
+
+innovative and intelligent tools for profiling Java and .NET applications.
+
+![YourKit](https://www.yourkit.com/images/yklogo.png)
+
 <h1></h1>
 <p align="center">
-  <img align="center" src="https://discordbots.org/api/widget/475312446156832768.svg">
+  <a href="https://discordbots.org/bot/475312446156832768"> <img align="center" src="https://discordbots.org/api/widget/475312446156832768.svg"></a>
+  <a href="https://bots.ondiscord.xyz/bots/475312446156832768"> <img align="center" src="https://bots.ondiscord.xyz/bots/475312446156832768/embed?showGuilds=true"></a>
 </p>
 
 <p align="center">Discord", "DiscordApp" and any associated logos are registered trademarks of Discord Inc.</p>

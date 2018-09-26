@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.jar.Attributes
 import java.util.jar.JarFile
 import javax.script.Invocable
+import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
 class EvalCommand : AbstractCommand(
@@ -53,6 +54,18 @@ class EvalCommand : AbstractCommand(
         System.setProperty("kotlin.script.classpath", propClassPath)
 
         val scriptEngine = ScriptEngineManager().getEngineByName("kotlin") as KotlinJsr223JvmLocalScriptEngine
+        scriptEngine.put("engineContext", scriptEngine.context)
+        scriptEngine.put("context", context)
+
+        val bindings = buildString {
+            scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).forEach { key, value ->
+                if ("." !in key) {
+                    val name: String = value::class.qualifiedName!!
+                    val bind = """val $key = bindings["$key"] as $name"""
+                    appendln(bind)
+                }
+            }
+        }
 
         val script = """
             import me.mrgaabriel.ayla.commands.*
@@ -61,21 +74,15 @@ class EvalCommand : AbstractCommand(
             import me.mrgaabriel.ayla.threads.*
             import me.mrgaabriel.ayla.utils.*
 
-            fun eval(context: me.mrgaabriel.ayla.utils.commands.CommandContext): Any? {
-                $code
+            $bindings
 
-                return null
-            }
+            $code
         """.trimIndent()
 
         try {
-            val start = System.currentTimeMillis()
-            scriptEngine.eval(script)
+            val evaluated = scriptEngine.eval(script, scriptEngine.context)
 
-            val invocable = scriptEngine as Invocable
-            val evaluated = invocable.invokeMethod(this, "eval", context)
-
-            context.sendMessage("```\n$evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
+            context.sendMessage("```kotlin\n$evaluated```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message

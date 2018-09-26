@@ -31,12 +31,11 @@ class EvalJSCommand : AbstractCommand(
         val scriptEngine = ScriptEngineManager().getEngineByName("nashorn")
 
         try {
-            val start = System.currentTimeMillis()
             scriptEngine.put("context", context)
 
             val evaluated = scriptEngine.eval(code)
 
-            context.sendMessage("```diff\n+ $evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
+            context.sendMessage("```js\n$evaluated```")
         } catch (e: Exception) {
             val message = if (e.message != null) {
                 e.message

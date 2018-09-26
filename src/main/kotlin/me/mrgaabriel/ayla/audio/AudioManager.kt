@@ -1,7 +1,6 @@
 package me.mrgaabriel.ayla.audio
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.common.cache.CacheBuilder
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
@@ -10,7 +9,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import me.mrgaabriel.ayla.utils.commands.CommandContext
-import me.mrgaabriel.ayla.utils.isValidUrl
+import me.mrgaabriel.ayla.utils.stripCodeMarks
 import me.mrgaabriel.ayla.utils.youtube.TemmieYouTube
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
@@ -52,7 +51,7 @@ class AudioManager {
                     musicPlayer.scheduler.queue(track)
                 }
 
-                context.sendMessage(context.getAsMention(true) + "Adicionado na fila `${track.info.title}` de `${track.info.author}`! :notes:")
+                context.sendMessage(context.getAsMention(true) + "Adicionado na fila `${track.info.title.stripCodeMarks()}` de `${track.info.author.stripCodeMarks()}`! :notes:")
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
@@ -60,7 +59,7 @@ class AudioManager {
                     musicPlayer.scheduler.queue(it)
                 }
 
-                context.sendMessage(context.getAsMention(true) + "Adicionado na fila ${playlist.tracks.size} músicas da playlist `${playlist.name}`! :notes:")
+                context.sendMessage(context.getAsMention(true) + "Adicionado na fila ${playlist.tracks.size} músicas da playlist `${playlist.name.stripCodeMarks()}`! :notes:")
             }
 
             override fun noMatches() {
@@ -74,7 +73,7 @@ class AudioManager {
                     return
                 }
 
-                context.sendMessage(context.getAsMention(true) + "Não encontrei nada relacionado a `$identifier`!")
+                context.sendMessage(context.getAsMention(true) + "Não encontrei nada relacionado a `${identifier.stripCodeMarks()}`!")
             }
 
             override fun loadFailed(e: FriendlyException) {

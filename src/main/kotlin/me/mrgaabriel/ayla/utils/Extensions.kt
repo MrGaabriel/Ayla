@@ -167,3 +167,7 @@ fun OnlineStatus.humanize(): String {
 fun String.escapeMentions(): String {
     return this.replace("@", "@\u200B")
 }
+
+fun String.stripCodeMarks(): String {
+    return this.replace("`", "")
+}

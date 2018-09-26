@@ -9,6 +9,7 @@ import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.tag
 import net.dv8tion.jda.core.EmbedBuilder
+import net.dv8tion.jda.core.MessageBuilder
 import java.time.OffsetDateTime
 
 class HelpCommand : AbstractCommand(
@@ -26,9 +27,13 @@ class HelpCommand : AbstractCommand(
                     .firstOrNull { it.label == cmd.toLowerCase() || it.aliases.any { it == cmd.toLowerCase() } }
 
             if (found != null) {
-                val dummyContext = CommandContext(context.message, context.args, found)
+                // TODO: Remover esta gambiarra
+                context.sendMessage(context.guild.config.prefix + found.label + " (ignore)", { message ->
+                    message.delete().queue()
 
-                dummyContext.explain()
+                    val dummyContext = CommandContext(message, context.args, found)
+                    dummyContext.explain()
+                })
             } else {
                 context.sendMessage(context.getAsMention(true) + "Comando não encontrado!")
             }

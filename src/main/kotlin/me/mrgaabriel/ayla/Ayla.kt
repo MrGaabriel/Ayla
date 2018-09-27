@@ -66,6 +66,12 @@ class Ayla(var config: AylaConfig) {
             .build<String, MessageInteraction>()
             .asMap()
 
+    val commandCooldownCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .maximumSize(5000L)
+            .build<String, Long>()
+            .asMap()
+
     fun start() {
         loadMongo()
         loadCommands()

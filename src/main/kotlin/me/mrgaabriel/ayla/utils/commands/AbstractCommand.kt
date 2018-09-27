@@ -6,6 +6,7 @@ import com.github.salomonbrys.kotson.set
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.ConsoleColors
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -25,6 +26,7 @@ import java.lang.reflect.Method
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.kotlinFunction
 
@@ -124,6 +126,15 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
             val start = System.currentTimeMillis()
             logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw}")
 
+            val cooldown = ayla.commandCooldownCache[message.author.id]
+            if (cooldown != null && cooldown > System.currentTimeMillis() && message.author.id != ayla.config.ownerId) {
+                ayla.commandCooldownCache.put(message.author.id, cooldown + 1000)
+                context.sendMessage(context.getAsMention(true) + "Espere **${AylaUtils.formatDateDiff(cooldown + 1000)}** para executar este comando novamente!")
+
+                logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
+                return true
+            }
+
             val permissions = method.getAnnotation(SubcommandPermissions::class.java)
 
             if (permissions != null) {
@@ -167,6 +178,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             method.invoke(this, *params.toTypedArray())
 
+            ayla.commandCooldownCache.put(message.author.id, System.currentTimeMillis() + 2500)
             logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
         } catch (ite: InvocationTargetException) {
             val e = ite.targetException

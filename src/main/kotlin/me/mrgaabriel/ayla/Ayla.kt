@@ -40,7 +40,7 @@ class Ayla(var config: AylaConfig) {
 
     val logger = LoggerFactory.getLogger(Ayla::class.java)
 
-    val flags = EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME, CacheFlag.VOICE_STATE)
+    val flags = EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME)
     val builder = JDABuilder(AccountType.BOT)
             .setToken(config.clientToken)
             .setStatus(OnlineStatus.ONLINE)

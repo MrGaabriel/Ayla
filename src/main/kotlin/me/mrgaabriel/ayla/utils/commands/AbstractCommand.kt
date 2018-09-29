@@ -221,16 +221,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             channel?.sendMessage("<@${ayla.config.ownerId}> $url")?.queue()
 
-            val errorMessage = arrayOf(
-                    message.author.asMention,
-                    "Um erro aconteceu durante a execução desse comando!",
-                    "",
-                    url,
-                    "",
-                    "Contate o `MrGaabriel#2430` e mande este erro!"
-            )
-
-            message.channel.sendMessage(errorMessage.joinToString("\n")).queue()
+            message.channel.sendMessage("${message.author.asMention} Um erro aconteceu durante a execução desse comando! Desculpe pela incoveniência! :cry:").queue()
             logger.error("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - ERROR!")
             logger.error(ExceptionUtils.getStackTrace(e))
         }

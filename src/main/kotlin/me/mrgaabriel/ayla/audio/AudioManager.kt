@@ -55,6 +55,8 @@ class AudioManager {
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
+                context.guild.audioManager.openAudioConnection(channel)
+
                 playlist.tracks.forEach {
                     musicPlayer.scheduler.queue(it)
                 }

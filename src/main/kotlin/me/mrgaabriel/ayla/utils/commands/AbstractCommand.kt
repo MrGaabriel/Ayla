@@ -245,7 +245,9 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                         duplicated.removeAt(0)
                     }
 
-                    params.add(arguments.joinToString(" "))
+                    if (duplicated.isNotEmpty()) {
+                        params.add(duplicated.joinToString(" "))
+                    }
                 }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.USER -> {
                     params.add(context.getUser(arguments.getOrNull(dynamicArgIdx)))

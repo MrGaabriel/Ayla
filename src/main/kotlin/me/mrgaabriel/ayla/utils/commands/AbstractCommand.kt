@@ -216,8 +216,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
             val url = receivedPayload["html_url"].string
 
             // TODO: Fazer com que isto seja configurável
-            val guild = ayla.getGuildById("451537296441737216") // Minha guild de testes
-            val channel = guild?.getTextChannelById("491339383904010240")
+            val channel = ayla.getTextChannelById("491339383904010240")
 
             channel?.sendMessage("<@${ayla.config.ownerId}> $url")?.queue()
 

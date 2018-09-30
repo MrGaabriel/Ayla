@@ -155,6 +155,10 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             user = it.retrieveUserById(id).complete()
+
+            if (user != null) {
+                return user
+            }
         }
 
         return user
@@ -165,6 +169,10 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             channel = it.getTextChannelById(id)
+
+            if (channel != null) {
+                return channel
+            }
         }
 
         return channel
@@ -175,9 +183,32 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             guild = it.getGuildById(id)
+
+            if (guild != null) {
+                return guild
+            }
         }
 
         return guild
     }
 
+    val guilds: List<Guild> get() {
+        val guilds = mutableListOf<Guild>()
+
+        shards.forEach {
+            guilds.addAll(it.guilds)
+        }
+
+        return guilds
+    }
+
+    val users: List<User> get() {
+        val users = mutableListOf<User>()
+
+        shards.forEach {
+            users.addAll(it.users)
+        }
+
+        return users
+    }
 }

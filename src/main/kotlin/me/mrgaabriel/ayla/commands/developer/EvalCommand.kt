@@ -16,7 +16,6 @@ import java.nio.file.Paths
 import java.time.OffsetDateTime
 import java.util.jar.Attributes
 import java.util.jar.JarFile
-import javax.script.Invocable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 

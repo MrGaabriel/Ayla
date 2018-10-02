@@ -11,8 +11,6 @@ import me.mrgaabriel.ayla.utils.humanize
 import me.mrgaabriel.ayla.utils.tag
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.User
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class UserInfoCommand : AbstractCommand("userinfo", category = CommandCategory.DISCORD, description = "Veja as informações de um usuário do Discord") {
 

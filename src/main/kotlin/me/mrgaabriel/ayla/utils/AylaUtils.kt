@@ -54,17 +54,17 @@ object AylaUtils {
         }
         val files = directory.listFiles()
         for (file in files) {
-            if (file.isDirectory()) {
-                assert(!file.getName().contains("."))
-                classes.addAll(findClasses(file, packageName + "." + file.getName()))
-            } else if (file.getName().endsWith(".class")) {
-                classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length - 6)))
+            if (file.isDirectory) {
+                assert(!file.name.contains("."))
+                classes.addAll(findClasses(file, packageName + "." + file.name))
+            } else if (file.name.endsWith(".class")) {
+                classes.add(Class.forName(packageName + '.' + file.name.substring(0, file.name.length - 6)))
             }
         }
         return classes
     }
 
-    private val maxYears = 100000
+    private const val maxYears = 100000
 
     fun dateDiff(type: Int, fromDate: Calendar, toDate: Calendar, future: Boolean): Int {
         val year = Calendar.YEAR
@@ -124,7 +124,7 @@ object AylaUtils {
                 sb.append(" ").append(diff).append(" ").append(names[i * 2 + (if (diff > 1) 1 else 0)])
             }
         }
-        return if (sb.length == 0) {
+        return if (sb.isEmpty()) {
             "alguns milisegundos"
         } else sb.toString().trim { it <= ' ' }
     }

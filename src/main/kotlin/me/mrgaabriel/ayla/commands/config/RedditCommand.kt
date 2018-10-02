@@ -19,7 +19,6 @@ import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 import me.mrgaabriel.ayla.utils.config
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.TextChannel
-import kotlin.collections.set
 
 class RedditCommand : AbstractCommand(
         "reddit",
@@ -44,7 +43,7 @@ class RedditCommand : AbstractCommand(
         if (aboutPayload["error"] != null && aboutPayload["error"].int == 403 && aboutPayload["message"].string == "Forbidden") {
             context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` é privada!")
             return
-        } else if (aboutPayload["data"] != null && aboutPayload["data"].obj["over18"] != null && aboutPayload["data"]["over18"].bool == true) {
+        } else if (aboutPayload["data"] != null && aboutPayload["data"].obj["over18"] != null && aboutPayload["data"]["over18"].bool) {
             context.sendMessage(context.getAsMention(true) + "Sub-reddit `r/$subreddit` é marcado como NSFW... e eu não quero postar este tipo de coisa por aqui.")
             return
         }

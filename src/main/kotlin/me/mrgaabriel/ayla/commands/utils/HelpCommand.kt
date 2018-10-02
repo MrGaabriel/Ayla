@@ -9,7 +9,6 @@ import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.tag
 import net.dv8tion.jda.core.EmbedBuilder
-import net.dv8tion.jda.core.MessageBuilder
 import java.time.OffsetDateTime
 
 class HelpCommand : AbstractCommand(

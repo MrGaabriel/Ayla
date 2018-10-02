@@ -36,15 +36,14 @@ class TemmieYouTube {
 
     private fun buildQuery(params: Map<String, Any>): String {
         val query = arrayOfNulls<String>(params.size)
-        var index = 0
-        for (key in params.keys) {
+        for ((index, key) in params.keys.withIndex()) {
             var `val` = (if (params[key] != null) params[key] else "").toString()
             try {
                 `val` = URLEncoder.encode(`val`, "UTF-8")
             } catch (e: UnsupportedEncodingException) {
             }
 
-            query[index++] = key + "=" + `val`
+            query[index] = "$key=$`val`"
         }
 
         return StringUtils.join(query, "&")

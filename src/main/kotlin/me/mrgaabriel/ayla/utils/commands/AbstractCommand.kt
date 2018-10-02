@@ -26,7 +26,6 @@ import java.lang.reflect.Method
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.util.concurrent.TimeUnit
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.kotlinFunction
 
@@ -231,7 +230,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         var dynamicArgIdx = 0
         val params = mutableListOf<Any?>()
 
-        for ((index, param) in method.parameters.withIndex()) {
+        for (param in method.parameters) {
             val typeName = param.type.simpleName.toLowerCase()
             val injectArgumentAnnotation = param.getAnnotation(InjectArgument::class.java)
             when {

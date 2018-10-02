@@ -110,14 +110,12 @@ class CommandContext(val message: Message,
         if (input == null)
             return null
 
-        val arg = input
-
-        val channels = guild.getTextChannelsByName(arg, false)
+        val channels = guild.getTextChannelsByName(input, false)
         if (channels.isNotEmpty()) {
-            return channels.get(0)
+            return channels[0]
         }
 
-        val id = arg
+        val id = input
                 .replace("<", "")
                 .replace("#", "")
                 .replace(">", "")
@@ -143,7 +141,7 @@ class CommandContext(val message: Message,
 
         val channels = guild.getTextChannelsByName(arg, false)
         if (channels.isNotEmpty()) {
-            return channels.get(0)
+            return channels[0]
         }
 
         val id = arg
@@ -167,9 +165,7 @@ class CommandContext(val message: Message,
         if (input == null)
             return null
 
-        val arg = input
-
-        val splitted = arg.split("#")
+        val splitted = input.split("#")
         if (splitted.size == 2) {
             val users = mutableListOf<User>()
             ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
@@ -181,19 +177,19 @@ class CommandContext(val message: Message,
             }
         }
 
-        val members = guild.getMembersByEffectiveName(arg, true)
+        val members = guild.getMembersByEffectiveName(input, true)
         if (members.isNotEmpty()) {
-            return members.get(0).user
+            return members[0].user
         }
 
         val users = mutableListOf<User>()
-        ayla.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
+        ayla.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
 
         if (users.isNotEmpty()) {
-            return users.get(0)
+            return users[0]
         }
 
-        val id = arg.replace("<", "")
+        val id = input.replace("<", "")
                 .replace("@", "")
                 .replace("!", "")
                 .replace(">", "") // Se for uma menção, retirar <, @, ! e >
@@ -231,14 +227,14 @@ class CommandContext(val message: Message,
 
         val members = guild.getMembersByEffectiveName(arg, true)
         if (members.isNotEmpty()) {
-            return members.get(0).user
+            return members[0].user
         }
 
         val users = mutableListOf<User>()
         ayla.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
 
         if (users.isNotEmpty()) {
-            return users.get(0)
+            return users[0]
         }
 
         val id = arg.replace("<", "")

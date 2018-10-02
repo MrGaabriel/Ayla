@@ -1,7 +1,9 @@
 package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
@@ -23,16 +25,17 @@ class EventLogListeners : ListenerAdapter() {
     val logger = LoggerFactory.getLogger(EventLogListeners::class.java)
 
     override fun onGenericGuild(event: GenericGuildEvent) {
-        try {
-            handleEvent(event)
-        } catch (e: Exception) {
-            logger.error("Erro ao processar \"handleEvent()\" para o evento $event na guild ${event.guild}")
-            logger.error(ExceptionUtils.getStackTrace(e))
+        GlobalScope.async {
+            try {
+                handleEvent(event)
+            } catch (e: Exception) {
+                logger.error("Erro ao processar \"handleEvent()\" para o evento $event na guild ${event.guild}")
+                logger.error(ExceptionUtils.getStackTrace(e))
+            }
         }
     }
 
     fun handleEvent(event: GenericGuildEvent) {
-        async {
             val guild = event.guild
             val config = guild.config
 
@@ -41,13 +44,13 @@ class EventLogListeners : ListenerAdapter() {
 
                 if (channel == null) {
                     config.eventLogEnabled = false
-                    return@async
+                    return
                 }
 
                 if (event is GuildMessageUpdateEvent) {
                     val storedMessage = ayla.storedMessagesColl.find(
                             Filters.eq("_id", event.messageId)
-                    ).firstOrNull() ?: return@async
+                    ).firstOrNull() ?: return
 
                     val oldContent = storedMessage.content.replace("`", "")
                     val newContent = event.message.contentDisplay.replace("`", "")
@@ -78,13 +81,13 @@ class EventLogListeners : ListenerAdapter() {
                 if (event is GuildMessageDeleteEvent) {
                     val storedMessage = ayla.storedMessagesColl.find(
                             Filters.eq("_id", event.messageId)
-                    ).firstOrNull() ?: return@async
+                    ).firstOrNull() ?: return
 
                     val oldContent = storedMessage.content.replace("`", "")
 
                     val builder = EmbedBuilder()
 
-                    val author = ayla.getUserById(storedMessage.authorId) ?: return@async
+                    val author = ayla.getUserById(storedMessage.authorId) ?: return
                     builder.setAuthor(author.tag, null, author.effectiveAvatarUrl)
                     builder.setDescription("**Uma mensagem foi apagada no canal ${event.channel.asMention}**\n\nConteúdo: ```\u200b$oldContent```")
                     builder.setColor(Color.RED)
@@ -119,7 +122,7 @@ class EventLogListeners : ListenerAdapter() {
                         channel.sendMessage(builder.build()).queue()
                     }
                 }
-            }
+
         }
     }
 }

@@ -9,7 +9,8 @@ import com.github.salomonbrys.kotson.nullString
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonParser
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -48,11 +49,11 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
             val subs = it.redditSubs
 
             for (sub in subs) {
-                redditSubs.put(sub, it)
+                redditSubs[sub] = it
             }
         }
 
-        async {
+        val deferred = GlobalScope.async {
             logger.info("Verificando sub-reddits! Atualmente eu estou verificando ${redditSubs.keys.size} sub-reddits!")
 
             var posts = 0

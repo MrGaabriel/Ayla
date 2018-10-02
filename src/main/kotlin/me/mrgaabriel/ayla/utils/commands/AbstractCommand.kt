@@ -128,7 +128,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             val cooldown = ayla.commandCooldownCache[message.author.id]
             if (cooldown != null && cooldown > System.currentTimeMillis() && message.author.id != ayla.config.ownerId) {
-                ayla.commandCooldownCache.put(message.author.id, cooldown + 1000)
+                ayla.commandCooldownCache[message.author.id] = cooldown + 1000
                 context.sendMessage(context.getAsMention(true) + "Espere **${AylaUtils.formatDateDiff(cooldown + 1000)}** para executar este comando novamente!")
 
                 logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
@@ -178,7 +178,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             method.invoke(this, *params.toTypedArray())
 
-            ayla.commandCooldownCache.put(message.author.id, System.currentTimeMillis() + 2500)
+            ayla.commandCooldownCache[message.author.id] = System.currentTimeMillis() + 2500
             logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
         } catch (ite: InvocationTargetException) {
             val e = ite.targetException

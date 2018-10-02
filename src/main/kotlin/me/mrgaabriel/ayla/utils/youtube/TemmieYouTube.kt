@@ -23,9 +23,9 @@ class TemmieYouTube {
     fun searchOnYouTube(searchQuery: String): SearchResponse {
         val key = ayla.config.youtubeApiKey
         val params = HashMap<String, Any>()
-        params.put("part", "snippet")
-        params.put("q", searchQuery)
-        params.put("key", key)
+        params["part"] = "snippet"
+        params["q"] = searchQuery
+        params["key"] = key
         val req = HttpRequest.get("https://www.googleapis.com/youtube/v3/search?" + buildQuery(params))
 
         val body = req.body()

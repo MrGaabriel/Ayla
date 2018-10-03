@@ -61,7 +61,7 @@ class Ayla(var config: AylaConfig) {
     lateinit var storedMessagesColl: MongoCollection<StoredMessage>
 
     val messageInteractionCache = Caffeine.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
             .maximumSize(2000)
             .build<String, MessageInteraction>()
             .asMap()

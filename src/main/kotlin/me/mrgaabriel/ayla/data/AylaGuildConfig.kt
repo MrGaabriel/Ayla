@@ -20,7 +20,7 @@ class AylaGuildConfig @BsonCreator constructor(@BsonProperty("_id") _id: String)
     var redditSubs = mutableListOf<SubRedditWrapper>()
     var redditSubsLastPost = mutableMapOf<String, Long>()
 
-    var badWordsEnabled = true
+    var badWordsEnabled = false
     var badWords = mutableListOf<String>()
     var badWordsIgnoredChannels = mutableListOf<String>()
 

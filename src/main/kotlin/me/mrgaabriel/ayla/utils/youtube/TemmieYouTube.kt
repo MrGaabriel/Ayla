@@ -23,9 +23,9 @@ class TemmieYouTube {
     fun searchOnYouTube(searchQuery: String): SearchResponse {
         val key = ayla.config.youtubeApiKey
         val params = HashMap<String, Any>()
-        params.put("part", "snippet")
-        params.put("q", searchQuery)
-        params.put("key", key)
+        params["part"] = "snippet"
+        params["q"] = searchQuery
+        params["key"] = key
         val req = HttpRequest.get("https://www.googleapis.com/youtube/v3/search?" + buildQuery(params))
 
         val body = req.body()
@@ -36,15 +36,14 @@ class TemmieYouTube {
 
     private fun buildQuery(params: Map<String, Any>): String {
         val query = arrayOfNulls<String>(params.size)
-        var index = 0
-        for (key in params.keys) {
+        for ((index, key) in params.keys.withIndex()) {
             var `val` = (if (params[key] != null) params[key] else "").toString()
             try {
                 `val` = URLEncoder.encode(`val`, "UTF-8")
             } catch (e: UnsupportedEncodingException) {
             }
 
-            query[index++] = key + "=" + `val`
+            query[index] = "$key=$`val`"
         }
 
         return StringUtils.join(query, "&")

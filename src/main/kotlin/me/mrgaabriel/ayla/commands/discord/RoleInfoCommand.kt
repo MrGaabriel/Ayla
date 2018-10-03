@@ -1,6 +1,5 @@
 package me.mrgaabriel.ayla.commands.discord
 
-import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
 import me.mrgaabriel.ayla.utils.commands.CommandContext

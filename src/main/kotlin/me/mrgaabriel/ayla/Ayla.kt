@@ -3,27 +3,11 @@ package me.mrgaabriel.ayla
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import me.mrgaabriel.ayla.audio.AudioManager
-import me.mrgaabriel.ayla.commands.config.BadWordsCommand
-import me.mrgaabriel.ayla.commands.config.EventLogCommand
-import me.mrgaabriel.ayla.commands.config.PrefixCommand
-import me.mrgaabriel.ayla.commands.config.RedditCommand
-import me.mrgaabriel.ayla.commands.config.WelcomeCommand
-import me.mrgaabriel.ayla.commands.developer.BashCommand
-import me.mrgaabriel.ayla.commands.developer.EvalCommand
-import me.mrgaabriel.ayla.commands.developer.EvalJSCommand
-import me.mrgaabriel.ayla.commands.developer.ReloadCommand
-import me.mrgaabriel.ayla.commands.music.PlayCommand
-import me.mrgaabriel.ayla.commands.music.SkipCommand
-import me.mrgaabriel.ayla.commands.utils.HelpCommand
-import me.mrgaabriel.ayla.commands.utils.PingCommand
 import me.mrgaabriel.ayla.data.AylaConfig
 import me.mrgaabriel.ayla.data.AylaGuildConfig
 import me.mrgaabriel.ayla.data.AylaUser
@@ -45,18 +29,25 @@ import net.dv8tion.jda.core.entities.Game
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.utils.cache.CacheFlag
 import org.bson.codecs.configuration.CodecRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Ayla(var config: AylaConfig) {
 
     val logger = LoggerFactory.getLogger(Ayla::class.java)
 
-    lateinit var builder: JDABuilder
+    val flags = EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME)
+    val builder = JDABuilder(AccountType.BOT)
+            .setToken(config.clientToken)
+            .setStatus(OnlineStatus.ONLINE)
+            .setDisabledCacheFlags(flags)
+            .addEventListener(DiscordListeners())
+            .addEventListener(EventLogListeners())
+
     lateinit var audioManager: AudioManager
 
     val commandMap = mutableListOf<AbstractCommand>()
@@ -70,20 +61,20 @@ class Ayla(var config: AylaConfig) {
     lateinit var storedMessagesColl: MongoCollection<StoredMessage>
 
     val messageInteractionCache = Caffeine.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
             .maximumSize(2000)
             .build<String, MessageInteraction>()
+            .asMap()
+
+    val commandCooldownCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .maximumSize(5000L)
+            .build<String, Long>()
             .asMap()
 
     fun start() {
         loadMongo()
         loadCommands()
-
-        builder = JDABuilder(AccountType.BOT)
-                .setToken(config.clientToken)
-                .setStatus(OnlineStatus.ONLINE)
-                .addEventListener(DiscordListeners())
-                .addEventListener(EventLogListeners())
 
         for (idx in 0..(config.shardCount - 1)) {
             logger.info("Iniciando shard $idx...")
@@ -164,6 +155,10 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             user = it.retrieveUserById(id).complete()
+
+            if (user != null) {
+                return user
+            }
         }
 
         return user
@@ -174,6 +169,10 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             channel = it.getTextChannelById(id)
+
+            if (channel != null) {
+                return channel
+            }
         }
 
         return channel
@@ -184,9 +183,32 @@ class Ayla(var config: AylaConfig) {
 
         shards.forEach {
             guild = it.getGuildById(id)
+
+            if (guild != null) {
+                return guild
+            }
         }
 
         return guild
     }
 
+    val guilds: List<Guild> get() {
+        val guilds = mutableListOf<Guild>()
+
+        shards.forEach {
+            guilds.addAll(it.guilds)
+        }
+
+        return guilds
+    }
+
+    val users: List<User> get() {
+        val users = mutableListOf<User>()
+
+        shards.forEach {
+            users.addAll(it.users)
+        }
+
+        return users
+    }
 }

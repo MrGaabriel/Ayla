@@ -6,6 +6,7 @@ import com.github.salomonbrys.kotson.set
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.ConsoleColors
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -96,7 +97,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         for (method in methods.filter { it.isAnnotationPresent(Subcommand::class.java) }.sortedByDescending { it.parameterCount }) {
             val subcommandAnnotation = method.getAnnotation(Subcommand::class.java)
             if (subcommandAnnotation.values.isEmpty()) {
-                if (executeMethod(baseClass, method, context, context.message, "g!" /* TODO: Corrigir isto */, args, 0))
+                if (executeMethod(baseClass, method, context, context.message, "", args, 0))
                     return
             }
         }
@@ -109,7 +110,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         for (i in 0 until skipArgs)
             arguments.removeAt(0)
 
-        val params = getContextualArgumentList(method, context, message.author, commandLabel, arguments)
+        val params = getContextualArgumentList(method, context, message.author, commandLabel, arguments).toMutableList()
 
         // Agora iremos "validar" o argument list antes de executar
         for ((index, parameter) in method.kotlinFunction!!.valueParameters.withIndex()) {
@@ -117,12 +118,26 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                 return false
         }
 
-        if (params.size != method.parameterCount)
-            return false
+        if (params.size != method.parameterCount) {
+            val missingParams = method.parameterCount - params.size
+
+            for (idx in 0..missingParams) {
+                params.add(null)
+            }
+        }
 
         try {
             val start = System.currentTimeMillis()
             logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw}")
+
+            val cooldown = ayla.commandCooldownCache[message.author.id]
+            if (cooldown != null && cooldown > System.currentTimeMillis() && message.author.id != ayla.config.ownerId) {
+                ayla.commandCooldownCache[message.author.id] = cooldown + 1000
+                context.sendMessage(context.getAsMention(true) + "Espere **${AylaUtils.formatDateDiff(cooldown + 1000)}** para executar este comando novamente!")
+
+                logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
+                return true
+            }
 
             val permissions = method.getAnnotation(SubcommandPermissions::class.java)
 
@@ -167,6 +182,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
             method.invoke(this, *params.toTypedArray())
 
+            ayla.commandCooldownCache[message.author.id] = System.currentTimeMillis() + 2500
             logger.info("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - OK! Processado em ${System.currentTimeMillis() - start}ms")
         } catch (ite: InvocationTargetException) {
             val e = ite.targetException
@@ -204,21 +220,11 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
             val url = receivedPayload["html_url"].string
 
             // TODO: Fazer com que isto seja configurável
-            val guild = ayla.getGuildById("451537296441737216") // Minha guild de testes
-            val channel = guild?.getTextChannelById("491339383904010240")
+            val channel = ayla.getTextChannelById("491339383904010240")
 
             channel?.sendMessage("<@${ayla.config.ownerId}> $url")?.queue()
 
-            val errorMessage = arrayOf(
-                    message.author.asMention,
-                    "Um erro aconteceu durante a execução desse comando!",
-                    "",
-                    url,
-                    "",
-                    "Contate o `MrGaabriel#2430` e mande este erro!"
-            )
-
-            message.channel.sendMessage(errorMessage.joinToString("\n")).queue()
+            message.channel.sendMessage("${message.author.asMention} Um erro aconteceu durante a execução desse comando! Desculpe pela incoveniência! :cry:").queue()
             logger.error("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - ERROR!")
             logger.error(ExceptionUtils.getStackTrace(e))
         }
@@ -229,26 +235,30 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         var dynamicArgIdx = 0
         val params = mutableListOf<Any?>()
 
-        for ((index, param) in method.parameters.withIndex()) {
+        for (param in method.parameters) {
             val typeName = param.type.simpleName.toLowerCase()
             val injectArgumentAnnotation = param.getAnnotation(InjectArgument::class.java)
             when {
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.COMMAND_LABEL -> {
                     params.add(commandLabel)
                 }
-                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
-                    val duplicated = arguments.toMutableList()
-                    for (idx in 0 until dynamicArgIdx) {
-                        duplicated.removeAt(0)
-                    }
-
-                    params.add(arguments.joinToString(" "))
-                }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.USER -> {
                     params.add(context.getUser(arguments.getOrNull(dynamicArgIdx)))
+                    dynamicArgIdx++
                 }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.TEXT_CHANNEL -> {
                     params.add(context.getTextChannel(arguments.getOrNull(dynamicArgIdx)))
+                    dynamicArgIdx++
+                }
+                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
+                    val duplicated = arguments.toMutableList()
+
+                    for (idx in 0 until dynamicArgIdx) {
+                        if (duplicated.getOrNull(0) != null)
+                            duplicated.removeAt(0)
+                    }
+
+                    params.add(if (duplicated.isNotEmpty()) duplicated.joinToString(" ") else null)
                 }
                 param.type.isAssignableFrom(String::class.java) -> {
                     params.add(arguments.getOrNull(dynamicArgIdx))

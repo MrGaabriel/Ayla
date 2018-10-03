@@ -8,14 +8,11 @@ import me.mrgaabriel.ayla.data.AylaUser
 import net.dv8tion.jda.core.OnlineStatus
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Message
-import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
-import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent
 import net.dv8tion.jda.core.utils.MiscUtil
 import java.net.MalformedURLException
 import java.net.URL
@@ -29,22 +26,21 @@ var User.aylaUser: AylaUser get() {
             Filters.eq("_id", this.id)
     ).firstOrNull()
 
-    if (found != null) {
-        return found
+    return if (found != null) {
+        found
     } else {
         ayla.usersColl.insertOne(
                 AylaUser(this.id)
         )
 
-        return AylaUser(this.id)
+        AylaUser(this.id)
     }
 } set(user) {
-    val conf = user
 
     val options = UpdateOptions().upsert(true)
     ayla.usersColl.replaceOne(
             Filters.eq("_id", this.id),
-            conf,
+            user,
             options
     )
 }
@@ -54,22 +50,21 @@ var Guild.config: AylaGuildConfig get() {
             Filters.eq("_id", this.id)
     ).firstOrNull()
 
-    if (found != null) {
-        return found
+    return if (found != null) {
+        found
     } else {
         ayla.guildsColl.insertOne(
                 AylaGuildConfig(this.id)
         )
 
-        return AylaGuildConfig(this.id)
+        AylaGuildConfig(this.id)
     }
 } set(config) {
-    val conf = config
 
     val options = UpdateOptions().upsert(true)
     ayla.guildsColl.replaceOne(
             Filters.eq("_id", this.id),
-            conf,
+            config,
             options
     )
 }
@@ -103,12 +98,12 @@ class MessageInteraction(val id: String, val remove: Boolean) {
 }
 
 fun String.isValidSnowflake(): Boolean {
-    try {
+    return try {
         MiscUtil.parseSnowflake(this)
 
-        return true
+        true
     } catch (e: NumberFormatException) {
-        return false
+        false
     }
 }
 

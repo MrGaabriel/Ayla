@@ -2,5 +2,5 @@ package me.mrgaabriel.ayla.utils.commands
 
 enum class CommandCategory {
 
-    DEVELOPER, MISC, UTILS, CONFIG, MUSIC, DISCORD, FUN, NONE
+    DEVELOPER, MISC, UTILS, CONFIG, MUSIC, DISCORD, FUN, MODERATION, NONE
 }

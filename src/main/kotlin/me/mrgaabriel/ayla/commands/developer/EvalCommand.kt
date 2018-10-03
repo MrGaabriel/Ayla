@@ -1,6 +1,14 @@
 package me.mrgaabriel.ayla.commands.developer
 
+import com.github.kevinsawicki.http.HttpRequest
+import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.set
+import com.github.salomonbrys.kotson.string
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import me.mrgaabriel.ayla.AylaLauncher
+import me.mrgaabriel.ayla.utils.Constants
+import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
 import me.mrgaabriel.ayla.utils.commands.CommandContext
@@ -8,15 +16,12 @@ import me.mrgaabriel.ayla.utils.commands.annotations.ArgumentType
 import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
-import net.dv8tion.jda.core.EmbedBuilder
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
-import java.awt.Color
 import java.nio.file.Paths
-import java.time.OffsetDateTime
 import java.util.jar.Attributes
 import java.util.jar.JarFile
-import javax.script.Invocable
+import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
 class EvalCommand : AbstractCommand(
@@ -53,6 +58,18 @@ class EvalCommand : AbstractCommand(
         System.setProperty("kotlin.script.classpath", propClassPath)
 
         val scriptEngine = ScriptEngineManager().getEngineByName("kotlin") as KotlinJsr223JvmLocalScriptEngine
+        scriptEngine.put("engineContext", scriptEngine.context)
+        scriptEngine.put("context", context)
+
+        val bindings = buildString {
+            scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).forEach { key, value ->
+                if ("." !in key) {
+                    val name: String = value::class.qualifiedName!!
+                    val bind = """val $key = bindings["$key"] as $name"""
+                    appendln(bind)
+                }
+            }
+        }
 
         val script = """
             import me.mrgaabriel.ayla.commands.*
@@ -61,42 +78,40 @@ class EvalCommand : AbstractCommand(
             import me.mrgaabriel.ayla.threads.*
             import me.mrgaabriel.ayla.utils.*
 
-            fun eval(context: me.mrgaabriel.ayla.utils.commands.CommandContext): Any? {
-                $code
+            $bindings
 
-                return null
-            }
+            $code
         """.trimIndent()
 
         try {
-            val start = System.currentTimeMillis()
-            scriptEngine.eval(script)
+            val evaluated = scriptEngine.eval(script, scriptEngine.context)
 
-            val invocable = scriptEngine as Invocable
-            val evaluated = invocable.invokeMethod(this, "eval", context)
-
-            context.sendMessage("```\n$evaluated\n\nOK! Processado com sucesso em ${System.currentTimeMillis() - start}ms```")
+            context.sendMessage("```kotlin\n$evaluated```")
         } catch (e: Exception) {
-            val message = if (e.message != null) {
-                e.message
-            } else {
-                if (ExceptionUtils.getStackTrace(e).length > 2000) {
-                    ExceptionUtils.getStackTrace(e).substring(0, 2000)
-                } else {
-                    ExceptionUtils.getStackTrace(e)
-                }
-            }
+            val payload = JsonObject()
 
-            val builder = EmbedBuilder()
+            payload["description"] = "Erro ao executar o código do Eval"
+            payload["public"] = false
 
-            builder.setTitle("Oopsie Woopsie")
-            builder.setDescription("```$message```")
-            builder.setColor(Color.RED)
+            val error = JsonObject()
+            error["content"] = ExceptionUtils.getStackTrace(e)
 
-            builder.setFooter("We made a Fucky Wucky \uD83D\uDE22", null)
-            builder.setTimestamp(OffsetDateTime.now())
+            val files = JsonObject()
+            files["error.txt"] = error
 
-            context.sendMessage(builder.build(), context.getAsMention())
+            payload["files"] = files
+
+            val requestBody = HttpRequest.post("https://api.github.com/gists")
+                    .userAgent(Constants.USER_AGENT)
+                    .authorization("token ${ayla.config.gistToken}")
+                    .send(payload.toString())
+                    .body()
+
+            val receivedPayload = JsonParser().parse(requestBody)
+
+            val url = receivedPayload["html_url"].string
+
+            context.sendMessage(context.getAsMention(true) + "Erro ao executar!\n$url")
         }
     }
 }

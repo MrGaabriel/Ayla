@@ -1,7 +1,8 @@
 package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import me.mrgaabriel.ayla.modules.BadWordModule
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -41,7 +42,7 @@ class DiscordListeners : ListenerAdapter() {
                 val onResponse = interaction.onResponse
 
                 if (onResponse != null) {
-                    async {
+                    GlobalScope.async {
                         try {
                             onResponse.invoke(event)
 
@@ -68,7 +69,7 @@ class DiscordListeners : ListenerAdapter() {
                 val interaction = it.value
                 val onReactionAdd = interaction.onReactionAdd
 
-                async {
+                GlobalScope.async {
                     try {
                         if (onReactionAdd != null) {
                             onReactionAdd.invoke(event)
@@ -90,7 +91,7 @@ class DiscordListeners : ListenerAdapter() {
                 val interaction = it.value
                 val onReactionRemove = interaction.onReactionRemove
 
-                async {
+                GlobalScope.async {
                     try {
                         if (onReactionRemove != null) {
                             onReactionRemove.invoke(event)
@@ -129,7 +130,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
-        async {
+        GlobalScope.async {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -168,7 +169,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMemberLeave(event: GuildMemberLeaveEvent) {
-        async {
+        GlobalScope.async {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -204,7 +205,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        async {
+        GlobalScope.async {
             ayla.guildsColl.deleteOne(
                     Filters.eq("_id", event.guild.id)
             )
@@ -212,7 +213,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        async {
+        GlobalScope.async {
             // Porque guardar mensagens!? Você está me espionando!?
             // - Isso serve para o event-log, já que a API não fornece a mensagem que foi apagada/editada, nós temos que guardar elas para pegar o conteúdo!
             if (event.guild.config.eventLogEnabled) {
@@ -248,7 +249,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
-        async {
+        GlobalScope.async {
             if (event.message.contentRaw == "<@${ayla.config.clientId}>" || event.message.contentRaw == "<@!${ayla.config.clientId}>") {
                 event.channel.sendMessage("Olá, ${event.author.asMention}! Meu nome é Ayla e o meu prefixo para comandos neste servidor é `${event.guild.config.prefix}`! Para saber o que eu posso fazer, use `${event.guild.config.prefix}help`").queue()
                 return@async

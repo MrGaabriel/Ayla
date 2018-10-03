@@ -192,6 +192,16 @@ class Ayla(var config: AylaConfig) {
         return guild
     }
 
+    fun getMutualGuilds(user: User): List<Guild> {
+        val guilds = mutableListOf<Guild>()
+
+        shards.forEach {
+            guilds.addAll(it.getMutualGuilds(user))
+        }
+
+        return guilds
+    }
+
     val guilds: List<Guild> get() {
         val guilds = mutableListOf<Guild>()
 

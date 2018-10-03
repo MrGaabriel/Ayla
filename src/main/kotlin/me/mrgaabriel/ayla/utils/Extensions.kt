@@ -143,7 +143,7 @@ fun OffsetDateTime.humanize(): String {
         else -> "Irineu, você não sabe e nem eu!"
     }
 
-    return "${this.dayOfMonth} de $month de ${this.year} às ${this.hour}:${this.minute}:${this.second}"
+    return "${this.dayOfMonth} de $month de ${this.year} às ${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}"
 }
 
 fun OnlineStatus.humanize(): String {

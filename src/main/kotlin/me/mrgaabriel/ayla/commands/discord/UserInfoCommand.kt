@@ -17,10 +17,7 @@ class UserInfoCommand : AbstractCommand("userinfo", category = CommandCategory.D
 
     @Subcommand
     fun userinfo(context: CommandContext, @InjectArgument(ArgumentType.USER) user: User?) {
-        val realUser = if (user == null)
-            context.user
-        else
-            user
+        val realUser = user ?: context.user
 
         val builder = EmbedBuilder()
 

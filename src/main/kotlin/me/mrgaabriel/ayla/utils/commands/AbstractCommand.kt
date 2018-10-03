@@ -97,7 +97,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         for (method in methods.filter { it.isAnnotationPresent(Subcommand::class.java) }.sortedByDescending { it.parameterCount }) {
             val subcommandAnnotation = method.getAnnotation(Subcommand::class.java)
             if (subcommandAnnotation.values.isEmpty()) {
-                if (executeMethod(baseClass, method, context, context.message, "g!" /* TODO: Corrigir isto */, args, 0))
+                if (executeMethod(baseClass, method, context, context.message, "", args, 0))
                     return
             }
         }
@@ -110,7 +110,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         for (i in 0 until skipArgs)
             arguments.removeAt(0)
 
-        val params = getContextualArgumentList(method, context, message.author, commandLabel, arguments)
+        val params = getContextualArgumentList(method, context, message.author, commandLabel, arguments).toMutableList()
 
         // Agora iremos "validar" o argument list antes de executar
         for ((index, parameter) in method.kotlinFunction!!.valueParameters.withIndex()) {
@@ -118,8 +118,13 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                 return false
         }
 
-        if (params.size != method.parameterCount)
-            return false
+        if (params.size != method.parameterCount) {
+            val missingParams = method.parameterCount - params.size
+
+            for (idx in 0..missingParams) {
+                params.add(null)
+            }
+        }
 
         try {
             val start = System.currentTimeMillis()
@@ -237,21 +242,23 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.COMMAND_LABEL -> {
                     params.add(commandLabel)
                 }
-                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
-                    val duplicated = arguments.toMutableList()
-                    for (idx in 0 until dynamicArgIdx) {
-                        duplicated.removeAt(0)
-                    }
-
-                    if (duplicated.isNotEmpty()) {
-                        params.add(duplicated.joinToString(" "))
-                    }
-                }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.USER -> {
                     params.add(context.getUser(arguments.getOrNull(dynamicArgIdx)))
+                    dynamicArgIdx++
                 }
                 injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.TEXT_CHANNEL -> {
                     params.add(context.getTextChannel(arguments.getOrNull(dynamicArgIdx)))
+                    dynamicArgIdx++
+                }
+                injectArgumentAnnotation != null && injectArgumentAnnotation.type == ArgumentType.ARGUMENT_LIST -> {
+                    val duplicated = arguments.toMutableList()
+
+                    for (idx in 0 until dynamicArgIdx) {
+                        if (duplicated.getOrNull(0) != null)
+                            duplicated.removeAt(0)
+                    }
+
+                    params.add(if (duplicated.isNotEmpty()) duplicated.joinToString(" ") else null)
                 }
                 param.type.isAssignableFrom(String::class.java) -> {
                     params.add(arguments.getOrNull(dynamicArgIdx))

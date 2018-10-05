@@ -47,6 +47,7 @@ class Ayla(var config: AylaConfig) {
             .setDisabledCacheFlags(flags)
             .addEventListener(DiscordListeners())
             .addEventListener(EventLogListeners())
+            .setBulkDeleteSplittingEnabled(true)
 
     lateinit var audioManager: AudioManager
 

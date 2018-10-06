@@ -40,17 +40,7 @@ class ClearCommand : AbstractCommand("clear", category = CommandCategory.MODERAT
             if (failed != 0) {
                 return@queue context.sendMessage(context.getAsMention(true) + "Chat limpo com sucesso, porém não consegui limpar $failed mensagens pelo fato delas terem sido enviadas há mais de duas semanas!")
             }
-
-            val cofre_da_nasa = object {
-                private val locked = true
-            }
-
-            val clazz = cofre_da_nasa::class.java
-            val field = clazz.getDeclaredField("locked")
-
-            field.isAccessible = true
-            field.set(clazz, false)
-
+            
             context.sendMessage(context.getAsMention(true) + "Chat limpo com sucesso!")
         }
     }

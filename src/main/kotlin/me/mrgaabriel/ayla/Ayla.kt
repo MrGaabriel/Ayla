@@ -16,6 +16,7 @@ import me.mrgaabriel.ayla.listeners.EventLogListeners
 import me.mrgaabriel.ayla.threads.GameUpdateThread
 import me.mrgaabriel.ayla.threads.RedditPostSyncThread
 import me.mrgaabriel.ayla.threads.RemoveCachedMessagesThread
+import me.mrgaabriel.ayla.threads.TempbanThread
 import me.mrgaabriel.ayla.threads.UpdateBotStatsThread
 import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.MessageInteraction
@@ -91,6 +92,7 @@ class Ayla(var config: AylaConfig) {
         RemoveCachedMessagesThread().start()
         RedditPostSyncThread().start()
         UpdateBotStatsThread().start()
+        TempbanThread().start()
 
         logger.info("OK! - Ayla inicializada com sucesso!")
     }

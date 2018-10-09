@@ -61,5 +61,16 @@ class UpdateBotStatsThread : Thread("Update Bot Stats") {
                         "guildCount" to guildsCount
                 ).toString())
         logger.info("Bots on Discord -> Código ${botsOnDiscord.code()}")
+
+        // Discord Bots (https://bots.discord.pw)
+        val discordBots = HttpRequest.post("https://bots.discord.pw/api/bots/${ayla.config.clientId}/stats")
+                .userAgent(Constants.USER_AGENT)
+                .authorization(ayla.config.botsOnDiscordToken)
+                .acceptJson()
+                .contentType("application/json")
+                .send(jsonObject(
+                        "server_count" to guildsCount
+                ).toString())
+        logger.info("Discord Bots -> Código ${discordBots.code()}")
     }
 }

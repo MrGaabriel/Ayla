@@ -15,22 +15,19 @@ class ChannelInfoCommand : AbstractCommand("channelinfo", category = CommandCate
 
     @Subcommand
     fun channelInfo(context: CommandContext, @InjectArgument(ArgumentType.TEXT_CHANNEL) channel: TextChannel?) {
-        if (channel == null) {
-            context.sendMessage(context.getAsMention(true) + "Canal inexistente!")
-            return
-        }
+        val realChannel = channel ?: context.channel
 
         val builder = EmbedBuilder()
 
         builder.setColor(AylaUtils.randomColor())
-        builder.setAuthor("#${channel.name}")
+        builder.setAuthor("#${realChannel.name}")
 
-        builder.addField("ID", channel.id, true)
-        builder.addField("Nome", channel.asMention, true)
-        builder.addField("Tópico", if (!channel.topic.isNullOrBlank()) channel.topic else "Indefinido", true)
-        builder.addField("NSFW", if (channel.isNSFW) "Sim" else "Não", true)
+        builder.addField("ID", realChannel.id, true)
+        builder.addField("Nome", realChannel.asMention, true)
+        builder.addField("Tópico", if (!realChannel.topic.isNullOrBlank()) realChannel.topic else "Indefinido", true)
+        builder.addField("NSFW", if (realChannel.isNSFW) "Sim" else "Não", true)
 
-        builder.addField("Criado em", channel.creationTime.humanize(), true)
+        builder.addField("Criado em", realChannel.creationTime.humanize(), true)
 
         context.sendMessage(builder.build(), context.getAsMention())
     }

@@ -7,13 +7,21 @@ import me.mrgaabriel.ayla.utils.commands.CommandCategory
 import me.mrgaabriel.ayla.utils.commands.CommandContext
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.humanize
+import me.mrgaabriel.ayla.utils.isValidSnowflake
 import net.dv8tion.jda.core.EmbedBuilder
 
 class ServerInfoCommand : AbstractCommand("serverinfo", category = CommandCategory.DISCORD, description = "Veja as informações de um servidor do Discord", aliases = listOf("guildinfo")) {
 
     @Subcommand
     fun serverInfo(context: CommandContext, input: String?) {
-        val guild = ayla.getGuildById(input ?: "-1") ?: context.guild
+        val guild = if (input != null) {
+            if (input.isValidSnowflake())
+                ayla.getGuildById(input) ?: context.guild
+            else
+                context.guild
+        } else {
+            context.guild
+        }
 
         val builder = EmbedBuilder()
 

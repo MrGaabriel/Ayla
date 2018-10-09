@@ -50,7 +50,7 @@ class CommandContext(val message: Message,
         channel.sendMessage(builder.setContent(content.toString()).setEmbed(embed).build()).queue { success?.invoke(it) }
     }
 
-    fun getAsMention(withSpace: Boolean = true): String {
+    fun getAsMention(withSpace: Boolean = false): String {
         return "${user.asMention}${if (withSpace) " " else ""}"
     }
 

@@ -17,9 +17,8 @@ class RemoveCachedMessagesThread : Thread("Remove Cached Messages Thread") {
     }
 
     fun deleteOldMessages() {
-        val storageMessages = ayla.storedMessagesColl.find()
-        // Pega todas as mensagens guardadas com mais de uma semana
-        val oldMessages = storageMessages.filter { (System.currentTimeMillis() - it.createdAt) >= 604800000 }
+        val storagedMessages = ayla.storedMessagesColl.find()
+        val oldMessages = storagedMessages.filter { (it.createdAt + 604800000) > System.currentTimeMillis() }
 
         for (message in oldMessages) {
             ayla.storedMessagesColl.deleteOne(Filters.eq("_id", message.messageId))

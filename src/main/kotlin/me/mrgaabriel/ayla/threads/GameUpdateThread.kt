@@ -33,9 +33,9 @@ class GameUpdateThread : Thread("Game Update Thread") {
 
         ayla.setGame(gameHandle)
     }
-}
 
-class AylaGameWrapper(
-        val name: String,
-        val type: String
-)
+    class AylaGameWrapper(
+            val name: String,
+            val type: String
+    )
+}

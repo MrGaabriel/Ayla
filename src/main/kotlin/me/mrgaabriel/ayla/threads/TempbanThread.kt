@@ -15,7 +15,7 @@ class TempbanThread : Thread("Unban Tempbanned Users Thread") {
     }
 
     fun checkUsers() {
-        ayla.guilds.forEach { guild ->
+        ayla.shardManager.guilds.forEach { guild ->
             val config = guild.config
             val bannedUsers = config.userData.filter { it.banned }
 

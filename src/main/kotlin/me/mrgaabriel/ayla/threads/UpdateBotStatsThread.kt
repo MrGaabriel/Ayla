@@ -27,7 +27,7 @@ class UpdateBotStatsThread : Thread("Update Bot Stats") {
     fun updateStats() {
         logger.info("Atualizando os dados do bot...")
 
-        val guildsCount = ayla.shards.sumBy { it.guilds.size }
+        val guildsCount = ayla.shardManager.shards.sumBy { it.guilds.size }
 
         // Vespertine Bots List (https://bots.perfectdreams.net)
         val vespertine = HttpRequest.put("https://bots.perfectdreams.net/api/v1/bot/${ayla.config.clientId}/stats")

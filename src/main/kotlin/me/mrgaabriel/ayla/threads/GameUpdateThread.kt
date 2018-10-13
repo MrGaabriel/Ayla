@@ -31,7 +31,7 @@ class GameUpdateThread : Thread("Game Update Thread") {
 
         val gameHandle = Game.of(Game.GameType.valueOf(randomGame.type), randomGame.name, "https://www.twitch.tv/MrGaabriel")
 
-        ayla.setGame(gameHandle)
+        ayla.shardManager.setGame(gameHandle)
     }
 
     class AylaGameWrapper(

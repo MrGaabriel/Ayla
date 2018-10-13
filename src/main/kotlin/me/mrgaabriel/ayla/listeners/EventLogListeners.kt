@@ -86,7 +86,7 @@ class EventLogListeners : ListenerAdapter() {
 
                     val builder = EmbedBuilder()
 
-                    val author = ayla.getUserById(storedMessage.authorId) ?: return
+                    val author = ayla.shardManager.getUserById(storedMessage.authorId) ?: return
                     builder.setAuthor(author.tag, null, author.effectiveAvatarUrl)
                     builder.setDescription("**Uma mensagem foi apagada no canal ${event.channel.asMention}**\n\nConteúdo: ```\u200b$oldContent```")
                     builder.setColor(Color.RED)

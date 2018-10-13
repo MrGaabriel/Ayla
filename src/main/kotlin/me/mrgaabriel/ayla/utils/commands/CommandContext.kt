@@ -22,6 +22,8 @@ class CommandContext(val message: Message,
     val guild = message.guild
     val member = guild.getMember(user)
 
+    val jda = guild.jda
+
     fun sendMessage(content: Any, success: ((Message) -> Unit)? = null) {
         channel.sendMessage(content.toString()).queue { success?.invoke(it) }
     }
@@ -168,7 +170,7 @@ class CommandContext(val message: Message,
         val splitted = input.split("#")
         if (splitted.size == 2) {
             val users = mutableListOf<User>()
-            ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
+            ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
 
             val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
 
@@ -183,7 +185,7 @@ class CommandContext(val message: Message,
         }
 
         val users = mutableListOf<User>()
-        ayla.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
+        ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
 
         if (users.isNotEmpty()) {
             return users[0]
@@ -197,7 +199,7 @@ class CommandContext(val message: Message,
         if (!id.isValidSnowflake())
             return null
 
-        val user = ayla.getUserById(id)
+        val user = ayla.shardManager.getUserById(id)
 
         if (user != null) {
             return user
@@ -216,7 +218,7 @@ class CommandContext(val message: Message,
         val splitted = arg.split("#")
         if (splitted.size == 2) {
             val users = mutableListOf<User>()
-            ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
+            ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
 
             val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
 
@@ -231,7 +233,7 @@ class CommandContext(val message: Message,
         }
 
         val users = mutableListOf<User>()
-        ayla.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
+        ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
 
         if (users.isNotEmpty()) {
             return users[0]
@@ -245,7 +247,7 @@ class CommandContext(val message: Message,
         if (!id.isValidSnowflake())
             return null
 
-        val user = ayla.getUserById(id)
+        val user = ayla.shardManager.getUserById(id)
 
         if (user != null) {
             return user

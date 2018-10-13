@@ -2,8 +2,6 @@ package me.mrgaabriel.ayla.commands.developer
 
 import com.google.gson.Gson
 import me.mrgaabriel.ayla.data.AylaConfig
-import me.mrgaabriel.ayla.listeners.DiscordListeners
-import me.mrgaabriel.ayla.listeners.EventLogListeners
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
@@ -29,9 +27,8 @@ class ReloadCommand : AbstractCommand(
 
         when (function) {
             "commands" -> {
-                val oldCommandMap = ayla.commandMap
-
                 ayla.loadCommands()
+                
                 context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados")
             }
 
@@ -47,44 +44,20 @@ class ReloadCommand : AbstractCommand(
                 context.sendMessage(context.getAsMention(true) + "Configuração recarregada!")
             }
 
-            "listeners" -> {
-                ayla.shards.forEach { shard ->
-                    shard.registeredListeners.forEach {
-                        shard.removeEventListener(it)
-                    }
-                }
-
-                ayla.shards.forEach { shard ->
-                    shard.addEventListener(DiscordListeners())
-                    shard.addEventListener(EventLogListeners())
-                }
-
-                context.sendMessage(context.getAsMention(true) + "Listeners recarregados com sucesso!")
-            }
-
             "mongo" -> {
                 ayla.loadMongo()
 
                 context.sendMessage(context.getAsMention(true) + "MongoDB recarregado com sucesso!")
             }
 
-            "restart_shard" -> {
+            "shard" -> {
                 val shardId = context.args[1].toInt()
 
-                val shard = ayla.shards[shardId]
-                shard.shutdown()
+                context.sendMessage("${context.getAsMention()} Reiniciando shard $shardId!")
+                ayla.shardManager.restart(shardId)
 
-                val newShard = ayla.builder.useSharding(shardId, ayla.config.shardCount)
-                        .build().awaitReady()
-
-                ayla.shards[shardId] = newShard
-
-                if (context.message.jda.shardInfo.shardId != shardId) {
-                    context.sendMessage("${context.getAsMention()} Shard reiniciada!")
-                } else {
-                    Thread.sleep(2000)
-
-                    context.sendMessage("${context.getAsMention()} Shard reiniciada!")
+                if (shardId != context.jda.shardInfo.shardId) {
+                    context.sendMessage("${context.getAsMention()} OK! Shard $shardId reiniciada com sucesso!")
                 }
             }
 

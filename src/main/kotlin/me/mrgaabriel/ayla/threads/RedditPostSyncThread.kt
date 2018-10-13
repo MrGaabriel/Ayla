@@ -76,9 +76,9 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                 val creationTime = post["created_utc"].long
 
                 if (creationTime > lastCachedPostCreation) {
-                    val guildHandle = ayla.getGuildById(guild.id)
-                        ?: throw RuntimeException("Guild ID is null") // what the fuck
-                    val channel = ayla.getTextChannelById(sub.channelId) ?: return@forEach // :rolling_eyes:
+                    val guildHandle = ayla.shardManager.getGuildById(guild.id)
+                        ?: throw RuntimeException("Guild is null") // what the fuck
+                    val channel = ayla.shardManager.getTextChannelById(sub.channelId) ?: return@forEach // :rolling_eyes:
 
                     if (post["over_18"].bool) { // Não, não e não
                         guild.redditSubsLastPost[sub.subReddit] = creationTime

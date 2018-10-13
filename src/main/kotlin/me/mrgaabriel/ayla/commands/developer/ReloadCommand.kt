@@ -68,6 +68,26 @@ class ReloadCommand : AbstractCommand(
                 context.sendMessage(context.getAsMention(true) + "MongoDB recarregado com sucesso!")
             }
 
+            "restart_shard" -> {
+                val shardId = context.args[1].toInt()
+
+                val shard = ayla.shards[shardId]
+                shard.shutdown()
+
+                val newShard = ayla.builder.useSharding(shardId, ayla.config.shardCount)
+                        .build().awaitReady()
+
+                ayla.shards[shardId] = newShard
+
+                if (context.message.jda.shardInfo.shardId != shardId) {
+                    context.sendMessage("${context.getAsMention()} Shard reiniciada!")
+                } else {
+                    Thread.sleep(2000)
+
+                    context.sendMessage("${context.getAsMention()} Shard reiniciada!")
+                }
+            }
+
              else -> {
                  context.explain()
              }

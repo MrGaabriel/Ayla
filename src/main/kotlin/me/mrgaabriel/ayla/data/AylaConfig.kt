@@ -15,4 +15,5 @@ class AylaConfig(val clientToken: String = "Token do Bot",
                  val youtubeApiKey: String = "API key do YouTube",
                  val botsOnDiscordToken: String = "Token do Bots on Discord",
                  val openWeatherMapKey: String = "Key do OpenWeatherMap",
-                 val discordBotsToken: String = "Token do Discord Bots")
+                 val discordBotsToken: String = "Token do Discord Bots",
+                 val fortniteTrackerApiKey: String = "API key do Fortnite Tracker")

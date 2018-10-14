@@ -126,7 +126,7 @@ class RedditPostSyncThread : Thread("Reddit Posts Sync") {
                         val urlRequest = HttpRequest.get(url)
                                 .userAgent(Constants.USER_AGENT)
 
-                        if (urlRequest.ok()) {
+                        if (urlRequest.code() == 200) {
                             val image = ImageIO.read(URL(url))
 
                             if (image != null) {

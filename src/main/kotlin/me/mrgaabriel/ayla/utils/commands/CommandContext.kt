@@ -1,5 +1,6 @@
 package me.mrgaabriel.ayla.utils.commands
 
+import me.mrgaabriel.ayla.utils.await
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.fancy
@@ -40,17 +41,20 @@ class CommandContext(val message: Message,
         channel.sendMessage(embed).queue { success?.invoke(it) }
     }
 
-    fun sendMessage(embed: MessageEmbed, content: String, success: ((Message) -> Unit)? = null) {
-        val builder = MessageBuilder()
-
-        channel.sendMessage(builder.setContent(content).setEmbed(embed).build()).queue { success?.invoke(it) }
-    }
-
     fun sendMessage(embed: MessageEmbed, content: Any, success: ((Message) -> Unit)? = null) {
         val builder = MessageBuilder()
 
         channel.sendMessage(builder.setContent(content.toString()).setEmbed(embed).build()).queue { success?.invoke(it) }
     }
+
+    // Para usar dentro de coroutines ou suspend functions
+    suspend fun sendMessageAsync(content: Any) = this.channel.sendMessage(content.toString()).await()
+
+    suspend fun sendMessageAsync(content: Message) = this.channel.sendMessage(content).await()
+
+    suspend fun sendMessageAsync(embed: MessageEmbed) = this.channel.sendMessage(embed).await()
+
+    suspend fun sendMessageAsync(embed: MessageEmbed, content: Any) = this.channel.sendMessage(MessageBuilder().setContent(content.toString()).setEmbed(embed).build()).await()
 
     fun getAsMention(withSpace: Boolean = false): String {
         return "${user.asMention}${if (withSpace) " " else ""}"

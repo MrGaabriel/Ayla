@@ -2,7 +2,7 @@ package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
@@ -24,7 +24,7 @@ class EventLogListeners : ListenerAdapter() {
     val logger = LoggerFactory.getLogger(EventLogListeners::class.java)
 
     override fun onGenericGuild(event: GenericGuildEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             try {
                 handleEvent(event)
             } catch (e: Exception) {

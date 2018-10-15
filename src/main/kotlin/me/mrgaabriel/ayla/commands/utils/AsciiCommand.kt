@@ -13,7 +13,7 @@ import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import java.net.URLEncoder
 
-class AsciiCommand : AbstractCommand("ascii", category = CommandCategory.UTILS, description = "Transforme textos em ASCII", usage = "texto") {
+class AsciiCommand : AbstractCommand("ascii", category = CommandCategory.UTILS, description = "Transforme textos em ASCII", usage = "texto", aliases = listOf("asciify")) {
 
     @Subcommand
     fun ascii(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) input: String?) {

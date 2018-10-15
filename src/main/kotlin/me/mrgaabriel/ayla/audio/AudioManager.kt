@@ -13,13 +13,12 @@ import me.mrgaabriel.ayla.utils.stripCodeMarks
 import me.mrgaabriel.ayla.utils.youtube.TemmieYouTube
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
-import java.util.concurrent.TimeUnit
 
 class AudioManager {
 
     val playerManager = DefaultAudioPlayerManager()
 
-    val musicPlayers = Caffeine.newBuilder().expireAfterAccess(30, TimeUnit.SECONDS)
+    val musicPlayers = Caffeine.newBuilder() // .expireAfterAccess(30, TimeUnit.SECONDS)
             .build<String, MusicPlayer>()
             .asMap()
 

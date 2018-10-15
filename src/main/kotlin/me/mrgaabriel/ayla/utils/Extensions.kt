@@ -267,18 +267,6 @@ fun String.convertToEpochMillis(): Long {
     return calendar.timeInMillis
 }
 
-fun <T> Array<T>.random(): T {
-    val random = SplittableRandom()
-
-    return this[random.nextInt(this.size)]
-}
-
-fun <T> List<T>.random(): T {
-    val random = SplittableRandom()
-
-    return this[random.nextInt(this.size)]
-}
-
 suspend fun <T> RestAction<T>.await(): T {
     return suspendCoroutine { cont ->
         this.queue({ cont.resume(it) }, { cont.resumeWithException(it) })

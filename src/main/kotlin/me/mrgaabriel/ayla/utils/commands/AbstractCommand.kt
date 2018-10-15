@@ -1,20 +1,14 @@
 package me.mrgaabriel.ayla.utils.commands
 
-import com.github.kevinsawicki.http.HttpRequest
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.set
-import com.github.salomonbrys.kotson.string
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.ConsoleColors
-import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.commands.annotations.ArgumentType
 import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 import me.mrgaabriel.ayla.utils.config
+import me.mrgaabriel.ayla.utils.gist.GistUtils
 import me.mrgaabriel.ayla.utils.tag
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Message
@@ -26,6 +20,7 @@ import java.lang.reflect.Method
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import kotlin.collections.set
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.kotlinFunction
 
@@ -187,13 +182,7 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
         } catch (ite: InvocationTargetException) {
             val e = ite.targetException
 
-            val payload = JsonObject()
-
-            payload["description"] = "Erro ao executar o comando \"..${this.label}\""
-            payload["public"] = false
-
-            val error = JsonObject()
-            error["content"] = """
+            val gistUrl = GistUtils.createGist("""
                 |Message: ${message.contentRaw} (ID: ${message.id})
                 |Channel: ${message.channel}
                 |
@@ -202,27 +191,12 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
                 |Timestamp: ${OffsetDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault())}
                 |
                 |${ExceptionUtils.getStackTrace(e)}
-            """.trimMargin()
-
-            val files = JsonObject()
-            files["error.txt"] = error
-
-            payload["files"] = files
-
-            val requestBody = HttpRequest.post("https://api.github.com/gists")
-                    .userAgent(Constants.USER_AGENT)
-                    .authorization("token ${ayla.config.gistToken}")
-                    .send(payload.toString())
-                    .body()
-
-            val receivedPayload = JsonParser().parse(requestBody)
-
-            val url = receivedPayload["html_url"].string
+            """.trimMargin(), "Erro ao executar o comando ${this.label}", false, "error.txt")
 
             // TODO: Fazer com que isto seja configurável
             val channel = ayla.shardManager.getTextChannelById("491339383904010240")
 
-            channel?.sendMessage("<@${ayla.config.ownerId}> $url")?.queue()
+            channel?.sendMessage("<@${ayla.config.ownerId}> $gistUrl")?.queue()
 
             message.channel.sendMessage("${message.author.asMention} Um erro aconteceu durante a execução desse comando! Desculpe pela incoveniência! :cry:").queue()
             logger.error("${ConsoleColors.YELLOW}[COMMAND EXECUTED]${ConsoleColors.RESET} (${message.guild.name} -> #${message.channel.name}) ${message.author.tag}: ${message.contentRaw} - ERROR!")

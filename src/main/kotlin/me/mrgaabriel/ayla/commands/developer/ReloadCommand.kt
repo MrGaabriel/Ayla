@@ -10,12 +10,7 @@ import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 import java.io.File
 
-class ReloadCommand : AbstractCommand(
-        "reload",
-        CommandCategory.DEVELOPER,
-        "Recarrega a Ayla",
-        "função"
-) {
+class ReloadCommand : AbstractCommand("reload", CommandCategory.DEVELOPER, "Recarrega a Ayla", "função") {
 
     @Subcommand
     @SubcommandPermissions([], true)
@@ -59,6 +54,13 @@ class ReloadCommand : AbstractCommand(
                 if (shardId != context.jda.shardInfo.shardId) {
                     context.sendMessage("${context.getAsMention()} OK! Shard $shardId reiniciada com sucesso!")
                 }
+            }
+
+            "bot" -> {
+                context.sendMessage("${context.getAsMention()} Reiniciando todas as shards... espero que nada de errado aconteça!")
+
+                ayla.shardManager.shutdown()
+                ayla.start()
             }
 
              else -> {

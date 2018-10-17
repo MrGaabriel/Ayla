@@ -13,12 +13,16 @@ import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
+import net.dv8tion.jda.core.requests.RestAction
 import net.dv8tion.jda.core.utils.MiscUtil
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Month
 import java.time.OffsetDateTime
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 val User.tag: String get() = "${this.name}#${this.discriminator}"
 
@@ -261,4 +265,10 @@ fun String.convertToEpochMillis(): Long {
     }
 
     return calendar.timeInMillis
+}
+
+suspend fun <T> RestAction<T>.await(): T {
+    return suspendCoroutine { cont ->
+        this.queue({ cont.resume(it) }, { cont.resumeWithException(it) })
+    }
 }

@@ -2,8 +2,6 @@ package me.mrgaabriel.ayla.commands.developer
 
 import com.google.gson.Gson
 import me.mrgaabriel.ayla.data.AylaConfig
-import me.mrgaabriel.ayla.listeners.DiscordListeners
-import me.mrgaabriel.ayla.listeners.EventLogListeners
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.commands.CommandCategory
@@ -12,12 +10,7 @@ import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 import java.io.File
 
-class ReloadCommand : AbstractCommand(
-        "reload",
-        CommandCategory.DEVELOPER,
-        "Recarrega a Ayla",
-        "função"
-) {
+class ReloadCommand : AbstractCommand("reload", CommandCategory.DEVELOPER, "Recarrega a Ayla", "função") {
 
     @Subcommand
     @SubcommandPermissions([], true)
@@ -29,9 +22,8 @@ class ReloadCommand : AbstractCommand(
 
         when (function) {
             "commands" -> {
-                val oldCommandMap = ayla.commandMap
-
                 ayla.loadCommands()
+                
                 context.sendMessage(context.getAsMention(true) + "Comandos recarregados! ${ayla.commandMap.size} comandos recarregados")
             }
 
@@ -47,25 +39,28 @@ class ReloadCommand : AbstractCommand(
                 context.sendMessage(context.getAsMention(true) + "Configuração recarregada!")
             }
 
-            "listeners" -> {
-                ayla.shards.forEach { shard ->
-                    shard.registeredListeners.forEach {
-                        shard.removeEventListener(it)
-                    }
-                }
-
-                ayla.shards.forEach { shard ->
-                    shard.addEventListener(DiscordListeners())
-                    shard.addEventListener(EventLogListeners())
-                }
-
-                context.sendMessage(context.getAsMention(true) + "Listeners recarregados com sucesso!")
-            }
-
             "mongo" -> {
                 ayla.loadMongo()
 
                 context.sendMessage(context.getAsMention(true) + "MongoDB recarregado com sucesso!")
+            }
+
+            "shard" -> {
+                val shardId = context.args[1].toInt()
+
+                context.sendMessage("${context.getAsMention()} Reiniciando shard $shardId!")
+                ayla.shardManager.restart(shardId)
+
+                if (shardId != context.jda.shardInfo.shardId) {
+                    context.sendMessage("${context.getAsMention()} OK! Shard $shardId reiniciada com sucesso!")
+                }
+            }
+
+            "bot" -> {
+                context.sendMessage("${context.getAsMention()} Reiniciando todas as shards... espero que nada de errado aconteça!")
+
+                ayla.shardManager.shutdown()
+                ayla.start()
             }
 
              else -> {

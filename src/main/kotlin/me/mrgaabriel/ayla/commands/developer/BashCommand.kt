@@ -8,11 +8,7 @@ import me.mrgaabriel.ayla.utils.commands.annotations.InjectArgument
 import me.mrgaabriel.ayla.utils.commands.annotations.Subcommand
 import me.mrgaabriel.ayla.utils.commands.annotations.SubcommandPermissions
 
-class BashCommand : AbstractCommand(
-        "bash",
-        CommandCategory.DEVELOPER,
-        "Executa comandos"
-) {
+class BashCommand : AbstractCommand("bash", CommandCategory.DEVELOPER, "Executa comandos") {
 
     @Subcommand
     @SubcommandPermissions([], onlyOwner = true)

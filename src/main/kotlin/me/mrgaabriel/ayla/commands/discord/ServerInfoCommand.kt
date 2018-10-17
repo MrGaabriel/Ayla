@@ -16,7 +16,7 @@ class ServerInfoCommand : AbstractCommand("serverinfo", category = CommandCatego
     fun serverInfo(context: CommandContext, input: String?) {
         val guild = if (input != null) {
             if (input.isValidSnowflake())
-                ayla.getGuildById(input) ?: context.guild
+                ayla.shardManager.getGuildById(input) ?: context.guild
             else
                 context.guild
         } else {

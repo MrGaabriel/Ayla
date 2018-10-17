@@ -2,7 +2,7 @@ package me.mrgaabriel.ayla.listeners
 
 import com.mongodb.client.model.Filters
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import me.mrgaabriel.ayla.modules.BadWordModule
 import me.mrgaabriel.ayla.utils.Constants
 import me.mrgaabriel.ayla.utils.ayla
@@ -42,7 +42,7 @@ class DiscordListeners : ListenerAdapter() {
                 val onResponse = interaction.onResponse
 
                 if (onResponse != null) {
-                    GlobalScope.async {
+                    GlobalScope.launch {
                         try {
                             onResponse.invoke(event)
 
@@ -69,7 +69,7 @@ class DiscordListeners : ListenerAdapter() {
                 val interaction = it.value
                 val onReactionAdd = interaction.onReactionAdd
 
-                GlobalScope.async {
+                GlobalScope.launch {
                     try {
                         if (onReactionAdd != null) {
                             onReactionAdd.invoke(event)
@@ -91,7 +91,7 @@ class DiscordListeners : ListenerAdapter() {
                 val interaction = it.value
                 val onReactionRemove = interaction.onReactionRemove
 
-                GlobalScope.async {
+                GlobalScope.launch {
                     try {
                         if (onReactionRemove != null) {
                             onReactionRemove.invoke(event)
@@ -130,7 +130,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -141,7 +141,7 @@ class DiscordListeners : ListenerAdapter() {
                     config.welcomeEnabled = false
                     event.guild.config = config
 
-                    return@async
+                    return@launch
                 }
 
                 val builder = EmbedBuilder()
@@ -169,7 +169,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMemberLeave(event: GuildMemberLeaveEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             val config = event.guild.config
 
             if (config.welcomeEnabled && config.welcomeChannel.isNotEmpty()) {
@@ -180,7 +180,7 @@ class DiscordListeners : ListenerAdapter() {
                     config.welcomeEnabled = false
                     event.guild.config = config
 
-                    return@async
+                    return@launch
                 }
 
                 val builder = EmbedBuilder()
@@ -205,7 +205,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             ayla.guildsColl.deleteOne(
                     Filters.eq("_id", event.guild.id)
             )
@@ -213,7 +213,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             // Porque guardar mensagens!? Você está me espionando!?
             // - Isso serve para o event-log, já que a API não fornece a mensagem que foi apagada/editada, nós temos que guardar elas para pegar o conteúdo!
             if (event.guild.config.eventLogEnabled) {
@@ -232,16 +232,16 @@ class DiscordListeners : ListenerAdapter() {
             }
 
             if (event.author.isBot)
-                return@async
+                return@launch
             
             if (event.message.contentRaw == "<@${ayla.config.clientId}>" || event.message.contentRaw == "<@!${ayla.config.clientId}>") {
                 event.channel.sendMessage("Olá, ${event.author.asMention}! Meu nome é Ayla e o meu prefixo para comandos neste servidor é `${event.guild.config.prefix}`! Para saber o que eu posso fazer, use `${event.guild.config.prefix}help`").queue()
-                return@async
+                return@launch
             }
 
             ayla.commandMap.forEach {
                 if (it.matches(event.message))
-                    return@async
+                    return@launch
             }
 
             BadWordModule.handleMessage(event.message)
@@ -249,15 +249,15 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
-        GlobalScope.async {
+        GlobalScope.launch {
             if (event.message.contentRaw == "<@${ayla.config.clientId}>" || event.message.contentRaw == "<@!${ayla.config.clientId}>") {
                 event.channel.sendMessage("Olá, ${event.author.asMention}! Meu nome é Ayla e o meu prefixo para comandos neste servidor é `${event.guild.config.prefix}`! Para saber o que eu posso fazer, use `${event.guild.config.prefix}help`").queue()
-                return@async
+                return@launch
             }
 
             ayla.commandMap.forEach {
                 if (it.matches(event.message))
-                    return@async
+                    return@launch
             }
 
             BadWordModule.handleMessage(event.message)

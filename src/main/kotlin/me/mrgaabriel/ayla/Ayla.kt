@@ -22,14 +22,9 @@ import me.mrgaabriel.ayla.utils.AylaUtils
 import me.mrgaabriel.ayla.utils.MessageInteraction
 import me.mrgaabriel.ayla.utils.commands.AbstractCommand
 import me.mrgaabriel.ayla.utils.eventlog.StoredMessage
-import net.dv8tion.jda.core.AccountType
-import net.dv8tion.jda.core.JDA
-import net.dv8tion.jda.core.JDABuilder
+import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
+import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.OnlineStatus
-import net.dv8tion.jda.core.entities.Game
-import net.dv8tion.jda.core.entities.Guild
-import net.dv8tion.jda.core.entities.TextChannel
-import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.utils.cache.CacheFlag
 import org.bson.codecs.configuration.CodecRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
@@ -42,18 +37,18 @@ class Ayla(var config: AylaConfig) {
     val logger = LoggerFactory.getLogger(Ayla::class.java)
 
     val flags = EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME)
-    val builder = JDABuilder(AccountType.BOT)
+    val builder = DefaultShardManagerBuilder()
+            .setShardsTotal(-1) // Total de shards recomendadas pelo Discord
             .setToken(config.clientToken)
             .setStatus(OnlineStatus.ONLINE)
             .setDisabledCacheFlags(flags)
-            .addEventListener(DiscordListeners())
-            .addEventListener(EventLogListeners())
+            .addEventListeners(DiscordListeners(), EventLogListeners())
             .setBulkDeleteSplittingEnabled(true)
 
     lateinit var audioManager: AudioManager
+    lateinit var shardManager: ShardManager
 
     val commandMap = mutableListOf<AbstractCommand>()
-    val shards = mutableListOf<JDA>()
 
     lateinit var mongo: MongoClient
     lateinit var mongoDatabase: MongoDatabase
@@ -78,13 +73,7 @@ class Ayla(var config: AylaConfig) {
         loadMongo()
         loadCommands()
 
-        for (idx in 0..(config.shardCount - 1)) {
-            logger.info("Iniciando shard $idx...")
-
-            val shard = builder.useSharding(idx, config.shardCount)
-                    .build().awaitReady()
-            shards.add(shard)
-        }
+        this.shardManager = builder.build()
 
         audioManager = AudioManager()
 
@@ -145,83 +134,5 @@ class Ayla(var config: AylaConfig) {
                 logger.warn("Erro ao carregar o comando ${clazz.simpleName}!")
             }
         }
-    }
-
-    fun setGame(game: Game) {
-        shards.forEach {
-            it.presence.game = game
-        }
-    }
-
-    fun getUserById(id: String): User? {
-        var user: User? = null
-
-        shards.forEach {
-            user = it.retrieveUserById(id).complete()
-
-            if (user != null) {
-                return user
-            }
-        }
-
-        return user
-    }
-
-    fun getTextChannelById(id: String): TextChannel? {
-        var channel: TextChannel? = null
-
-        shards.forEach {
-            channel = it.getTextChannelById(id)
-
-            if (channel != null) {
-                return channel
-            }
-        }
-
-        return channel
-    }
-
-    fun getGuildById(id: String): Guild? {
-        var guild: Guild? = null
-
-        shards.forEach {
-            guild = it.getGuildById(id)
-
-            if (guild != null) {
-                return guild
-            }
-        }
-
-        return guild
-    }
-
-    fun getMutualGuilds(user: User): List<Guild> {
-        val guilds = mutableListOf<Guild>()
-
-        shards.forEach {
-            guilds.addAll(it.getMutualGuilds(user))
-        }
-
-        return guilds
-    }
-
-    val guilds: List<Guild> get() {
-        val guilds = mutableListOf<Guild>()
-
-        shards.forEach {
-            guilds.addAll(it.guilds)
-        }
-
-        return guilds
-    }
-
-    val users: List<User> get() {
-        val users = mutableListOf<User>()
-
-        shards.forEach {
-            users.addAll(it.users)
-        }
-
-        return users
     }
 }

@@ -1,5 +1,6 @@
 package me.mrgaabriel.ayla.utils.commands
 
+import me.mrgaabriel.ayla.utils.await
 import me.mrgaabriel.ayla.utils.ayla
 import me.mrgaabriel.ayla.utils.config
 import me.mrgaabriel.ayla.utils.fancy
@@ -22,6 +23,8 @@ class CommandContext(val message: Message,
     val guild = message.guild
     val member = guild.getMember(user)
 
+    val jda = guild.jda
+
     fun sendMessage(content: Any, success: ((Message) -> Unit)? = null) {
         channel.sendMessage(content.toString()).queue { success?.invoke(it) }
     }
@@ -38,17 +41,20 @@ class CommandContext(val message: Message,
         channel.sendMessage(embed).queue { success?.invoke(it) }
     }
 
-    fun sendMessage(embed: MessageEmbed, content: String, success: ((Message) -> Unit)? = null) {
-        val builder = MessageBuilder()
-
-        channel.sendMessage(builder.setContent(content).setEmbed(embed).build()).queue { success?.invoke(it) }
-    }
-
     fun sendMessage(embed: MessageEmbed, content: Any, success: ((Message) -> Unit)? = null) {
         val builder = MessageBuilder()
 
         channel.sendMessage(builder.setContent(content.toString()).setEmbed(embed).build()).queue { success?.invoke(it) }
     }
+
+    // Para usar dentro de coroutines ou suspend functions
+    suspend fun sendMessageAsync(content: Any) = this.channel.sendMessage(content.toString()).await()
+
+    suspend fun sendMessageAsync(content: Message) = this.channel.sendMessage(content).await()
+
+    suspend fun sendMessageAsync(embed: MessageEmbed) = this.channel.sendMessage(embed).await()
+
+    suspend fun sendMessageAsync(embed: MessageEmbed, content: Any) = this.channel.sendMessage(MessageBuilder().setContent(content.toString()).setEmbed(embed).build()).await()
 
     fun getAsMention(withSpace: Boolean = false): String {
         return "${user.asMention}${if (withSpace) " " else ""}"
@@ -168,7 +174,7 @@ class CommandContext(val message: Message,
         val splitted = input.split("#")
         if (splitted.size == 2) {
             val users = mutableListOf<User>()
-            ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
+            ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
 
             val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
 
@@ -183,7 +189,7 @@ class CommandContext(val message: Message,
         }
 
         val users = mutableListOf<User>()
-        ayla.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
+        ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
 
         if (users.isNotEmpty()) {
             return users[0]
@@ -197,7 +203,7 @@ class CommandContext(val message: Message,
         if (!id.isValidSnowflake())
             return null
 
-        val user = ayla.getUserById(id)
+        val user = ayla.shardManager.getUserById(id)
 
         if (user != null) {
             return user
@@ -216,7 +222,7 @@ class CommandContext(val message: Message,
         val splitted = arg.split("#")
         if (splitted.size == 2) {
             val users = mutableListOf<User>()
-            ayla.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
+            ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
 
             val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
 
@@ -231,7 +237,7 @@ class CommandContext(val message: Message,
         }
 
         val users = mutableListOf<User>()
-        ayla.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
+        ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(arg, true)) }
 
         if (users.isNotEmpty()) {
             return users[0]
@@ -245,7 +251,7 @@ class CommandContext(val message: Message,
         if (!id.isValidSnowflake())
             return null
 
-        val user = ayla.getUserById(id)
+        val user = ayla.shardManager.getUserById(id)
 
         if (user != null) {
             return user

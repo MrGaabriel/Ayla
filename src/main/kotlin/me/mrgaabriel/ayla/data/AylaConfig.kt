@@ -14,4 +14,6 @@ class AylaConfig(val clientToken: String = "Token do Bot",
                  val mongoDatabaseName: String = "Nome do banco de dados do MongoDB",
                  val youtubeApiKey: String = "API key do YouTube",
                  val botsOnDiscordToken: String = "Token do Bots on Discord",
-                 val openWeatherMapKey: String = "Key do OpenWeatherMap")
+                 val openWeatherMapKey: String = "Key do OpenWeatherMap",
+                 val discordBotsToken: String = "Token do Discord Bots",
+                 val fortniteTrackerApiKey: String = "API key do Fortnite Tracker")

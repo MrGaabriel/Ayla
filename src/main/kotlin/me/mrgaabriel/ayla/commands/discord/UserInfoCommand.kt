@@ -27,7 +27,7 @@ class UserInfoCommand : AbstractCommand("userinfo", category = CommandCategory.D
         builder.setTitle("Usuário: ${realUser.tag}")
 
         builder.addField("ID do usuário", realUser.id, true)
-        builder.addField("Servidores compartilhados (${ayla.getMutualGuilds(realUser).size})", ayla.getMutualGuilds(realUser).joinToString(", ", transform = {it.name}), true)
+        builder.addField("Servidores compartilhados (${ayla.shardManager.getMutualGuilds(realUser).size})", ayla.shardManager.getMutualGuilds(realUser).joinToString(", ", transform = {it.name}), true)
         builder.addField("Data de criação da conta", realUser.creationTime.humanize(), true)
 
         if (context.guild.isMember(realUser)) {

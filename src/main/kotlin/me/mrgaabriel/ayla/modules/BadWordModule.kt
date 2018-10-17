@@ -29,16 +29,29 @@ object BadWordModule {
                         }
 
                         if (blacklistedWords.isNotEmpty()) {
-                            val webhook = webhooks.firstOrNull { it.name == "Bad Words Webhook" }
-                                ?: message.textChannel.createWebhook("Bad Words Webhook").complete()
-                            message.delete().queue()
-                            val temmie = TemmieWebhook(webhook.url)
+                            val webhook = webhooks.firstOrNull()
 
-                            temmie.sendMessage(DiscordMessage.builder()
-                                    .avatarUrl(message.author.effectiveAvatarUrl)
-                                    .username(message.member.effectiveName)
-                                    .content(content.replace("@", "@\u200B"))
-                                    .build())
+                            if (webhook != null) {
+                                message.delete().queue()
+                                val temmie = TemmieWebhook(webhook.url)
+
+                                temmie.sendMessage(DiscordMessage.builder()
+                                        .avatarUrl(message.author.effectiveAvatarUrl)
+                                        .username(message.member.effectiveName)
+                                        .content(content.replace("@", "@\u200B"))
+                                        .build())
+                            } else {
+                                message.textChannel.createWebhook("Bad Words Webhook").queue { webhook ->
+                                    message.delete().queue()
+                                    val temmie = TemmieWebhook(webhook.url)
+
+                                    temmie.sendMessage(DiscordMessage.builder()
+                                            .avatarUrl(message.author.effectiveAvatarUrl)
+                                            .username(message.member.effectiveName)
+                                            .content(content.replace("@", "@\u200B"))
+                                            .build())
+                                }
+                            }
                         }
                     })
                 } else {

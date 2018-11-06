@@ -20,6 +20,7 @@ import java.lang.reflect.Method
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.util.regex.Pattern
 import kotlin.collections.set
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.kotlinFunction
@@ -30,36 +31,32 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 
     fun matches(msg: Message): Boolean {
         val message = msg.contentRaw
-
         val config = msg.guild.config
-
-        val args = message.trim().replace(Regex(" +"), " ").split(" ").toMutableList()
-
-        var byMention = false
-        if (args[0] == "<@${ayla.config.clientId}>" || args[0] == "<@!${ayla.config.clientId}>") {
-            byMention = true
-        }
-
-        val command = if (byMention) args[1] else args[0]
-        args.removeAt(0)
-
-        val labels = mutableListOf(label)
-        labels.addAll(aliases)
-
-        var valid = labels.any { command.equals(config.prefix + it, true) }
-
-        if (byMention) {
-            valid = labels.any { command.equals(it, true) }
-
-            args.removeAt(0)
-        }
-
-        if (!valid)
-            return false
-
-        msg.channel.sendTyping().queue()
-
-        run(CommandContext(msg, args.toTypedArray(), this))
+		
+		val matcher = Pattern.compile("^(<@[!]?${ayla.config.clientId}>[ ]?|${config.prefix}).+")
+				.matcher(message)
+		
+		if (matcher.find()) {
+			val usedPrefix = matcher.group(1)
+			val fullCmd = matcher.group().substring(usedPrefix.length).split(Regex("/\\s+/g"))
+			
+			val labels = mutableListOf(label)
+			labels.addAll(aliases)
+			
+			val label = fullCmd[0].toLowerCase().trim()
+			
+			val valid = labels.any { it == label }
+			
+			if (valid) {
+				msg.channel.sendTyping().queue()
+				
+				val args = fullCmd.toMutableList()
+				args.removeAt(0)
+				
+				val context = CommandContext(msg, args.toTypedArray(), this)
+				run(context)
+			}
+		}
         return true
     }
 

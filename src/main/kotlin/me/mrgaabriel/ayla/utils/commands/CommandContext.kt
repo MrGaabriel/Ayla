@@ -25,6 +25,8 @@ class CommandContext(val message: Message,
 
     val jda = guild.jda
 
+	// TODO: Trocar todos os "sendMessage" pelo "sendMessageAsync"
+	
     fun sendMessage(content: Any, success: ((Message) -> Unit)? = null) {
         channel.sendMessage(content.toString()).queue { success?.invoke(it) }
     }

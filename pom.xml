@@ -24,18 +24,7 @@
             <id>jitpack</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>kotlin-eap</id>
-            <url>http://dl.bintray.com/kotlin/kotlin-eap</url>
-        </repository>
     </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>kotlin-eap</id>
-            <url>http://dl.bintray.com/kotlin/kotlin-eap</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>

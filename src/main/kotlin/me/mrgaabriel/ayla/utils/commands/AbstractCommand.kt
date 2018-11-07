@@ -38,31 +38,35 @@ abstract class AbstractCommand(val label: String, val category: CommandCategory 
 		
 		println("matcher.find() : ${matcher.find()}")
 		if (matcher.find()) {
-			val usedPrefix = matcher.group(1)
-			val fullCmd = matcher.group().substring(usedPrefix.length).split(Regex("/\\s+/g"))
-			
-			val labels = mutableListOf(label)
-			labels.addAll(aliases)
-			
-			val label = fullCmd[0].toLowerCase().trim()
-			
-			val valid = labels.any { it == label }
-			
-			println("""
+			try {
+				val usedPrefix = matcher.group(1)
+				val fullCmd = matcher.group().substring(usedPrefix.length).split(Regex("/\\s+/g"))
+				
+				val labels = mutableListOf(label)
+				labels.addAll(aliases)
+				
+				val label = fullCmd[0].toLowerCase().trim()
+				
+				val valid = labels.any { it == label }
+				
+				println("""
 				usedPrefix : $usedPrefix
 				fullCmd    : $fullCmd
 				label      : $label
 				valid      : $valid
 			""".trimIndent())
-			
-			if (valid) {
-				msg.channel.sendTyping().queue()
 				
-				val args = fullCmd.toMutableList()
-				args.removeAt(0)
-				
-				val context = CommandContext(msg, args.toTypedArray(), this)
-				run(context)
+				if (valid) {
+					msg.channel.sendTyping().queue()
+					
+					val args = fullCmd.toMutableList()
+					args.removeAt(0)
+					
+					val context = CommandContext(msg, args.toTypedArray(), this)
+					run(context)
+				}
+			} catch (e: Exception) {
+				logger.error("Deu ruim!", e)
 			}
 		}
         return true

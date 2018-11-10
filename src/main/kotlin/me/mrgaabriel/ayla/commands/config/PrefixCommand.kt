@@ -20,11 +20,10 @@ class PrefixCommand : AbstractCommand(
 
     @Subcommand
     @SubcommandPermissions([Permission.MANAGE_SERVER])
-    fun onExecute(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) prefix: String) {
-        if (context.args.isEmpty()) {
-            context.explain()
-            return
-        }
+    fun onExecute(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) prefix: String?) {
+        if (prefix == null) {
+			return context.explain()
+		}
 
         val config = context.guild.config
 

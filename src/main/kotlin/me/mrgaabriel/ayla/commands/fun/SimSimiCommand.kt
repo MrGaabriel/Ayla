@@ -21,7 +21,7 @@ import java.net.URLEncoder
 class SimSimiCommand : AbstractCommand("simsimi", category = CommandCategory.FUN, description = "Fale com o SimSimi") {
 
     @Subcommand
-    fun simsimi(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) question: String) {
+    fun simsimi(context: CommandContext, @InjectArgument(ArgumentType.ARGUMENT_LIST) question: String?) {
         if (context.args.isEmpty()) {
             context.explain()
             return

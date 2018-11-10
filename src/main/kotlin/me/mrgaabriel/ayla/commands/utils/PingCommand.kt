@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.EmbedBuilder
 class PingCommand : AbstractCommand("ping", CommandCategory.UTILS, "Verifica a conexão do bot com os servidores do Discord") {
 
     @Subcommand
-    fun ping(context: CommandContext, arg: String?) {
+    suspend fun ping(context: CommandContext, arg: String?) {
         GlobalScope.launch {
             if (arg != null && arg == "shards") {
                 val builder = EmbedBuilder()

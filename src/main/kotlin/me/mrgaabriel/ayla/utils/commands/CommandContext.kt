@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.User
 import java.time.OffsetDateTime
 
 class CommandContext(val message: Message,
-                     val args: Array<String>,
+                     val args: List<String>,
                      val command: AbstractCommand) {
 
     val channel = message.textChannel

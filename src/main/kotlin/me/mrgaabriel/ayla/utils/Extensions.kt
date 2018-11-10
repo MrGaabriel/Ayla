@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.core.requests.RestAction
 import net.dv8tion.jda.core.utils.MiscUtil
+import java.lang.reflect.Method
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Month
@@ -272,3 +273,8 @@ suspend fun <T> RestAction<T>.await(): T {
         this.queue({ cont.resume(it) }, { cont.resumeWithException(it) })
     }
 }
+
+suspend fun Method.invokeSuspend(obj: Any, vararg args: Any?): Any? =
+		suspendCoroutine { cont ->
+			invoke(obj, *args, cont)
+		}

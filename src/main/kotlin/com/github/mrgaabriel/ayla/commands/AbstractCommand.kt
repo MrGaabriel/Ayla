@@ -31,13 +31,15 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
         val contentSplitted = event.message.contentRaw.split(" ")
 
         val labels = mutableListOf(label)
-        labels.addAll(labels)
+        labels.addAll(aliases)
 
         val label = contentSplitted[0]
         val valid = labels.any { (config.prefix + it).equals(label, true) }
 
         if (valid) {
             try {
+                event.channel.sendTyping().queue()
+
                 val start = System.currentTimeMillis()
                 logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label})")
 

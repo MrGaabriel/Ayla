@@ -10,23 +10,34 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.MessageUpdateEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.regex.Pattern
 
 class DiscordListeners : ListenerAdapter() {
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        if (event.author.isBot)
+            return
+
         GlobalScope.launch {
             val aylaEvent = AylaMessageEvent(event.message)
 
-            val config = transaction(ayla.database) {
+            var config = transaction(ayla.database) {
                 Guild.find { Guilds.id eq event.guild.idLong }.firstOrNull()
             }
 
             if (config == null) {
                 transaction(ayla.database) {
-                    Guild.new(event.guild.idLong) {
+                    config = Guild.new(event.guild.idLong) {
                         this.prefix = ".."
                     }
                 }
+            }
+
+            val matcher = Pattern.compile("^<@[!]?${ayla.config.clientId}>$")
+                .matcher(event.message.contentRaw)
+
+            if (matcher.find()) {
+                event.channel.sendMessage("\uD83D\uDD39 **|** ${event.author.asMention} Olá! Meu nome é Ayla e eu sou só mais um bot de terras tupiniquins criado para alegrar seu servidor!\n\uD83D\uDD39 **|** Neste servidor, o prefixo é `${config!!.prefix}`. Se quiser ver o que eu posso fazer, use `${config!!.prefix}help`").queue()
             }
 
             ayla.commandMap.forEach {

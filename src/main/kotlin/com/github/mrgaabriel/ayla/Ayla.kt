@@ -3,6 +3,7 @@ package com.github.mrgaabriel.ayla
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
+import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
@@ -28,7 +29,10 @@ class Ayla(var config: AylaConfig) {
             config.password = ayla.config.postgrePassword
         config.driverClassName = "org.postgresql.Driver"
 
-        config.maximumPoolSize = 256
+        config.addDataSourceProperty("cachePrepStmts", "true")
+        config.addDataSourceProperty("prepStmtCacheSize", "250")
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+        config.maximumPoolSize = 150
         return@lazy config
     }
 
@@ -41,6 +45,7 @@ class Ayla(var config: AylaConfig) {
         .setBulkDeleteSplittingEnabled(true)
         .setStatus(OnlineStatus.valueOf(config.onlineStatus))
         .setShardsTotal(config.shardsCount)
+        .addEventListeners(DiscordListeners())
 
     val logger by logger()
 

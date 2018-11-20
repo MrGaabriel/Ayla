@@ -41,7 +41,10 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
                 val start = System.currentTimeMillis()
                 logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label})")
 
-                val context = CommandContext(event, this)
+                val args = contentSplitted.toMutableList()
+                args.removeAt(0)
+
+                val context = CommandContext(event, this, args)
 
                 if (onlyOwner() && context.event.author.id != ayla.config.ownerId) {
                     context.sendMessage("${context.event.author.asMention} Você não tem permissão para fazer isto!")
@@ -92,6 +95,8 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                 logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")
             } catch (e: Exception) {
+                event.channel.sendMessage("${event.author.asMention} Um erro aconteceu durante a execução deste comando!").queue()
+
                 logger.info("${t.red}[COMMAND STATUS]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - ERROR!", e)
             }
 

@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
@@ -71,6 +72,10 @@ class Ayla(var config: AylaConfig) {
     fun loadCommands() {
         commandMap.clear()
 
+        // ==[ UTILS ]==
         commandMap.add(PingCommand())
+
+        // ==[ DEVELOPER ]==
+        commandMap.add(ReloadCommand())
     }
 }

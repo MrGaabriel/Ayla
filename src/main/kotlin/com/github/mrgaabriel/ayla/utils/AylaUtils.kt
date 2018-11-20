@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.utils
 
 import com.github.ajalt.mordant.TermColors
+import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.isValidSnowflake
 import net.dv8tion.jda.core.entities.Guild
@@ -81,7 +82,7 @@ object AylaUtils {
         return null
     }
 
-    fun getUser(input: String?, guild: Guild): User? {
+    suspend fun getUser(input: String?, guild: Guild): User? {
         if (input == null)
             return null
         val splitted = input.split("#")
@@ -108,7 +109,7 @@ object AylaUtils {
             .replace(">", "") // Se for uma menção, retirar <, @, ! e >
         if (!id.isValidSnowflake())
             return null
-        val user = ayla.shardManager.getUserById(id)
+        val user = ayla.shardManager.retrieveUserById(id).await()
         if (user != null) {
             return user
         }

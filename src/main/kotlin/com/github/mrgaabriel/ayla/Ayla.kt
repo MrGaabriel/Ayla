@@ -7,6 +7,7 @@ import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.threads.GameUpdateThread
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
 import com.zaxxer.hikari.HikariConfig
@@ -60,6 +61,8 @@ class Ayla(var config: AylaConfig) {
 
         initPostgre()
         loadCommands()
+
+        GameUpdateThread().start()
     }
 
     fun initPostgre() {

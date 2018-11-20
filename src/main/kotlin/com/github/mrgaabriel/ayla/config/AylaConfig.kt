@@ -12,8 +12,11 @@ class AylaConfig(
     val postgreDatabaseName: String = "Nome da database do PostgreSQL",
     val postgreUsername: String = "Username do PostgreSQL",
     val postgrePassword: String = "Senha do PostgreSQL",
-    val ownerId: String = "ID do dono do bot"
+    val ownerId: String = "ID do dono do bot",
+    val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING"))
 ) {
+
+    class AylaGameWrapper(val name: String, val type: String)
 
     override fun toString() = Static.YAML_MAPPER.writeValueAsString(this)
 }

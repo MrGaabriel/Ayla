@@ -1,9 +1,0 @@
-clientToken: "Client token do bot no Discord"
-clientId: "ID do bot no Discord"
-shardsCount: -1
-onlineStatus: "Online status do bot no Discord"
-postgreIp: "IP do PostgreSQL"
-postgrePort: 5432
-postgreDatabaseName: "Nome da database do PostgreSQL"
-postgreUsername: "Username do PostgreSQL"
-postgrePassword: "Senha do PostgreSQL"

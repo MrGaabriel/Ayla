@@ -24,8 +24,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b89af71-3060-467a-9782-6622f355fe36" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,16 +61,16 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="6" />
-          <entry key="kt" value="7843" />
-          <entry key="xml" value="385" />
+          <entry key="kt" value="7856" />
+          <entry key="xml" value="386" />
           <entry key="yml" value="49" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Git file" value="6" />
-          <entry key="Kotlin" value="7843" />
-          <entry key="XML" value="385" />
+          <entry key="Kotlin" value="7856" />
+          <entry key="XML" value="386" />
           <entry key="YAML" value="49" />
         </counts>
       </usages-collector>
@@ -82,8 +81,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+            <state relative-caret-position="447">
+              <caret line="59" column="22" lean-forward="true" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
               <folding>
                 <element signature="e#36#774#0" expanded="true" />
               </folding>
@@ -103,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/listeners/DiscordListeners.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="49" column="11" selection-start-line="49" selection-start-column="11" selection-end-line="49" selection-end-column="11" />
+            <state relative-caret-position="456">
+              <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -188,16 +187,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+            <state relative-caret-position="374">
+              <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
               <folding>
                 <element signature="n#appender#0;n#configuration#0;n#!!top" expanded="true" />
                 <element signature="n#encoder#0;n#appender#0;n#configuration#0;n#!!top" expanded="true" />
+                <element signature="n#appender#1;n#configuration#0;n#!!top" expanded="true" />
+                <element signature="n#encoder#0;n#appender#1;n#configuration#0;n#!!top" expanded="true" />
                 <element signature="n#root#0;n#configuration#0;n#!!top" expanded="true" />
-                <element signature="n#root#1;n#configuration#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -245,10 +245,10 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/commands/AbstractCommand.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/utils/ConsoleAppender.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/AylaLauncher.kt" />
-        <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/listeners/DiscordListeners.kt" />
+        <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
       </list>
     </option>
   </component>
@@ -374,71 +374,6 @@
               <item name="Ayla" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="events" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="listeners" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="tables" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="extensions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ayla" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ayla" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -454,7 +389,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542677473910" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542721039304" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Loritta" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -503,12 +438,12 @@
       <option name="presentableId" value="Default" />
       <updated>1542657708400</updated>
       <workItem from="1542657731311" duration="17553000" />
-      <workItem from="1542719079232" duration="692000" />
+      <workItem from="1542719079232" duration="1851000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18452000" />
+    <option name="totallyTimeSpent" value="19404000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -633,16 +568,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
-          <folding>
-            <element signature="e#36#774#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/AylaLauncher.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -721,19 +646,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-          <folding>
-            <element signature="n#appender#0;n#configuration#0;n#!!top" expanded="true" />
-            <element signature="n#encoder#0;n#appender#0;n#configuration#0;n#!!top" expanded="true" />
-            <element signature="n#root#0;n#configuration#0;n#!!top" expanded="true" />
-            <element signature="n#root#1;n#configuration#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/events/AylaMessageEvent.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -741,10 +653,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/Ayla.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="59" column="22" lean-forward="true" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
+          <folding>
+            <element signature="e#36#774#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/com/github/mrgaabriel/ayla/listeners/DiscordListeners.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="49" column="11" selection-start-line="49" selection-start-column="11" selection-end-line="49" selection-end-column="11" />
+        <state relative-caret-position="456">
+          <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+          <folding>
+            <element signature="n#appender#0;n#configuration#0;n#!!top" expanded="true" />
+            <element signature="n#encoder#0;n#appender#0;n#configuration#0;n#!!top" expanded="true" />
+            <element signature="n#appender#1;n#configuration#0;n#!!top" expanded="true" />
+            <element signature="n#encoder#0;n#appender#1;n#configuration#0;n#!!top" expanded="true" />
+            <element signature="n#root#0;n#configuration#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

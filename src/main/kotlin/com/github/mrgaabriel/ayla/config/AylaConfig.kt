@@ -11,7 +11,8 @@ class AylaConfig(
     val postgrePort: Int = 5432,
     val postgreDatabaseName: String = "Nome da database do PostgreSQL",
     val postgreUsername: String = "Username do PostgreSQL",
-    val postgrePassword: String = "Senha do PostgreSQL"
+    val postgrePassword: String = "Senha do PostgreSQL",
+    val ownerId: String = "ID do dono do bot"
 ) {
 
     override fun toString() = Static.YAML_MAPPER.writeValueAsString(this)

@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
@@ -81,6 +82,7 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ DEVELOPER ]==
         commandMap.add(ReloadCommand())
+        commandMap.add(EvalCommand())
 
         // ==[ IMAGES ]==
         commandMap.add(IsThisCommand())

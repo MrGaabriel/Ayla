@@ -35,35 +35,66 @@ class EvalCommand : AbstractCommand("eval") {
         val script = context.args.joinToString(" ")
 
         val code = """
-            import com.github.mrgaabriel.ayla.*
-            import com.github.mrgaabriel.ayla.commands.*
-            import com.github.mrgaabriel.ayla.config.*
-            import com.github.mrgaabriel.ayla.dao.*
-            import com.github.mrgaabriel.ayla.events.*
-            import com.github.mrgaabriel.ayla.listeners.*
-            import com.github.mrgaabriel.ayla.tables.*
-            import com.github.mrgaabriel.ayla.threads.*
-            import com.github.mrgaabriel.ayla.utils.*
-            import com.github.mrgaabriel.ayla.utils.extensions.*
+import com.github.mrgaabriel.ayla.*
+import com.github.mrgaabriel.ayla.commands.*
+import com.github.mrgaabriel.ayla.config.*
+import com.github.mrgaabriel.ayla.dao.*
+import com.github.mrgaabriel.ayla.events.*
+import com.github.mrgaabriel.ayla.listeners.*
+import com.github.mrgaabriel.ayla.tables.*
+import com.github.mrgaabriel.ayla.threads.*
+import com.github.mrgaabriel.ayla.utils.*
+import com.github.mrgaabriel.ayla.utils.extensions.*
 
-			import java.awt.image.BufferedImage
-			import java.io.File
-			import javax.imageio.ImageIO
-			import kotlinx.coroutines.GlobalScope
-			import kotlinx.coroutines.async
-            import kotlinx.coroutines.launch
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
-            $bindings
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.time.OffsetDateTime
+import java.awt.Color
 
-            val deferred = GlobalScope.async {
-                $script
-            }
+$bindings
+val deferred = GlobalScope.async {
+    try {
+        $script
+    } catch (e: Exception) {
+        exception(e)
+    }
+}
 
-            GlobalScope.launch {
-                val await = deferred.await()
+GlobalScope.launch {
+    try {
+        val await = deferred.await()
 
-                context.sendMessage("```xl\n" + await + "```")
-            }
+        context.sendMessage("```xl\n" + await + "```")
+    } catch (e: Exception) {
+        exception(e)
+    }
+}
+
+fun exception(e: Exception) {
+    GlobalScope.launch {
+        val stringWriter = StringWriter()
+        val printWriter = PrintWriter(stringWriter)
+        e.printStackTrace(printWriter)
+
+        val builder = net.dv8tion.jda.core.EmbedBuilder()
+
+        builder.setAuthor("Whoops! \uD83D\uDE2D")
+        builder.setDescription("```" + stringWriter.toString().trim() + "```")
+
+        builder.setTimestamp(OffsetDateTime.now())
+        builder.setFooter("#trost", null)
+
+        builder.setColor(Color.RED)
+        context.sendMessage(builder.build(), context.event.author.asMention)
+    }
+}
         """.trimIndent()
 
         try {
@@ -73,16 +104,15 @@ class EvalCommand : AbstractCommand("eval") {
             val printWriter = PrintWriter(stringWriter)
             e.printStackTrace(printWriter)
 
-            val builder = EmbedBuilder()
+            val builder = net.dv8tion.jda.core.EmbedBuilder()
 
             builder.setAuthor("Whoops! \uD83D\uDE2D")
-            builder.setDescription("```$stringWriter```")
+            builder.setDescription("```${stringWriter.toString().trim()}```")
 
             builder.setTimestamp(OffsetDateTime.now())
             builder.setFooter("#trost", null)
 
             builder.setColor(Color.RED)
-
             context.sendMessage(builder.build(), context.event.author.asMention)
         }
     }

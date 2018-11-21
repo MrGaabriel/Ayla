@@ -2,8 +2,6 @@ package com.github.mrgaabriel.ayla.commands.developer
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.CommandContext
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import net.dv8tion.jda.core.EmbedBuilder
 import java.awt.Color
 import java.io.PrintWriter
@@ -46,6 +44,7 @@ class EvalCommand : AbstractCommand("eval") {
             import com.github.mrgaabriel.ayla.tables.*
             import com.github.mrgaabriel.ayla.threads.*
             import com.github.mrgaabriel.ayla.utils.*
+            import com.github.mrgaabriel.ayla.utils.extensions.*
 
 			import java.awt.image.BufferedImage
 			import java.io.File

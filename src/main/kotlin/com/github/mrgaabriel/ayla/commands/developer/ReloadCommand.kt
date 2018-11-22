@@ -43,6 +43,13 @@ class ReloadCommand : AbstractCommand("reload") {
 
                 context.sendMessage("${context.event.author.asMention} Configuração recarregada com sucesso")
             }
+
+            "website" -> {
+                Thread.getAllStackTraces().keys.filter { it.name == "Website Thread" }.forEach { it.interrupt() }
+
+                ayla.initWebsite()
+                context.sendMessage("${context.event.author.asMention} Website recarregado!")
+            }
         }
     }
 }

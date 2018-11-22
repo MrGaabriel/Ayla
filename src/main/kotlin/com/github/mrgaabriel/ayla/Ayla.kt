@@ -11,6 +11,7 @@ import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.threads.GameUpdateThread
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
+import com.github.mrgaabriel.ayla.website.Website
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
@@ -20,10 +21,12 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
 class Ayla(var config: AylaConfig) {
 
     lateinit var shardManager: ShardManager
+    lateinit var website: Website
 
     val hikariConfig by lazy {
         val config = HikariConfig()
@@ -62,6 +65,7 @@ class Ayla(var config: AylaConfig) {
 
         initPostgre()
         loadCommands()
+        initWebsite()
 
         GameUpdateThread().start()
     }
@@ -71,6 +75,16 @@ class Ayla(var config: AylaConfig) {
             SchemaUtils.createMissingTablesAndColumns(
                 Guilds
             )
+        }
+    }
+
+    fun initWebsite() {
+        website = Website(config.websiteUrl)
+
+        thread(name = "Website Thread") {
+            org.jooby.run({
+                website
+            })
         }
     }
 

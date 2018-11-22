@@ -13,7 +13,9 @@ class AylaConfig(
     val postgreUsername: String = "Username do PostgreSQL",
     val postgrePassword: String = "Senha do PostgreSQL",
     val ownerId: String = "ID do dono do bot",
-    val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING"))
+    val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING")),
+    val websiteUrl: String = "URL do website",
+    val websitePort: Int = 80
 ) {
 
     class AylaGameWrapper(val name: String, val type: String)

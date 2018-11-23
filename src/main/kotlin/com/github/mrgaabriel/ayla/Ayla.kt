@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
@@ -90,6 +91,9 @@ class Ayla(var config: AylaConfig) {
 
     fun loadCommands() {
         commandMap.clear()
+
+        // ==[ CONFIG ]==
+        commandMap.add(PrefixCommand())
 
         // ==[ UTILS ]==
         commandMap.add(PingCommand())

@@ -58,6 +58,8 @@ import java.io.StringWriter
 import java.time.OffsetDateTime
 import java.awt.Color
 
+import org.jetbrains.exposed.sql.transactions.transaction
+
 $bindings
 val deferred = GlobalScope.async {
     try {

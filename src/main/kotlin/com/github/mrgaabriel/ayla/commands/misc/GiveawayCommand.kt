@@ -33,7 +33,7 @@ class GiveawayCommand : AbstractCommand("giveaway", listOf("sorteio")) {
         context.args.removeAt(0)
         val prize = context.args.joinToString(" ")
 
-        val message = context.sendMessage("Iniciando giveaway...")
+        val message = context.sendMessage("\u200B")
         message.addReaction("\uD83C\uDF89").queue()
 
         val giveaway = transaction(ayla.database) {

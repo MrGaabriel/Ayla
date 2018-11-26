@@ -57,6 +57,14 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
 
         builder.setDescription(command.getDescription())
 
+        if (command.getUsage().isNotEmpty()) {
+            builder.addField(
+                ":question: Como usar?",
+                "${config.prefix}${command.label} ${command.getUsage()}",
+                true
+            )
+        }
+
         if (command.aliases.isNotEmpty()) {
             builder.addField(
                 ":heavy_plus_sign: Alternativas",

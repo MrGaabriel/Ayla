@@ -5,11 +5,14 @@ import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
+import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
+import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.threads.GameUpdateThread
+import com.github.mrgaabriel.ayla.utils.GiveawayUtils
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.website.Website
@@ -68,13 +71,16 @@ class Ayla(var config: AylaConfig) {
         loadCommands()
         initWebsite()
 
+        GiveawayUtils.spawnTasks()
+
         GameUpdateThread().start()
     }
 
     fun initPostgre() {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(
-                Guilds
+                Guilds,
+                Giveaways
             )
         }
     }
@@ -104,5 +110,8 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ IMAGES ]==
         commandMap.add(IsThisCommand())
+
+        // ==[ MISC ]==
+        commandMap.add(GiveawayCommand())
     }
 }

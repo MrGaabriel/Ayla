@@ -17,6 +17,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
     val logger by logger()
 
     open fun getDescription() = "Insira descrição do comando aqui"
+    open fun getUsage() = ""
 
     open fun onlyOwner() = false
 

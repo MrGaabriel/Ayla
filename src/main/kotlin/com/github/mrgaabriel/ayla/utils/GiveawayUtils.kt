@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.EmbedBuilder
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
+import java.time.Instant
 import java.time.OffsetDateTime
 
 object GiveawayUtils {
@@ -50,7 +51,7 @@ object GiveawayUtils {
                 builder.setTitle(":tada: SORTEIO!!! :tada:")
 
                 builder.setTimestamp(OffsetDateTime.now())
-                builder.setFooter(author.tag, author.effectiveAvatarUrl)
+                builder.setFooter("Terminou", null)
 
                 builder.setDescription("Corra para participar do sorteio! Clique no :tada:!")
 
@@ -77,7 +78,7 @@ object GiveawayUtils {
             builder.setTitle(":tada: SORTEIO!!! :tada:")
 
             builder.setTimestamp(OffsetDateTime.now())
-            builder.setFooter(author.tag, author.effectiveAvatarUrl)
+            builder.setFooter("Terminou", null)
 
             builder.setDescription("Corra para participar do sorteio! Clique no :tada:!")
 
@@ -105,8 +106,8 @@ object GiveawayUtils {
 
                 builder.setTitle(":tada: SORTEIO!!! :tada:")
 
-                builder.setTimestamp(OffsetDateTime.now())
-                builder.setFooter(author.tag, author.effectiveAvatarUrl)
+                builder.setTimestamp(Instant.ofEpochMilli(giveaway.endsAt))
+                builder.setFooter("Terminará", null)
 
                 builder.setDescription("Corra para participar do sorteio! Clique no :tada:!")
 

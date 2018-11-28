@@ -26,7 +26,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
     suspend fun matches(event: AylaMessageEvent): Boolean {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild!!.idLong }.first()
+            Guild.find { Guilds.id eq event.guild.id }.first()
         }
 
         val contentSplitted = event.message.contentRaw.split(" ")

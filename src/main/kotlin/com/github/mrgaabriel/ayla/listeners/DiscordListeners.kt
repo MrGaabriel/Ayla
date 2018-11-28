@@ -26,12 +26,12 @@ class DiscordListeners : ListenerAdapter() {
             val aylaEvent = AylaMessageEvent(event.message)
 
             var config = transaction(ayla.database) {
-                Guild.find { Guilds.id eq event.guild.idLong }.firstOrNull()
+                Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
             }
 
             if (config == null) {
                 transaction(ayla.database) {
-                    config = Guild.new(event.guild.idLong) {
+                    config = Guild.new(event.guild.id) {
                         this.prefix = ".."
                     }
                 }

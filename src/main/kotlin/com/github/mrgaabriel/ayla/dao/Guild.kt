@@ -5,8 +5,8 @@ import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.EntityID
 
-class Guild(id: EntityID<Long>) : Entity<Long>(id)  {
-    companion object : EntityClass<Long, Guild>(Guilds)
+class Guild(id: EntityID<String>) : Entity<String>(id)  {
+    companion object : EntityClass<String, Guild>(Guilds)
 
     val guildId = this.id.value
 

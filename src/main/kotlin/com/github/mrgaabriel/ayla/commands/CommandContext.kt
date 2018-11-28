@@ -47,7 +47,7 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
 
     suspend fun explain(): Message {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild!!.idLong }.first()
+            Guild.find { Guilds.id eq event.guild.id }.first()
         }
 
         val builder = EmbedBuilder()

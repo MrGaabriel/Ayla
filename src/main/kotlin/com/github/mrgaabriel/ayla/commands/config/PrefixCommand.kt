@@ -25,7 +25,7 @@ class PrefixCommand : AbstractCommand("prefix") {
         }
 
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq context.event.guild!!.idLong }.first()
+            Guild.find { Guilds.id eq context.event.guild.id }.first()
         }
 
         val prefix = context.args[0]

@@ -39,7 +39,7 @@ object GiveawayUtils {
 
             if (channel == null) {
                 transaction(ayla.database) {
-                    Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                    giveaway.delete()
                 }
 
                 return@launch
@@ -49,7 +49,7 @@ object GiveawayUtils {
 
             if (message == null) {
                 transaction(ayla.database) {
-                    Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                    giveaway.delete()
                 }
 
                 return@launch
@@ -81,7 +81,7 @@ object GiveawayUtils {
                 channel.sendMessage("Ninguém ganhou `${giveaway.prize}` porque ninguém está participando!").queue()
 
                 transaction(ayla.database) {
-                    Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                    giveaway.delete()
                 }
 
                 return@launch
@@ -108,7 +108,7 @@ object GiveawayUtils {
             channel.sendMessage("Parabéns <@$chosenUser> por ter ganhado `${giveaway.prize}` no sorteio!").queue()
 
             transaction(ayla.database) {
-                Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                giveaway.delete()
             }
         }
 
@@ -118,7 +118,7 @@ object GiveawayUtils {
 
                 if (channel == null) {
                     transaction(ayla.database) {
-                        Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                        giveaway.delete()
                     }
 
                     return@launch
@@ -128,7 +128,7 @@ object GiveawayUtils {
 
                 if (message == null) {
                     transaction(ayla.database) {
-                        Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                        giveaway.delete()
                     }
 
                     return@launch

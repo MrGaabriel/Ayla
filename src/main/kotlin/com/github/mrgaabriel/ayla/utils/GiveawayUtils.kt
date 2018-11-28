@@ -36,8 +36,24 @@ object GiveawayUtils {
             delay(delay)
 
             val channel = ayla.shardManager.getTextChannelById(giveaway.channelId)
+
+            if (channel == null) {
+                transaction(ayla.database) {
+                    Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                }
+
+                return@launch
+            }
+
             val message = channel.getMessageById(giveaway.messageId).await()
-            val author = ayla.shardManager.retrieveUserById(giveaway.authorId).await()
+
+            if (message == null) {
+                transaction(ayla.database) {
+                    Giveaways.deleteWhere { Giveaways.messageId eq giveaway.messageId }
+                }
+
+                return@launch
+            }
 
             val giveaway = transaction(ayla.database) {
                 Giveaway.find { Giveaways.messageId eq giveaway.messageId }.first()

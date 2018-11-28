@@ -8,7 +8,8 @@ import org.jetbrains.exposed.dao.EntityID
 class Guild(id: EntityID<String>) : Entity<String>(id)  {
     companion object : EntityClass<String, Guild>(Guilds)
 
-    val guildId = this.id.value
-
     var prefix by Guilds.prefix
+
+    var welcomeEnabled by Guilds.welcomeEnabled
+    var welcomeChannelId by Guilds.welcomeChannelId
 }

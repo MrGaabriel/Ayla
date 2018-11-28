@@ -8,12 +8,18 @@ import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.dv8tion.jda.core.EmbedBuilder
+import net.dv8tion.jda.core.MessageBuilder
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
+import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.MessageUpdateEvent
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.awt.Color
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
 class DiscordListeners : ListenerAdapter() {
@@ -31,9 +37,7 @@ class DiscordListeners : ListenerAdapter() {
 
             if (config == null) {
                 transaction(ayla.database) {
-                    config = Guild.new(event.guild.id) {
-                        this.prefix = ".."
-                    }
+                    config = Guild.new(event.guild.id) {}
                 }
             }
 
@@ -99,6 +103,66 @@ class DiscordListeners : ListenerAdapter() {
                     giveaway.users = participating.toTypedArray()
                 }
             }
+        }
+    }
+
+    override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
+        val config = transaction(ayla.database) {
+            Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
+        }
+
+        if (config != null && config.welcomeEnabled && config.welcomeChannelId != null) {
+            val channel = event.guild.getTextChannelById(config.welcomeChannelId)
+
+            val builder = EmbedBuilder()
+
+            builder.setAuthor("${event.user.name}#${event.user.discriminator}", null, event.user.effectiveAvatarUrl)
+            builder.setColor(Color.GREEN)
+
+            builder.setThumbnail(event.user.effectiveAvatarUrl)
+
+            builder.setTitle(":wave: Bem vindo ${event.user.name}!")
+            builder.setDescription("Boas vindas ${event.user.asMention} ao servidor! Esperamos que você se divirta!")
+
+            builder.addField("Conta criada em", event.user.creationTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss")), false)
+
+            builder.setFooter("ID do usuário: ${event.user.id}", null)
+
+            val message = MessageBuilder()
+                .setContent(event.user.asMention)
+                .setEmbed(builder.build())
+                .build()
+
+            channel.sendMessage(message).queue()
+        }
+    }
+
+    override fun onGuildMemberLeave(event: GuildMemberLeaveEvent) {
+        val config = transaction(ayla.database) {
+            Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
+        }
+
+        if (config != null && config.welcomeEnabled && config.welcomeChannelId != null) {
+            val channel = event.guild.getTextChannelById(config.welcomeChannelId)
+
+            val builder = EmbedBuilder()
+
+            builder.setAuthor("${event.user.name}#${event.user.discriminator}", null, event.user.effectiveAvatarUrl)
+            builder.setColor(Color.RED)
+
+            builder.setThumbnail(event.user.effectiveAvatarUrl)
+
+            builder.setTitle(":wave: Adeus ${event.user.name}!")
+            builder.setDescription("Adeus ${event.user.name}! Esperamos que você volte em breve!")
+
+            builder.setFooter("ID do usuário: ${event.user.id}", null)
+
+            val message = MessageBuilder()
+                .setContent(event.user.asMention)
+                .setEmbed(builder.build())
+                .build()
+
+            channel.sendMessage(message).queue()
         }
     }
 

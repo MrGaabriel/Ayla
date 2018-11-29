@@ -36,6 +36,7 @@ class WelcomeCommand : AbstractCommand("welcome") {
         if (context.args[0] == "off") {
             transaction(ayla.database) {
                 config.welcomeEnabled = false
+                config.welcomeChannelId = null
             }
 
             context.sendMessage("${context.event.author.asMention} Módulo de boas vindas desativado!")

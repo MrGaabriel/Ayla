@@ -168,7 +168,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>kotlin-css</artifactId>
-            <version>1.0.0-pre.59-kotlin-1.3.0</version>
+            <version>1.0.0-pre.60-kotlin-1.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

@@ -7,6 +7,7 @@ import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
+import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
@@ -105,6 +106,7 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ UTILS ]==
         commandMap.add(PingCommand())
+        commandMap.add(HelpCommand())
 
         // ==[ DEVELOPER ]==
         commandMap.add(ReloadCommand())

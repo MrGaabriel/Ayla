@@ -91,7 +91,7 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
 
         builder.setTimestamp(OffsetDateTime.now())
 
-        builder.setColor(Color.GRAY)
+        builder.setColor(Color.RED)
 
         return sendMessage(builder.build(), event.author.asMention)
     }

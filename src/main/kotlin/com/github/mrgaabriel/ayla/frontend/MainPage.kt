@@ -59,28 +59,30 @@ object MainPage {
         builder.appendHTML().html {
             head {
                 link(rel = "icon", href = "https://mrgaabriel.website/files/ayla.png")
-                title { + "Ayla" }
+                title { +"Ayla" }
 
                 style {
                     unsafe {
-                        raw("""
+                        raw(
+                            """
                             @font-face {
                                font-family: roboto-light;
                                src: url(/assets/font/roboto.ttf);
                             }
-                        """.trimIndent())
+                        """.trimIndent()
+                        )
                     }
-                    + css.toString()
+                    +css.toString()
                 }
             }
 
             body {
                 h1 {
-                    + "Ayla"
+                    +"Ayla"
                 }
 
                 h2 {
-                    + "Somente mais um bot de terras tupiniquins para alegrar seu servidor!"
+                    +"Somente mais um bot de terras tupiniquins para alegrar seu servidor!"
                 }
             }
         }

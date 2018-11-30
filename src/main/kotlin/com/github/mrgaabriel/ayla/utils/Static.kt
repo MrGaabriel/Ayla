@@ -11,7 +11,8 @@ import com.google.gson.JsonParser
 // Esta classe contém algumas instâncias de classes úteis que serão inicializadas juntamente com a JVM para economizar tempo de Garbage Clean
 object Static {
 
-    val YAML_MAPPER = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)).registerKotlinModule()
+    val YAML_MAPPER =
+        ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)).registerKotlinModule()
     val JSON_MAPPER = ObjectMapper(JsonFactory()).registerKotlinModule()
 
     val GSON = Gson()

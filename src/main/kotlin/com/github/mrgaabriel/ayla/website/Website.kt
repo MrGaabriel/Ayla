@@ -2,7 +2,6 @@ package com.github.mrgaabriel.ayla.website
 
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
-import com.github.mrgaabriel.ayla.website.routes.controllers.MainPageController
 import org.jooby.Err
 import org.jooby.Kooby
 import org.jooby.Request
@@ -42,7 +41,7 @@ class Website(val websiteUrl: String) : Kooby({
             rsp.send("Erro 404!!!")
         }
     }
-    
+
     use(Routes())
 })
 
@@ -50,19 +49,21 @@ fun Request.userAgent(): String {
     return this.header("User-Agent").value()
 }
 
-val Request.ip: String get() {
-    val forwardedForHeader = this.header("X-Forwarded-For")
-    return if (forwardedForHeader.isSet)
-        forwardedForHeader.value()
-    else
-        this.ip()
-}
+val Request.ip: String
+    get() {
+        val forwardedForHeader = this.header("X-Forwarded-For")
+        return if (forwardedForHeader.isSet)
+            forwardedForHeader.value()
+        else
+            this.ip()
+    }
 
-val Request.path: String get() {
-    val queryString = if (this.queryString().isPresent)
-        "?" + this.queryString().get()
-    else
-        ""
+val Request.path: String
+    get() {
+        val queryString = if (this.queryString().isPresent)
+            "?" + this.queryString().get()
+        else
+            ""
 
-    return this.path() + queryString
-}
+        return this.path() + queryString
+    }

@@ -3,7 +3,6 @@ package com.github.mrgaabriel.ayla.threads
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
 import net.dv8tion.jda.core.entities.Game
-import java.util.*
 
 class GameUpdateThread : Thread("Game Update Thread") {
 
@@ -17,7 +16,7 @@ class GameUpdateThread : Thread("Game Update Thread") {
                 logger.info("Erro ao atualizar o \"Jogando\" do bot", e)
             }
 
-            Thread.sleep(30*1000)
+            Thread.sleep(30 * 1000)
         }
     }
 

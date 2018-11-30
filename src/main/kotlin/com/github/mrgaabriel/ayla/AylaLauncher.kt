@@ -26,19 +26,24 @@ object AylaLauncher {
             // By the way, don't forget to append your original JAR at the end of the string!
             val clazz = AylaLauncher::class.java
             val protectionDomain = clazz.protectionDomain
-            val propClassPath = manifestClassPath.replace(" ", ":") + ":${Paths.get(protectionDomain.codeSource.location.toURI()).fileName}"
+            val propClassPath = manifestClassPath.replace(
+                " ",
+                ":"
+            ) + ":${Paths.get(protectionDomain.codeSource.location.toURI()).fileName}"
 
             // Now we set it to our own classpath
             System.setProperty("kotlin.script.classpath", propClassPath)
 
-            println("""
+            println(
+                """
             _         _
            / \  _   _| | __ _
           / _ \| | | | |/ _` |
          / ___ \ |_| | | (_| |
         /_/   \_\__, |_|\__,_|
                 |___/
-            """.trimIndent())
+            """.trimIndent()
+            )
             val file = File("config.yml")
 
             if (!file.exists()) {

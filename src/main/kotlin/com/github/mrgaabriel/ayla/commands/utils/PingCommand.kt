@@ -8,8 +8,10 @@ class PingCommand : AbstractCommand("ping") {
 
     override suspend fun run(context: CommandContext) {
         val start = System.currentTimeMillis()
-        val message = context.sendMessage("${context.event.author.asMention} **Pong!** :ping_pong:\nGateway Ping: `${context.event.jda.ping}ms`")
+        val message =
+            context.sendMessage("${context.event.author.asMention} **Pong!** :ping_pong:\nGateway Ping: `${context.event.jda.ping}ms`")
 
-        message.editMessage("${context.event.author.asMention} **Pong!** :ping_pong:\nGateway Ping: `${context.event.jda.ping}ms`\nAPI Ping: `${System.currentTimeMillis() - start}ms`").await()
+        message.editMessage("${context.event.author.asMention} **Pong!** :ping_pong:\nGateway Ping: `${context.event.jda.ping}ms`\nAPI Ping: `${System.currentTimeMillis() - start}ms`")
+            .await()
     }
 }

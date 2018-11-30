@@ -42,7 +42,8 @@ class Ayla(var config: AylaConfig) {
 
     val hikariConfig by lazy {
         val config = HikariConfig()
-        config.jdbcUrl = "jdbc:postgresql://${ayla.config.postgreIp}:${ayla.config.postgrePort}/${ayla.config.postgreDatabaseName}"
+        config.jdbcUrl =
+                "jdbc:postgresql://${ayla.config.postgreIp}:${ayla.config.postgrePort}/${ayla.config.postgreDatabaseName}"
         config.username = ayla.config.postgreUsername
         if (ayla.config.postgrePassword.isNotEmpty())
             config.password = ayla.config.postgrePassword

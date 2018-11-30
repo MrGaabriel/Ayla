@@ -4,12 +4,10 @@ import com.github.mrgaabriel.ayla.dao.Giveaway
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
-import com.github.mrgaabriel.ayla.utils.extensions.tag
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.core.EmbedBuilder
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.time.Instant

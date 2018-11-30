@@ -45,7 +45,8 @@ class DiscordListeners : ListenerAdapter() {
                 .matcher(event.message.contentRaw)
 
             if (matcher.find()) {
-                event.channel.sendMessage("\uD83D\uDD39 **|** ${event.author.asMention} Olá! Meu nome é Ayla e eu sou só mais um bot de terras tupiniquins criado para alegrar seu servidor!\n\uD83D\uDD39 **|** Neste servidor, o prefixo é `${config!!.prefix}`. Se quiser ver o que eu posso fazer, use `${config!!.prefix}help`").queue()
+                event.channel.sendMessage("\uD83D\uDD39 **|** ${event.author.asMention} Olá! Meu nome é Ayla e eu sou só mais um bot de terras tupiniquins criado para alegrar seu servidor!\n\uD83D\uDD39 **|** Neste servidor, o prefixo é `${config!!.prefix}`. Se quiser ver o que eu posso fazer, use `${config!!.prefix}help`")
+                    .queue()
             }
 
             ayla.commandMap.forEach {
@@ -124,7 +125,11 @@ class DiscordListeners : ListenerAdapter() {
             builder.setTitle(":wave: Bem vindo ${event.user.name}!")
             builder.setDescription("Boas vindas ${event.user.asMention} ao servidor! Esperamos que você se divirta!")
 
-            builder.addField("Conta criada em", event.user.creationTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss")), false)
+            builder.addField(
+                "Conta criada em",
+                event.user.creationTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss")),
+                false
+            )
 
             builder.setFooter("ID do usuário: ${event.user.id}", null)
 

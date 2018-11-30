@@ -2,7 +2,6 @@ package com.github.mrgaabriel.ayla.commands.developer
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.CommandContext
-import net.dv8tion.jda.core.EmbedBuilder
 import java.awt.Color
 import java.io.PrintWriter
 import java.io.StringWriter

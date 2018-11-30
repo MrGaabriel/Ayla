@@ -3,13 +3,15 @@ package com.github.mrgaabriel.ayla.utils.exposed
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
-fun <T> Table.array(name: String, columnType: ColumnType): Column<Array<T>> = registerColumn(name, ArrayColumnType(columnType))
+fun <T> Table.array(name: String, columnType: ColumnType): Column<Array<T>> =
+    registerColumn(name, ArrayColumnType(columnType))
 
 class ArrayColumnType(private val type: ColumnType) : ColumnType() {
     override fun sqlType(): String = buildString {
         append(type.sqlType())
         append(" ARRAY")
     }
+
     override fun valueToDB(value: Any?): Any? {
         if (value is kotlin.Array<*>) {
             val columnType = type.sqlType().split("(")[0]
@@ -18,6 +20,7 @@ class ArrayColumnType(private val type: ColumnType) : ColumnType() {
             return super.valueToDB(value)
         }
     }
+
     override fun valueFromDB(value: Any): Any {
         if (value is java.sql.Array) {
             return value.array
@@ -48,11 +51,12 @@ class AnyOp(val expr1: Expression<*>, val expr2: Expression<*>) : Op<Boolean>() 
 
 class ContainsOp(expr1: Expression<*>, expr2: Expression<*>) : ComparisonOp(expr1, expr2, "@>")
 
-infix fun<T, S> ExpressionWithColumnType<T>.any(t: S) : Op<Boolean> {
+infix fun <T, S> ExpressionWithColumnType<T>.any(t: S): Op<Boolean> {
     if (t == null) {
         return IsNullOp(this)
     }
     return AnyOp(this, QueryParameter(t, columnType))
 }
 
-infix fun<T, S> ExpressionWithColumnType<T>.contains(arry: Array<in S>) : Op<Boolean> = ContainsOp(this, QueryParameter(arry, columnType))
+infix fun <T, S> ExpressionWithColumnType<T>.contains(arry: Array<in S>): Op<Boolean> =
+    ContainsOp(this, QueryParameter(arry, columnType))

@@ -15,7 +15,6 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.InputStream
 import java.time.OffsetDateTime
 import javax.imageio.ImageIO
 
@@ -76,7 +75,7 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
         if (command.getBotPermissions().isNotEmpty()) {
             builder.addField(
                 ":robot: Permissões que eu preciso",
-                command.getBotPermissions().joinToString(", ", transform = {"`${it.name}`"}),
+                command.getBotPermissions().joinToString(", ", transform = { "`${it.name}`" }),
                 true
             )
         }
@@ -84,7 +83,7 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
         if (command.getMemberPermissions().isNotEmpty()) {
             builder.addField(
                 ":information_desk_person: Permissões que você precisa",
-                command.getMemberPermissions().joinToString(", ", transform = {"`${it.name}`"}),
+                command.getMemberPermissions().joinToString(", ", transform = { "`${it.name}`" }),
                 true
             )
         }

@@ -67,10 +67,15 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                 allBotPermissions.addAll(getBotPermissions())
 
-                val missingBotPermissions = allBotPermissions.filter { !context.event.guild?.selfMember!!.hasPermission(it) }
+                val missingBotPermissions =
+                    allBotPermissions.filter { !context.event.guild?.selfMember!!.hasPermission(it) }
 
                 if (missingBotPermissions.isNotEmpty() && Permission.MESSAGE_WRITE !in missingBotPermissions) {
-                    context.sendMessage("${context.event.author.asMention} Eu não posso processar este comando porque eu não tenho as permissões `${missingBotPermissions.joinToString(", ", transform = { it.name })}`")
+                    context.sendMessage(
+                        "${context.event.author.asMention} Eu não posso processar este comando porque eu não tenho as permissões `${missingBotPermissions.joinToString(
+                            ", ",
+                            transform = { it.name })}`"
+                    )
 
                     logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")
                     return true
@@ -78,14 +83,17 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
                     try {
                         val channel = context.event.author.openPrivateChannel().await()
 
-                        channel.sendMessage("${context.event.author} Eu não tenho permissão para falar no canal ${context.event.textChannel?.asMention}!").queue()
-                    } catch (e: ErrorResponseException) { }
+                        channel.sendMessage("${context.event.author} Eu não tenho permissão para falar no canal ${context.event.textChannel?.asMention}!")
+                            .queue()
+                    } catch (e: ErrorResponseException) {
+                    }
 
                     logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")
                     return true
                 }
 
-                val missingMemberPermissions = getMemberPermissions().filter { !context.event.member!!.hasPermission(it) }
+                val missingMemberPermissions =
+                    getMemberPermissions().filter { !context.event.member!!.hasPermission(it) }
 
                 if (missingMemberPermissions.isNotEmpty()) {
                     context.sendMessage("${context.event.author.asMention} Você não tem permissão para fazer isto!")
@@ -98,9 +106,13 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                 logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")
             } catch (e: Exception) {
-                event.channel.sendMessage("${event.author.asMention} Um erro aconteceu durante a execução deste comando!").queue()
+                event.channel.sendMessage("${event.author.asMention} Um erro aconteceu durante a execução deste comando!")
+                    .queue()
 
-                logger.info("${t.red}[COMMAND STATUS]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - ERROR!", e)
+                logger.info(
+                    "${t.red}[COMMAND STATUS]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - ERROR!",
+                    e
+                )
             }
 
             return true

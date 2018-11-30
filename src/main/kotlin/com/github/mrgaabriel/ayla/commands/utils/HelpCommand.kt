@@ -33,13 +33,15 @@ class HelpCommand : AbstractCommand("help", aliases = listOf("ajuda", "comandos"
             return
         }
 
-        context.sendMessage("""
+        context.sendMessage(
+            """
             ```Lista de comandos```
             Use `${config.prefix}help [comando]` para saber mais sobre um comando.
             **Comandos disponíveis (${ayla.commandMap.size}):**
 
             ${ayla.commandMap.joinToString(" ", transform = { "`${it.label}`" })}
             ```Lembre-se de usar o prefixo (${config.prefix}) antes dos comandos!```
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }

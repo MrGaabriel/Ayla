@@ -1,6 +1,5 @@
 package com.github.mrgaabriel.ayla.utils
 
-import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.kevinsawicki.http.HttpRequest
 import com.github.mrgaabriel.ayla.dao.SubReddit
 import com.github.mrgaabriel.ayla.tables.SubReddits

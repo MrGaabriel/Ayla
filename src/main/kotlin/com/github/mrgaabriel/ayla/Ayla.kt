@@ -2,6 +2,7 @@ package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
+import com.github.mrgaabriel.ayla.commands.config.RedditCommand
 import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
@@ -13,19 +14,24 @@ import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.SubReddits
 import com.github.mrgaabriel.ayla.threads.GameUpdateThread
 import com.github.mrgaabriel.ayla.utils.GiveawayUtils
+import com.github.mrgaabriel.ayla.utils.RedditUtils
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.website.Website
+import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.asCoroutineDispatcher
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.OnlineStatus
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -48,6 +54,16 @@ class Ayla(var config: AylaConfig) {
         config.maximumPoolSize = 150
         return@lazy config
     }
+
+    fun createThreadPool(name: String): ExecutorService {
+        return Executors.newCachedThreadPool(ThreadFactoryBuilder().setNameFormat(name).build())
+    }
+
+    val redditTasksPool = createThreadPool("Reddit Task %d")
+    val redditTasksDispatcher = redditTasksPool.asCoroutineDispatcher()
+
+    val giveawayTasksPool = createThreadPool("Giveaway Task %d")
+    val giveawayTasksDispatcher = giveawayTasksPool.asCoroutineDispatcher()
 
     val dataSource by lazy { HikariDataSource(hikariConfig) }
     val database by lazy { Database.connect(dataSource) }
@@ -74,6 +90,7 @@ class Ayla(var config: AylaConfig) {
         initWebsite()
 
         GiveawayUtils.spawnTasks()
+        RedditUtils.spawnTasks()
 
         GameUpdateThread().start()
     }
@@ -82,7 +99,8 @@ class Ayla(var config: AylaConfig) {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(
                 Guilds,
-                Giveaways
+                Giveaways,
+                SubReddits
             )
         }
     }
@@ -103,6 +121,7 @@ class Ayla(var config: AylaConfig) {
         // ==[ CONFIG ]==
         commandMap.add(PrefixCommand())
         commandMap.add(WelcomeCommand())
+        commandMap.add(RedditCommand())
 
         // ==[ UTILS ]==
         commandMap.add(PingCommand())

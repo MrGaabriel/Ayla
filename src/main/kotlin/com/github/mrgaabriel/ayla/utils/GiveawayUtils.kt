@@ -30,7 +30,7 @@ object GiveawayUtils {
     }
 
     fun spawnTask(giveaway: Giveaway) {
-        GlobalScope.launch {
+        GlobalScope.launch(ayla.giveawayTasksDispatcher) {
             logger.info("Criando giveaway task para o término do sorteio na guild ${giveaway.guildId} - channelId: ${giveaway.channelId} - messageId: ${giveaway.messageId}")
             val delay = giveaway.endsAt - System.currentTimeMillis()
             delay(delay)
@@ -112,7 +112,7 @@ object GiveawayUtils {
             }
         }
 
-        GlobalScope.launch {
+        GlobalScope.launch(ayla.giveawayTasksDispatcher) {
             while (giveaway.endsAt > System.currentTimeMillis()) {
                 val channel = ayla.shardManager.getTextChannelById(giveaway.channelId)
 

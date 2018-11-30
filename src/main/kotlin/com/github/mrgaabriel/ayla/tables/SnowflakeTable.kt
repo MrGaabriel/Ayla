@@ -8,6 +8,6 @@ open class SnowflakeTable(name: String = "", columnName: String = "id") : IdTabl
     override val id: Column<EntityID<String>> = varchar(columnName, 18).primaryKey().entityId()
 }
 
-abstract class SnowflakeEntity(id: EntityID<Long>) : Entity<Long>(id)
+abstract class SnowflakeEntity(id: EntityID<String>) : Entity<String>(id)
 
-abstract class SlowflakeEntityClass<out E: LongEntity>(table: IdTable<Long>, entityType: Class<E>? = null) : EntityClass<Long, E>(table, entityType)
+abstract class SnowflakeEntityClass<out E: Entity<String>>(table: IdTable<String>, entityType: Class<E>? = null) : EntityClass<String, E>(table, entityType)

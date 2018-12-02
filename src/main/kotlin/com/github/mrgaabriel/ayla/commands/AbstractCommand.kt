@@ -1,8 +1,10 @@
 package com.github.mrgaabriel.ayla.commands
 
 import com.github.mrgaabriel.ayla.dao.Guild
+import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -29,6 +31,10 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
             Guild.find { Guilds.id eq event.guild.id }.first()
         }
 
+        val profile = transaction(ayla.database) {
+            UserProfile.find { UserProfiles.id eq event.author.id }.first()
+        }
+
         val contentSplitted = event.message.contentRaw.split(" ")
 
         val labels = mutableListOf(label)
@@ -39,6 +45,16 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
         if (valid) {
             try {
+                if (profile.blacklisted) {
+                    try {
+                        val channel = event.author.openPrivateChannel().await()
+
+                        channel.sendMessage("${event.author.asMention} Você foi bloqueado de usar os comandos da Ayla **permanentemente**!\n\nMotivo: `${profile.blacklistReason}`\nSe achou este banimento injusto (duvido que foi injusto, 2bj) contate o `MrGaabriel#2430` via DM").queue()
+                    } catch (e: ErrorResponseException) { }
+
+                    return true
+                }
+
                 event.channel.sendTyping().queue()
 
                 val start = System.currentTimeMillis()

@@ -46,7 +46,7 @@ class Website(val websiteUrl: String) : Kooby({
 })
 
 fun Request.userAgent(): String {
-    return this.header("User-Agent").value()
+    return this.header("UserProfile-Agent").value()
 }
 
 val Request.ip: String

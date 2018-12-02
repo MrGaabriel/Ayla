@@ -2,9 +2,11 @@ package com.github.mrgaabriel.ayla.listeners
 
 import com.github.mrgaabriel.ayla.dao.Giveaway
 import com.github.mrgaabriel.ayla.dao.Guild
+import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,6 +32,16 @@ class DiscordListeners : ListenerAdapter() {
 
         GlobalScope.launch {
             val aylaEvent = AylaMessageEvent(event.message)
+
+            val profile = transaction(ayla.database) {
+                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull()
+            }
+
+            if (profile == null) {
+                transaction(ayla.database) {
+                    UserProfile.new(event.author.id) {}
+                }
+            }
 
             var config = transaction(ayla.database) {
                 Guild.find { Guilds.id eq event.guild.id }.firstOrNull()

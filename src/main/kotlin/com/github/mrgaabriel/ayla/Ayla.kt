@@ -4,6 +4,7 @@ import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.config.RedditCommand
 import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
+import com.github.mrgaabriel.ayla.commands.developer.BlacklistCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
@@ -15,6 +16,7 @@ import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.tables.SubReddits
+import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.threads.GameUpdateThread
 import com.github.mrgaabriel.ayla.utils.GiveawayUtils
 import com.github.mrgaabriel.ayla.utils.RedditUtils
@@ -101,7 +103,8 @@ class Ayla(var config: AylaConfig) {
             SchemaUtils.createMissingTablesAndColumns(
                 Guilds,
                 Giveaways,
-                SubReddits
+                SubReddits,
+                UserProfiles
             )
         }
     }
@@ -131,6 +134,7 @@ class Ayla(var config: AylaConfig) {
         // ==[ DEVELOPER ]==
         commandMap.add(ReloadCommand())
         commandMap.add(EvalCommand())
+        commandMap.add(BlacklistCommand())
 
         // ==[ IMAGES ]==
         commandMap.add(IsThisCommand())

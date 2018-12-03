@@ -9,6 +9,7 @@ import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
+import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
@@ -141,5 +142,6 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ MISC ]==
         commandMap.add(GiveawayCommand())
+        commandMap.add(VideoChatCommand())
     }
 }

@@ -14,8 +14,8 @@ import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent
-import net.dv8tion.jda.core.events.message.MessageUpdateEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
@@ -26,7 +26,7 @@ import java.util.regex.Pattern
 
 class DiscordListeners : ListenerAdapter() {
 
-    override fun onMessageReceived(event: MessageReceivedEvent) {
+    override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.author.isBot)
             return
 
@@ -72,9 +72,21 @@ class DiscordListeners : ListenerAdapter() {
         }
     }
 
-    override fun onMessageUpdate(event: MessageUpdateEvent) {
+    override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
         GlobalScope.launch {
             val aylaEvent = AylaMessageEvent(event.message)
+
+            val profile = transaction(ayla.database) {
+                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull()
+            }
+
+            if (profile == null) {
+                transaction(ayla.database) {
+                    UserProfile.new(event.author.id) {}
+                }
+
+                return@launch
+            }
 
             ayla.commandMap.forEach {
                 if (it.matches(aylaEvent))

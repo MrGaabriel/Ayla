@@ -15,7 +15,8 @@ class AylaConfig(
     val ownerId: String = "ID do dono do bot",
     val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING")),
     val websiteUrl: String = "URL do website",
-    val websitePort: Int = 80
+    val websitePort: Int = 80,
+    val websiteMasterToken: String = "Token mestre do website, usado para coisas *muito* importantes"
 ) {
 
     class AylaGameWrapper(val name: String, val type: String)

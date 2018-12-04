@@ -52,10 +52,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+import kotlin.concurrent.thread
+
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.OffsetDateTime
 import java.awt.Color
+
+import net.dv8tion.jda.core.*
+import net.dv8tion.jda.core.entities.*
 
 import org.jetbrains.exposed.sql.transactions.transaction
 

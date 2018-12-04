@@ -41,6 +41,8 @@ class DiscordListeners : ListenerAdapter() {
                 transaction(ayla.database) {
                     UserProfile.new(event.author.id) {}
                 }
+
+                return@launch
             }
 
             var config = transaction(ayla.database) {
@@ -51,6 +53,8 @@ class DiscordListeners : ListenerAdapter() {
                 transaction(ayla.database) {
                     config = Guild.new(event.guild.id) {}
                 }
+
+                return@launch
             }
 
             val matcher = Pattern.compile("^<@[!]?${ayla.config.clientId}>$")

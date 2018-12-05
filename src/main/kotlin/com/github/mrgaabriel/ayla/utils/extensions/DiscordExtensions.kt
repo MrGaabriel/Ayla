@@ -28,12 +28,3 @@ fun String.isValidSnowflake(): Boolean {
         return false
     }
 }
-
-fun DefaultShardManagerBuilder.buildBlocking(): ShardManager {
-    val manager = this.build()
-
-    while (!manager.shards.all { it.status == JDA.Status.CONNECTED })
-        continue
-
-    return manager
-}

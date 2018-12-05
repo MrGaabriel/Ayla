@@ -89,7 +89,7 @@ class Ayla(var config: AylaConfig) {
     fun start() {
         logger.info("Iniciando a Ayla (discord bot)...")
 
-        shardManager = builder.buildBlocking()
+        shardManager = builder.build()
 
         logger.info("OK! Ayla (discord bot) iniciada com sucesso!")
 

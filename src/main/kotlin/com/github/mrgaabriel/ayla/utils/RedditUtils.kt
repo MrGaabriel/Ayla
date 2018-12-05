@@ -40,13 +40,14 @@ object RedditUtils {
                 try {
                     val request = HttpRequest.get("https://reddit.com/r/${sub.name}/new/.json")
                         .userAgent(Constants.USER_AGENT)
+                    val body = request.body()
 
                     if (!request.ok()) {
                         logger.error("Erro ao fazer request para \"https://reddit.com/r/${sub.name}/new/.json\" - Response code: ${request.code()}")
                         continue
                     }
 
-                    val payload = Static.JSON_PARSER.parse(request.body()).obj
+                    val payload = Static.JSON_PARSER.parse(body).obj
                     val data = payload["data"].obj
                     val children = data["children"].array
 

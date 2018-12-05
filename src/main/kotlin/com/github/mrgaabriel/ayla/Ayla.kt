@@ -13,6 +13,7 @@ import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
+import com.github.mrgaabriel.ayla.debug.DebugLog
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.Guilds
@@ -69,6 +70,9 @@ class Ayla(var config: AylaConfig) {
     val giveawayTasksPool = createThreadPool("Giveaway Task %d")
     val giveawayTasksDispatcher = giveawayTasksPool.asCoroutineDispatcher()
 
+    val defaultPool = createThreadPool("Coroutine Dispatcher Task %d")
+    val defaultCoroutineDispatcher = defaultPool.asCoroutineDispatcher()
+
     val dataSource by lazy { HikariDataSource(hikariConfig) }
     val database by lazy { Database.connect(dataSource) }
 
@@ -97,6 +101,8 @@ class Ayla(var config: AylaConfig) {
 
         GiveawayUtils.spawnTasks()
         RedditUtils.spawnTasks()
+
+        DebugLog.startCommandHandler()
 
         GameUpdateThread().start()
     }

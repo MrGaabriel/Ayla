@@ -30,7 +30,7 @@ class DiscordListeners : ListenerAdapter() {
         if (event.author.isBot)
             return
 
-        GlobalScope.launch {
+        GlobalScope.launch(ayla.defaultCoroutineDispatcher) {
             val aylaEvent = AylaMessageEvent(event.message)
 
             val profile = transaction(ayla.database) {
@@ -73,7 +73,7 @@ class DiscordListeners : ListenerAdapter() {
     }
 
     override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
-        GlobalScope.launch {
+        GlobalScope.launch(ayla.defaultCoroutineDispatcher) {
             val aylaEvent = AylaMessageEvent(event.message)
 
             val profile = transaction(ayla.database) {

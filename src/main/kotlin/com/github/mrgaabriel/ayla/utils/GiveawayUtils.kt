@@ -8,6 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.core.EmbedBuilder
+import net.dv8tion.jda.core.JDA
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.time.Instant
@@ -111,7 +112,7 @@ object GiveawayUtils {
         }
 
         GlobalScope.launch(ayla.giveawayTasksDispatcher) {
-            while (giveaway.endsAt > System.currentTimeMillis()) {
+            while (giveaway.endsAt > System.currentTimeMillis() && ayla.shardManager.shards.all { it.status == JDA.Status.CONNECTED }) {
                 val channel = ayla.shardManager.getTextChannelById(giveaway.channelId)
 
                 if (channel == null) {

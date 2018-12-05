@@ -121,7 +121,7 @@ object AylaUtils {
             val conn = URL(url).openConnection()
 
             conn.setRequestProperty(
-                "UserProfile-Agent",
+                "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0"
             )
 
@@ -130,5 +130,14 @@ object AylaUtils {
         } catch (e: Exception) {
             return null
         }
+    }
+
+    fun getTimestamp(milis: Long): String {
+        var seconds = milis / 1000
+        val hours = Math.floorDiv(seconds, 3600)
+        seconds = seconds - hours * 3600
+        val mins = Math.floorDiv(seconds, 60)
+        seconds = seconds - mins * 60
+        return (if (hours == 0L) "" else hours.toString() + ":") + String.format("%02d", mins) + ":" + String.format("%02d", seconds)
     }
 }

@@ -16,7 +16,10 @@ class AylaConfig(
     val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING")),
     val websiteUrl: String = "URL do website",
     val websitePort: Int = 80,
-    val websiteMasterToken: String = "Token mestre do website, usado para coisas *muito* importantes"
+    val websiteMasterToken: String = "Token mestre do website, usado para coisas *muito* importantes",
+    val lavalinkHostname: String = "ws://127.0.0.1:2334",
+    val lavalinkPassword: String = "Senha do Lavalink",
+    val youtubeApiKey: String = "API key do YouTube"
 ) {
 
     class AylaGameWrapper(val name: String, val type: String)

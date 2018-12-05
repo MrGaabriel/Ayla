@@ -1,5 +1,6 @@
 package com.github.mrgaabriel.ayla
 
+import com.github.mrgaabriel.ayla.audio.AudioManager
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.config.RedditCommand
@@ -10,6 +11,7 @@ import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
 import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
+import com.github.mrgaabriel.ayla.commands.music.*
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
@@ -76,6 +78,8 @@ class Ayla(var config: AylaConfig) {
     val dataSource by lazy { HikariDataSource(hikariConfig) }
     val database by lazy { Database.connect(dataSource) }
 
+    lateinit var audioManager: AudioManager
+
     val builder = DefaultShardManagerBuilder()
         .setToken(config.clientToken)
         .setCallbackPool(Executors.newSingleThreadExecutor())
@@ -92,8 +96,10 @@ class Ayla(var config: AylaConfig) {
         logger.info("Iniciando a Ayla (discord bot)...")
 
         shardManager = builder.build()
-
         logger.info("OK! Ayla (discord bot) iniciada com sucesso!")
+
+        audioManager = AudioManager()
+        shardManager.addEventListener(audioManager.lavalink)
 
         initPostgre()
         loadCommands()
@@ -151,5 +157,12 @@ class Ayla(var config: AylaConfig) {
         // ==[ MISC ]==
         commandMap.add(GiveawayCommand())
         commandMap.add(VideoChatCommand())
+
+        // ==[ MUSIC ]==
+        commandMap.add(PlayCommand())
+        commandMap.add(SkipCommand())
+        commandMap.add(PlayNowCommand())
+        commandMap.add(VolumeCommand())
+        commandMap.add(PlayingCommand())
     }
 }

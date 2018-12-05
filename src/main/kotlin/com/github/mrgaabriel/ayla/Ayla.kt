@@ -22,7 +22,6 @@ import com.github.mrgaabriel.ayla.threads.GameUpdateThread
 import com.github.mrgaabriel.ayla.utils.GiveawayUtils
 import com.github.mrgaabriel.ayla.utils.RedditUtils
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
-import com.github.mrgaabriel.ayla.utils.extensions.buildBlocking
 import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.website.Website
 import com.google.common.util.concurrent.ThreadFactoryBuilder
@@ -31,7 +30,6 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.asCoroutineDispatcher
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
-import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.OnlineStatus
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

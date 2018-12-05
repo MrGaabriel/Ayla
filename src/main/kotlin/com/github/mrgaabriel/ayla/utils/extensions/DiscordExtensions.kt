@@ -1,6 +1,9 @@
 package com.github.mrgaabriel.ayla.utils.extensions
 
 import com.github.mrgaabriel.ayla.AylaLauncher
+import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
+import net.dv8tion.jda.bot.sharding.ShardManager
+import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.requests.RestAction
 import net.dv8tion.jda.core.utils.MiscUtil
@@ -24,4 +27,13 @@ fun String.isValidSnowflake(): Boolean {
     } catch (e: Exception) {
         return false
     }
+}
+
+fun DefaultShardManagerBuilder.buildBlocking(): ShardManager {
+    val manager = this.build()
+
+    while (manager.shards.all { it.status == JDA.Status.CONNECTED })
+        continue
+
+    return manager
 }

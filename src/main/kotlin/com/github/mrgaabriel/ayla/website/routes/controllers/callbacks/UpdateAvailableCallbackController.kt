@@ -3,6 +3,7 @@ package com.github.mrgaabriel.ayla.website.routes.controllers.callbacks
 import com.github.kevinsawicki.http.HttpRequest
 import com.github.mrgaabriel.ayla.utils.Constants
 import com.github.mrgaabriel.ayla.utils.Static
+import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.salomonbrys.kotson.*
 import org.jooby.MediaType
@@ -51,6 +52,21 @@ class UpdateAvailableCallbackController {
                 .body()
 
             val payload = Static.JSON_PARSER.parse(body).obj
+
+            val items = payload["changeSet"]["items"].array
+
+            var message = "Chegaram novidades para mim! Novidades:"
+
+            if (items.size() == 0) {
+                message += "\nNada! (apenas um rebuild)..."
+            } else {
+                for (item in items) {
+                    message += "\n - `${item["comment"].string}`"
+                }
+            }
+
+            val channel = ayla.shardManager.getTextChannelById("489558031496118292")
+            channel.sendMessage(message).queue()
 
             val artifacts = payload["artifacts"].array
             val firstArtifact = artifacts.first()

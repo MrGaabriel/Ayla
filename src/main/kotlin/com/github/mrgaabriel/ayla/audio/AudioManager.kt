@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import lavalink.client.io.jda.JdaLavalink
 import lavalink.client.player.LavalinkPlayer
+import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
 import java.net.URI
@@ -41,12 +42,16 @@ class AudioManager {
     }
 
     fun loadAndPlay(context: CommandContext, identifier: String, channel: VoiceChannel, override: Boolean = false) {
+        val musicPlayer = getMusicPlayer(context.event.guild)
+        val textChannel = context.event.channel
+
+        if (!context.event.guild.selfMember.hasPermission(channel, Permission.VOICE_CONNECT)) {
+            textChannel.sendMessage("${context.event.author.asMention} ...eu queria muito reproduzir músicas, mas eu não tenho permissão para me conectar no canal `${channel.name}`! :sob:").queue()
+            return
+        }
+
         context.event.guild.audioManager.isSelfDeafened = true
         context.event.guild.audioManager.isSelfMuted = false
-
-        val musicPlayer = getMusicPlayer(context.event.guild)
-
-        val textChannel = context.event.channel
 
         playerManager.loadItemOrdered(musicPlayer.player, identifier, object : AudioLoadResultHandler {
             override fun trackLoaded(track: AudioTrack) {

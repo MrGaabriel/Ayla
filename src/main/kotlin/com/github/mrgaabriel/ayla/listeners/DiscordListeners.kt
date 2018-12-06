@@ -35,27 +35,11 @@ class DiscordListeners : ListenerAdapter() {
             val aylaEvent = AylaMessageEvent(event.message)
 
             val profile = transaction(ayla.database) {
-                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull()
+                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull() ?: UserProfile.new(event.author.id) {}
             }
 
-            if (profile == null) {
-                transaction(ayla.database) {
-                    UserProfile.new(event.author.id) {}
-                }
-
-                return@launch
-            }
-
-            var config = transaction(ayla.database) {
-                Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
-            }
-
-            if (config == null) {
-                transaction(ayla.database) {
-                    config = Guild.new(event.guild.id) {}
-                }
-
-                return@launch
+            val config = transaction(ayla.database) {
+                Guild.find { Guilds.id eq event.guild.id }.firstOrNull() ?: Guild.new(event.guild.id) {}
             }
 
             val matcher = Pattern.compile("^<@[!]?${ayla.config.clientId}>$")
@@ -78,15 +62,7 @@ class DiscordListeners : ListenerAdapter() {
             val aylaEvent = AylaMessageEvent(event.message)
 
             val profile = transaction(ayla.database) {
-                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull()
-            }
-
-            if (profile == null) {
-                transaction(ayla.database) {
-                    UserProfile.new(event.author.id) {}
-                }
-
-                return@launch
+                UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull() ?: UserProfile.new(event.author.id) {}
             }
 
             ayla.commandMap.forEach {

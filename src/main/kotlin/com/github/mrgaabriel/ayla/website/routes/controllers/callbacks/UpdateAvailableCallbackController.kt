@@ -65,7 +65,7 @@ class UpdateAvailableCallbackController {
                 }
             }
 
-            message += "Vou reiniciar e já volto!.."
+            message += "\nVou reiniciar e já volto!.."
 
             val channel = ayla.shardManager.getTextChannelById("489558031496118292")
             channel.sendMessage(message).queue()

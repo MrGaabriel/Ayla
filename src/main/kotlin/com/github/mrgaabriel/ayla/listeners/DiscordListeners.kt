@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent
@@ -199,4 +200,23 @@ class DiscordListeners : ListenerAdapter() {
         }
     }
 
+    override fun onGuildVoiceLeave(event: GuildVoiceLeaveEvent) {
+        val selfMember = event.guild.selfMember
+
+        val channel = event.channelLeft
+        if (channel == selfMember.voiceState.channel) {
+            if (channel.members.size == 1) { // Só tem o bot?
+                val player = ayla.audioManager.getAudioPlayer(event.guild)
+
+                if (player.playingTrack != null) {
+                    player.stopTrack()
+                }
+
+                player.link.disconnect()
+                player.link.destroy()
+
+                ayla.audioManager.musicPlayers.remove(event.guild.id)
+            }
+        }
+    }
 }

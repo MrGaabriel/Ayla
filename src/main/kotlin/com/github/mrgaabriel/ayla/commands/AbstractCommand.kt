@@ -1,10 +1,12 @@
 package com.github.mrgaabriel.ayla.commands
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.mrgaabriel.ayla.dao.Guild
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.tables.Guilds
 import com.github.mrgaabriel.ayla.tables.UserProfiles
+import com.github.mrgaabriel.ayla.utils.DateUtils
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -13,8 +15,14 @@ import com.github.mrgaabriel.ayla.utils.t
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.exceptions.ErrorResponseException
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractCommand(val label: String, val aliases: List<String> = listOf()) {
+
+    val commandCooldownCache = Caffeine.newBuilder()
+        .expireAfterWrite(2L, TimeUnit.MINUTES)
+        .build<String, Long>()
+        .asMap()
 
     val logger by logger()
 
@@ -56,6 +64,12 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
                 }
 
                 event.channel.sendTyping().queue()
+
+                if (commandCooldownCache.getOrDefault(event.author.id, 0) > System.currentTimeMillis()) {
+                    event.channel.sendMessage("${event.author.asMention} Espere **${DateUtils.formatDateDiff(commandCooldownCache[event.author.id]!!)} para poder utilizar este comando novamente!")
+                    commandCooldownCache[event.author.id] = commandCooldownCache[event.author.id]!! + 500
+                    return true
+                }
 
                 val start = System.currentTimeMillis()
                 logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label})")
@@ -120,6 +134,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                 run(context)
 
+                commandCooldownCache[event.author.id] = System.currentTimeMillis() + 2500
                 logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")
             } catch (e: Exception) {
                 event.channel.sendMessage("${event.author.asMention} Um erro aconteceu durante a execução deste comando!")

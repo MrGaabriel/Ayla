@@ -38,6 +38,14 @@ object RedditUtils {
                 }
 
                 try {
+                    if (sub.channels.isEmpty()) {
+                        transaction(ayla.database) {
+                            sub.delete()
+                        }
+
+                        return@launch
+                    }
+
                     val request = HttpRequest.get("https://reddit.com/r/${sub.name}/new/.json")
                         .userAgent(Constants.USER_AGENT)
                     val body = request.body()

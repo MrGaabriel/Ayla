@@ -89,7 +89,7 @@ object RedditUtils {
                         builder.setAuthor(title, link, "https://cdn.discordapp.com/emojis/517750327798267905.png?v=1")
                         builder.setColor(Constants.REDDIT_ORANGE_RED)
 
-                        builder.setDescription(if (description.length > 2000) "${description.substring(0..1970)}... [Leia mais aqui]($link)" else description)
+                        builder.setDescription(if (description.length > 2000) "${description.substring(0..1900)}... [Leia mais aqui]($link)" else description)
 
                         builder.setFooter(author, null)
                         builder.setTimestamp(OffsetDateTime.now())

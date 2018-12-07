@@ -140,4 +140,17 @@ object AylaUtils {
         seconds = seconds - mins * 60
         return (if (hours == 0L) "" else hours.toString() + ":") + String.format("%02d", mins) + ":" + String.format("%02d", seconds)
     }
+
+    fun isValidImage(url: String): Boolean {
+        try {
+            val conn = URL(url).openConnection()
+            conn.setRequestProperty("User-Agent", Constants.USER_AGENT)
+
+            val image = ImageIO.read(conn.getInputStream())
+
+            return image != null
+        } catch (e: Exception) {
+            return false
+        }
+    }
 }

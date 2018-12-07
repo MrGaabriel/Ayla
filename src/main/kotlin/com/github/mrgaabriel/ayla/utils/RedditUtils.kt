@@ -46,14 +46,9 @@ object RedditUtils {
                         return@launch
                     }
 
-                    val request = HttpRequest.get("https://reddit.com/r/${sub.name}/new/.json")
+                    val body = HttpRequest.get("https://reddit.com/r/${sub.name}/new/.json")
                         .userAgent(Constants.USER_AGENT)
-                    val body = request.body()
-
-                    if (!request.ok()) {
-                        logger.error("Erro ao fazer request para \"https://reddit.com/r/${sub.name}/new/.json\" - Response code: ${request.code()}")
-                        continue
-                    }
+                        .body()
 
                     val payload = Static.JSON_PARSER.parse(body).obj
                     val data = payload["data"].obj
@@ -81,7 +76,9 @@ object RedditUtils {
 
                         val url = commentData["url"].nullString
                         if (url != null && imageUrl == null) {
-                            imageUrl = url
+                            if (AylaUtils.isValidImage(url)) {
+                                imageUrl = url
+                            }
                         }
 
                         val builder = EmbedBuilder()

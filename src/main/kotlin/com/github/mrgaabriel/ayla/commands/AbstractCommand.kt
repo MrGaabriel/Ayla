@@ -70,7 +70,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
                     event.channel.sendTyping().queue()
 
                     if (commandCooldownCache.getOrDefault(event.author.id, 0) > System.currentTimeMillis()) {
-                        event.channel.sendMessage("${event.author.asMention} Espere **${DateUtils.formatDateDiff(commandCooldownCache[event.author.id]!!)} para poder utilizar este comando novamente!").queue()
+                        event.channel.sendMessage("${event.author.asMention} Espere **${DateUtils.formatDateDiff(commandCooldownCache[event.author.id]!!)}** para poder utilizar este comando novamente!").queue()
                         commandCooldownCache[event.author.id] = commandCooldownCache[event.author.id]!! + 500
                         return true
                     }

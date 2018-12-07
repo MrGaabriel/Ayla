@@ -18,7 +18,7 @@ import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.debug.DebugLog
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
 import com.github.mrgaabriel.ayla.tables.Giveaways
-import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.tables.SubReddits
 import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.threads.GameUpdateThread
@@ -116,7 +116,7 @@ class Ayla(var config: AylaConfig) {
     fun initPostgre() {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(
-                Guilds,
+                GuildConfigs,
                 Giveaways,
                 SubReddits,
                 UserProfiles

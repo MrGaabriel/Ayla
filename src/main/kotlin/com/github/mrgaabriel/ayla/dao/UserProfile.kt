@@ -1,7 +1,7 @@
 package com.github.mrgaabriel.ayla.dao
 
-import com.github.mrgaabriel.ayla.tables.SnowflakeEntity
-import com.github.mrgaabriel.ayla.tables.SnowflakeEntityClass
+import com.github.mrgaabriel.ayla.utils.exposed.SnowflakeEntity
+import com.github.mrgaabriel.ayla.utils.exposed.SnowflakeEntityClass
 import com.github.mrgaabriel.ayla.tables.UserProfiles
 import org.jetbrains.exposed.dao.EntityID
 

@@ -1,11 +1,11 @@
 package com.github.mrgaabriel.ayla.listeners
 
 import com.github.mrgaabriel.ayla.dao.Giveaway
-import com.github.mrgaabriel.ayla.dao.Guild
+import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.tables.Giveaways
-import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import kotlinx.coroutines.GlobalScope
@@ -39,7 +39,7 @@ class DiscordListeners : ListenerAdapter() {
             }
 
             val config = transaction(ayla.database) {
-                Guild.find { Guilds.id eq event.guild.id }.firstOrNull() ?: Guild.new(event.guild.id) {}
+                GuildConfig.find { GuildConfigs.id eq event.guild.id }.firstOrNull() ?: GuildConfig.new(event.guild.id) {}
             }
 
             val matcher = Pattern.compile("^<@[!]?${ayla.config.clientId}>$")
@@ -114,7 +114,7 @@ class DiscordListeners : ListenerAdapter() {
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
+            GuildConfig.find { GuildConfigs.id eq event.guild.id }.firstOrNull()
         }
 
         if (config != null && config.welcomeEnabled && config.welcomeChannelId != null) {
@@ -149,7 +149,7 @@ class DiscordListeners : ListenerAdapter() {
 
     override fun onGuildMemberLeave(event: GuildMemberLeaveEvent) {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild.id }.firstOrNull()
+            GuildConfig.find { GuildConfigs.id eq event.guild.id }.firstOrNull()
         }
 
         if (config != null && config.welcomeEnabled && config.welcomeChannelId != null) {

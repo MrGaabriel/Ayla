@@ -2,8 +2,8 @@ package com.github.mrgaabriel.ayla.commands.config
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.CommandContext
-import com.github.mrgaabriel.ayla.dao.Guild
-import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.dao.GuildConfig
+import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
@@ -30,7 +30,7 @@ class WelcomeCommand : AbstractCommand("welcome") {
         }
 
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq context.event.guild.id }.first()
+            GuildConfig.find { GuildConfigs.id eq context.event.guild.id }.first()
         }
 
         if (context.args[0] == "off") {

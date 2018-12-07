@@ -1,10 +1,10 @@
 package com.github.mrgaabriel.ayla.commands
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.github.mrgaabriel.ayla.dao.Guild
+import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
-import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.utils.DateUtils
 import com.github.mrgaabriel.ayla.utils.extensions.await
@@ -37,7 +37,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
     suspend fun matches(event: AylaMessageEvent): Boolean {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild.id }.first()
+            GuildConfig.find { GuildConfigs.id eq event.guild.id }.first()
         }
 
         val profile = transaction(ayla.database) {

@@ -1,8 +1,8 @@
 package com.github.mrgaabriel.ayla.commands
 
-import com.github.mrgaabriel.ayla.dao.Guild
+import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
-import com.github.mrgaabriel.ayla.tables.Guilds
+import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -46,7 +46,7 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
 
     suspend fun explain(): Message {
         val config = transaction(ayla.database) {
-            Guild.find { Guilds.id eq event.guild.id }.first()
+            GuildConfig.find { GuildConfigs.id eq event.guild.id }.first()
         }
 
         val builder = EmbedBuilder()

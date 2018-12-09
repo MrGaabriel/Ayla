@@ -1,5 +1,7 @@
 package com.github.mrgaabriel.ayla.utils
 
+import java.time.Month
+import java.time.OffsetDateTime
 import java.util.*
 
 object DateUtils {
@@ -87,4 +89,25 @@ object DateUtils {
             "alguns milisegundos"
         } else sb.toString().trim { it <= ' ' }
     }
+}
+
+fun OffsetDateTime.humanize(): String {
+    val month = when (this.month) {
+        Month.JANUARY -> "Janeiro"
+        Month.FEBRUARY -> "Fevereiro"
+        Month.MARCH -> "Março"
+        Month.APRIL -> "Abril"
+        Month.MAY -> "Maio"
+        Month.JUNE -> "Junho"
+        Month.JULY -> "Julho"
+        Month.AUGUST -> "Agosto"
+        Month.SEPTEMBER -> "Setembro"
+        Month.OCTOBER -> "Outubro"
+        Month.NOVEMBER -> "Novembro"
+        Month.DECEMBER -> "Dezembro"
+
+        else -> "Irineu, você não sabe e nem eu!"
+    }
+
+    return "${this.dayOfMonth} de $month de ${this.year} às ${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}"
 }

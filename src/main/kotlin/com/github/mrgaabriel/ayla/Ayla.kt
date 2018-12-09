@@ -8,6 +8,7 @@ import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.BlacklistCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
+import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
 import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
@@ -164,5 +165,8 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(PlayNowCommand())
         commandMap.add(VolumeCommand())
         commandMap.add(PlayingCommand())
+
+        // ==[ DISCORD ]==
+        commandMap.add(InviteInfoCommand())
     }
 }

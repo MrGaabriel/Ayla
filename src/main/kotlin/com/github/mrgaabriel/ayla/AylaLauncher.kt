@@ -2,6 +2,7 @@ package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.utils.Static
+import com.github.mrgaabriel.ayla.utils.WebsiteUtils
 import java.io.File
 import java.nio.file.Paths
 import java.util.jar.Attributes
@@ -14,6 +15,10 @@ object AylaLauncher {
     @JvmStatic
     fun main(args: Array<String>) {
         try {
+
+            // https://bugs.openjdk.java.net/browse/JDK-7016595
+            WebsiteUtils.allowMethods("PATCH")
+
             // https://www.reddit.com/r/Kotlin/comments/8qdd4x/kotlin_script_engine_and_your_classpaths_what/
             val path = this::class.java.protectionDomain.codeSource.location.path
             val jar = JarFile(path)

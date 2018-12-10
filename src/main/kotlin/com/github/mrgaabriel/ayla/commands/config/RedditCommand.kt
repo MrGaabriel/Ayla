@@ -2,6 +2,7 @@ package com.github.mrgaabriel.ayla.commands.config
 
 import com.github.kevinsawicki.http.HttpRequest
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.Constants
@@ -14,7 +15,7 @@ import com.github.salomonbrys.kotson.obj
 import net.dv8tion.jda.core.Permission
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class RedditCommand : AbstractCommand("reddit") {
+class RedditCommand : AbstractCommand("reddit", category = CommandCategory.CONFIG) {
 
     override fun getDescription(): String {
         return "Gerencia o módulo de sincronização de posts do Reddit"

@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.config
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.tables.GuildConfigs
@@ -8,7 +9,7 @@ import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class PrefixCommand : AbstractCommand("prefix") {
+class PrefixCommand : AbstractCommand("prefix", category = CommandCategory.CONFIG) {
 
     override fun getDescription(): String {
         return "Mude o prefixo dos comandos do servidor"

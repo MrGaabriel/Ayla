@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.developer
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import java.awt.Color
 import java.io.PrintWriter
@@ -9,7 +10,7 @@ import java.time.OffsetDateTime
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
-class EvalCommand : AbstractCommand("eval") {
+class EvalCommand : AbstractCommand("eval", category = CommandCategory.DEVELOPER) {
 
     override fun onlyOwner(): Boolean {
         return true
@@ -63,6 +64,8 @@ import net.dv8tion.jda.core.*
 import net.dv8tion.jda.core.entities.*
 
 import org.jetbrains.exposed.sql.transactions.transaction
+
+import com.github.kevinsawicki.http.HttpRequest
 
 $bindings
 val deferred = GlobalScope.async {

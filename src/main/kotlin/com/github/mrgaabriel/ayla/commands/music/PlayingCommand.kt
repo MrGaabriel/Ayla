@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.music
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.Constants
@@ -8,7 +9,7 @@ import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.EmbedBuilder
 import java.time.OffsetDateTime
 
-class PlayingCommand : AbstractCommand("playing", listOf("playingnow", "np", "tocando", "tocandoagora")) {
+class PlayingCommand : AbstractCommand("playing", listOf("playingnow", "np", "tocando", "tocandoagora"), category = CommandCategory.MUSIC) {
 
     override fun getDescription(): String {
         return "Vê as informações da música que está tocando"

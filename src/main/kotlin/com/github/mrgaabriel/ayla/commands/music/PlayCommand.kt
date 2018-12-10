@@ -1,10 +1,11 @@
 package com.github.mrgaabriel.ayla.commands.music
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 
-class PlayCommand : AbstractCommand("play", listOf("tocar")) {
+class PlayCommand : AbstractCommand("play", listOf("tocar"), category = CommandCategory.MUSIC) {
 
     override fun getDescription(): String {
         return "Reproduz uma música em um canal de voz"

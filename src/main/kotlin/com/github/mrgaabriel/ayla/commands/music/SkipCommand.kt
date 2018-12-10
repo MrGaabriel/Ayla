@@ -1,11 +1,12 @@
 package com.github.mrgaabriel.ayla.commands.music
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
 
-class SkipCommand : AbstractCommand("skip", listOf("pular")) {
+class SkipCommand : AbstractCommand("skip", listOf("pular"), category = CommandCategory.MUSIC) {
 
     override fun getDescription(): String {
         return "Pula a música que está reproduzindo"

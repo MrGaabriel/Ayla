@@ -1,10 +1,11 @@
 package com.github.mrgaabriel.ayla.commands.utils
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.await
 
-class PingCommand : AbstractCommand("ping") {
+class PingCommand : AbstractCommand("ping", category = CommandCategory.UTILS) {
 
     override suspend fun run(context: CommandContext) {
         val start = System.currentTimeMillis()

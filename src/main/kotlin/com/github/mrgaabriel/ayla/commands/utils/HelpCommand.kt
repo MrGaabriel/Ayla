@@ -1,13 +1,14 @@
 package com.github.mrgaabriel.ayla.commands.utils
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class HelpCommand : AbstractCommand("help", aliases = listOf("ajuda", "comandos", "commands")) {
+class HelpCommand : AbstractCommand("help", aliases = listOf("ajuda", "comandos", "commands"), category = CommandCategory.UTILS) {
 
     override fun getDescription(): String {
         return "Veja os comandos que a Ayla tem"

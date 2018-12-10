@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
-abstract class AbstractCommand(val label: String, val aliases: List<String> = listOf()) {
+abstract class AbstractCommand(val label: String, val aliases: List<String> = listOf(), val category: CommandCategory) {
 
     val commandCooldownCache = Caffeine.newBuilder()
         .expireAfterWrite(2L, TimeUnit.MINUTES)

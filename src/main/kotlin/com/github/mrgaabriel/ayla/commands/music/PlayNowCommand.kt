@@ -1,11 +1,12 @@
 package com.github.mrgaabriel.ayla.commands.music
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
 
-class PlayNowCommand : AbstractCommand("playnow", listOf("tocaragora", "playskip")) {
+class PlayNowCommand : AbstractCommand("playnow", listOf("tocaragora", "playskip"), category = CommandCategory.MUSIC) {
 
     override fun getDescription(): String {
         return "Reproduz uma música ignorando a fila e a que está tocando"

@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.images
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -11,7 +12,7 @@ import java.awt.Font
 import java.io.File
 import javax.imageio.ImageIO
 
-class IsThisCommand : AbstractCommand("isthis", aliases = listOf("isthat")) {
+class IsThisCommand : AbstractCommand("isthis", aliases = listOf("isthat"), category = CommandCategory.IMAGES) {
 
     override fun getDescription(): String {
         return "Is this a butterfly?"

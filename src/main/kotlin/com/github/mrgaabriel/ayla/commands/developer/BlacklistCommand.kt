@@ -1,13 +1,14 @@
 package com.github.mrgaabriel.ayla.commands.developer
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.tables.UserProfiles
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class BlacklistCommand : AbstractCommand("blacklist") {
+class BlacklistCommand : AbstractCommand("blacklist", category = CommandCategory.DEVELOPER) {
 
     override fun onlyOwner(): Boolean {
         return true

@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.misc
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.dao.Giveaway
 import com.github.mrgaabriel.ayla.utils.GiveawayUtils
@@ -8,7 +9,7 @@ import com.github.mrgaabriel.ayla.utils.convertToEpochMillis
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class GiveawayCommand : AbstractCommand("giveaway", listOf("sorteio")) {
+class GiveawayCommand : AbstractCommand("giveaway", listOf("sorteio"), category = CommandCategory.MISC) {
 
     override fun getDescription(): String {
         return "Crie um sorteio"

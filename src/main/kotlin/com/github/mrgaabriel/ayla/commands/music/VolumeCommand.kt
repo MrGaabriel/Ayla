@@ -1,11 +1,12 @@
 package com.github.mrgaabriel.ayla.commands.music
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
 
-class VolumeCommand : AbstractCommand("volume") {
+class VolumeCommand : AbstractCommand("volume", category = CommandCategory.MUSIC) {
 
     override fun getDescription(): String {
         return "Muda o volume da música que está sendo reproduzida"

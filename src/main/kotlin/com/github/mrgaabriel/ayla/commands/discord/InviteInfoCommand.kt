@@ -1,6 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.discord
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.humanize
@@ -9,7 +10,7 @@ import net.dv8tion.jda.core.entities.Invite
 import net.dv8tion.jda.core.exceptions.ErrorResponseException
 import java.awt.Color
 
-class InviteInfoCommand : AbstractCommand("inviteinfo") {
+class InviteInfoCommand : AbstractCommand("inviteinfo", category = CommandCategory.DISCORD) {
 
     override fun getDescription(): String {
         return "Pega as informações de um invite do Discord"

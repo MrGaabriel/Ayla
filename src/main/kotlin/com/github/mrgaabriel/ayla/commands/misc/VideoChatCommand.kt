@@ -1,13 +1,14 @@
 package com.github.mrgaabriel.ayla.commands.misc
 
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import net.dv8tion.jda.core.EmbedBuilder
 import java.awt.Color
 import java.time.OffsetDateTime
 
-class VideoChatCommand : AbstractCommand("videochat") {
+class VideoChatCommand : AbstractCommand("videochat", category = CommandCategory.MISC) {
 
     override fun getDescription(): String {
         return "Experimental"

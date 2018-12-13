@@ -69,7 +69,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                     event.channel.sendTyping().queue()
 
-                    if (commandCooldownCache.getOrDefault(event.author.id, 0) > System.currentTimeMillis()) {
+                    if (commandCooldownCache.getOrDefault(event.author.id, 0) > System.currentTimeMillis() && event.author.id !in ayla.config.ownerIds) {
                         event.channel.sendMessage("${event.author.asMention} Espere **${DateUtils.formatDateDiff(commandCooldownCache[event.author.id]!!)}** para poder utilizar este comando novamente!").queue()
                         commandCooldownCache[event.author.id] = commandCooldownCache[event.author.id]!! + 500
                         return true
@@ -83,7 +83,7 @@ abstract class AbstractCommand(val label: String, val aliases: List<String> = li
 
                     val context = CommandContext(event, this, args)
 
-                    if (onlyOwner() && context.event.author.id != ayla.config.ownerId) {
+                    if (onlyOwner() && context.event.author.id !in ayla.config.ownerIds) {
                         context.sendMessage("${context.event.author.asMention} Você não tem permissão para fazer isto!")
 
                         logger.info("${t.green}[COMMAND EXECUTED]${t.reset} (${event.guild!!.name} -> #${event.channel.name}) ${event.author.tag}: ${event.message.contentRaw} (${this.label}) - OK! Processado em ${System.currentTimeMillis() - start}ms")

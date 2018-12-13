@@ -12,7 +12,7 @@ class AylaConfig(
     val postgreDatabaseName: String = "Nome da database do PostgreSQL",
     val postgreUsername: String = "Username do PostgreSQL",
     val postgrePassword: String = "Senha do PostgreSQL",
-    val ownerId: String = "ID do dono do bot",
+    val ownerIds: List<String> = listOf("ID do(s) dono(s) do bot"),
     val games: List<AylaGameWrapper> = listOf(AylaGameWrapper("Spotify", "LISTENING")),
     val websiteUrl: String = "URL do website",
     val websitePort: Int = 80,

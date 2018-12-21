@@ -18,6 +18,7 @@ import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.debug.DebugLog
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
+import com.github.mrgaabriel.ayla.managers.AylaCommandManager
 import com.github.mrgaabriel.ayla.tables.Giveaways
 import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.tables.SubReddits
@@ -35,6 +36,7 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.OnlineStatus
+import net.perfectdreams.commands.manager.CommandManager
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -46,6 +48,8 @@ class Ayla(var config: AylaConfig) {
 
     lateinit var shardManager: ShardManager
     lateinit var website: Website
+
+    val commandManager by lazy { AylaCommandManager() }
 
     val hikariConfig by lazy {
         val config = HikariConfig()
@@ -168,5 +172,7 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ DISCORD ]==
         commandMap.add(InviteInfoCommand())
+
+
     }
 }

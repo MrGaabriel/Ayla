@@ -38,6 +38,14 @@
             <name>bintray</name>
             <url>https://kotlin.bintray.com/kotlin-js-wrappers</url>
         </repository>
+        <repository>
+            <id>perfectdreams-repo</id>
+            <url>https://repo.perfectdreams.net/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -203,6 +211,11 @@
             <groupId>com.github.FredBoat</groupId>
             <artifactId>Lavalink-Client</artifactId>
             <version>edd76a0ae8</version>
+        </dependency>
+        <dependency>
+            <groupId>net.perfectdreams.commands</groupId>
+            <artifactId>command-framework-core</artifactId>
+            <version>0.0.2-SNAPSHOT</version> <!-- Veja a última versão no pom.xml! -->
         </dependency>
     </dependencies>
 

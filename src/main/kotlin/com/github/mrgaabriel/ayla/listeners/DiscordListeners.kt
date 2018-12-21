@@ -50,6 +50,9 @@ class DiscordListeners : ListenerAdapter() {
                     .queue()
             }
 
+            if (ayla.commandManager.dispatch(aylaEvent, config, profile))
+                return@launch
+
             ayla.commandMap.forEach {
                 if (it.matches(aylaEvent))
                     return@launch

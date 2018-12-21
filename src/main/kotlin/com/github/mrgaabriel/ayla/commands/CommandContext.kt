@@ -30,6 +30,10 @@ class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, 
         return event.channel.sendMessage(message).await()
     }
 
+    suspend fun reply(content: Any): Message {
+        return sendMessage("${event.author.asMention} $content")
+    }
+
     suspend fun sendFile(image: BufferedImage, name: String, message: String): Message {
         val outputStream = ByteArrayOutputStream()
         outputStream.use {

@@ -5,6 +5,7 @@ import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.config.RedditCommand
 import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
+import com.github.mrgaabriel.ayla.commands.developer.BashCommand
 import com.github.mrgaabriel.ayla.commands.developer.BlacklistCommand
 import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
 import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
@@ -155,6 +156,7 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(ReloadCommand())
         commandMap.add(EvalCommand())
         commandMap.add(BlacklistCommand())
+        commandMap.add(BashCommand())
 
         // ==[ IMAGES ]==
         commandMap.add(IsThisCommand())

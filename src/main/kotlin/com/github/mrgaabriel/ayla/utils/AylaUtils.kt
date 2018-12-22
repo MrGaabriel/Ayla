@@ -69,50 +69,52 @@ object AylaUtils {
         if (channels.isNotEmpty()) {
             return channels[0]
         }
-        val id = input
-            .replace("<", "")
-            .replace("#", "")
-            .replace(">", "")
+        val id = input.replace(Regex("[<#>]"), "")
+
         if (!id.isValidSnowflake())
             return null
+
         val channel = guild.getTextChannelById(id)
+        
         if (channel != null) {
             return channel
         }
+
         return null
     }
 
     suspend fun getUser(input: String?, guild: Guild): User? {
         if (input == null)
             return null
+
         val splitted = input.split("#")
+
         if (splitted.size == 2) {
-            val users = mutableListOf<User>()
-            ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(splitted[0], true)) }
-            val matchedUser = users.stream().filter { it.discriminator == splitted[1] }.findFirst()
-            if (matchedUser.isPresent) {
-                return matchedUser.get()
+            val users = ayla.shardManager.users.filter { it.name.equals(splitted[0], true) && it.discriminator == splitted[1] }
+
+            if (users.firstOrNull() != null) {
+                return users.firstOrNull()
             }
         }
+
+        val users = ayla.shardManager.users.filter { it.name == input }
+
+        if (users.firstOrNull() != null) {
+            return users.firstOrNull()
+        }
+
         val members = guild.getMembersByEffectiveName(input, true)
-        if (members.isNotEmpty()) {
-            return members[0].user
+
+        if (members.firstOrNull() != null) {
+            return members.firstOrNull()!!.user
         }
-        val users = mutableListOf<User>()
-        ayla.shardManager.shards.forEach { users.addAll(it.getUsersByName(input, true)) }
-        if (users.isNotEmpty()) {
-            return users[0]
+
+        val id = input.replace(Regex("[<@!>]"), "")
+
+        if (id.isValidSnowflake()) {
+            return ayla.shardManager.retrieveUserById(id).await()
         }
-        val id = input.replace("<", "")
-            .replace("@", "")
-            .replace("!", "")
-            .replace(">", "") // Se for uma menção, retirar <, @, ! e >
-        if (!id.isValidSnowflake())
-            return null
-        val user = ayla.shardManager.retrieveUserById(id).await()
-        if (user != null) {
-            return user
-        }
+
         return null
     }
 

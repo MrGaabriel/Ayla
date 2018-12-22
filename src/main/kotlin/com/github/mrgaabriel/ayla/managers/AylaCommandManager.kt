@@ -83,26 +83,20 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
     suspend fun dispatch(command: AylaCommand, rawArgs: MutableList<String>, event: AylaMessageEvent, config: GuildConfig, profile: UserProfile, isSubcommand: Boolean = false): Boolean {
         val labels = command.labels
 
-        var valid = labels.any { rawArgs[0].toLowerCase() == (config.prefix + it).toLowerCase() }
-        var byMention = false
+        val matcher = Pattern.compile("^(<@!?${ayla.config.clientId}>\\s+(?:${config.prefix}\\s*)?|${config.prefix}\\s*)([^\\s]+)")
+            .matcher(event.message.contentRaw)
 
-        val pattern = Pattern.compile("<@[!]?${ayla.config.clientId}>")
+        if (!matcher.find())
+            return false
 
-        if (!isSubcommand and pattern.matcher(rawArgs[0]).matches()) {
-            valid = labels.any { rawArgs[1].toLowerCase() == it }
-            byMention = true
-        }
+        val label = matcher.group(0)
+        val valid = labels.any { (config.prefix + it).equals(label.replace(" ", ""), true) }
 
         if (!valid)
             return false
 
-        rawArgs.removeAt(0)
-        var args = rawArgs
-
-        if (byMention) {
-            rawArgs.removeAt(0)
-            args = rawArgs
-        }
+        val args = event.message.contentRaw.substring(label.length).split(" ").toMutableList()
+        args.removeAt(0)
 
         val context = AylaCommandContext(event, command, args)
 

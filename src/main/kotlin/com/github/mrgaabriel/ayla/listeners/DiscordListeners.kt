@@ -68,6 +68,13 @@ class DiscordListeners : ListenerAdapter() {
                 UserProfile.find { UserProfiles.id eq event.author.id }.firstOrNull() ?: UserProfile.new(event.author.id) {}
             }
 
+            val config = transaction(ayla.database) {
+                GuildConfig.find { GuildConfigs.id eq event.guild.id }.firstOrNull() ?: GuildConfig.new(event.guild.id) {}
+            }
+
+            if (ayla.commandManager.dispatch(aylaEvent, config, profile))
+                return@launch
+
             ayla.commandMap.forEach {
                 if (it.matches(aylaEvent))
                     return@launch

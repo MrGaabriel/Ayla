@@ -16,6 +16,7 @@ import net.dv8tion.jda.core.entities.User
 import net.perfectdreams.commands.dsl.BaseDSLCommand
 import net.perfectdreams.commands.manager.CommandManager
 import java.util.regex.Pattern
+import kotlin.reflect.full.isSubclassOf
 
 class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseDSLCommand>() {
 
@@ -37,7 +38,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         registerCommand(ApiTestCommand())
 
         contextManager.registerContext<User>(
-            { clazz -> clazz == User::class },
+            { clazz -> clazz == User::class || clazz.isSubclassOf(User::class) },
             { context, clazz, stack ->
                 val pop = stack.pop()
 
@@ -46,7 +47,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         )
 
         contextManager.registerContext<TextChannel>(
-            { clazz -> clazz == TextChannel::class },
+            { clazz -> clazz == TextChannel::class || clazz.isSubclassOf(TextChannel::class) },
             { context, clazz, stack ->
                 val pop = stack.pop()
 

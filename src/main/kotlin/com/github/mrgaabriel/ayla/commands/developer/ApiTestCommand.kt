@@ -8,12 +8,12 @@ import net.perfectdreams.commands.annotation.Subcommand
 class ApiTestCommand : AylaCommand("apitest", "testando") {
 
     @Subcommand
-    suspend fun apiTest(context: CommandContext, user: User? = null) {
-        if (user == null) {
-            context.reply("eae men, é só um comando para testar mesmo")
-            return
-        }
+    suspend fun root(context: CommandContext) {
+        context.reply("hello world!")
+    }
 
+    @Subcommand(["mentionuser"])
+    suspend fun mentionUser(context: CommandContext, user: User) {
         context.reply("o usuário é ${user.asMention}")
     }
 }

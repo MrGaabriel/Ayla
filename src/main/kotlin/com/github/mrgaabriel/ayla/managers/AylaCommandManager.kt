@@ -7,6 +7,8 @@ import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.utils.AylaUtils
+import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
+import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -17,6 +19,7 @@ import net.dv8tion.jda.core.entities.User
 import net.perfectdreams.commands.dsl.BaseDSLCommand
 import net.perfectdreams.commands.manager.CommandManager
 import java.util.regex.Pattern
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubclassOf
 
 class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseDSLCommand>() {
@@ -37,6 +40,16 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
 
     init {
         registerCommand(ApiTestCommand())
+
+        commandListeners.addParameterListener { context, command, parameter, stack ->
+            val annotation = parameter.findAnnotation<InjectParameterType>()
+
+            if (annotation != null) {
+                when (annotation.type) {
+                    ParameterType.ARGUMENT_LIST -> stack.joinToString(" ")
+                }
+            }
+        }
 
         contextManager.registerContext<User>(
             { clazz -> clazz == User::class || clazz.isSubclassOf(User::class) },

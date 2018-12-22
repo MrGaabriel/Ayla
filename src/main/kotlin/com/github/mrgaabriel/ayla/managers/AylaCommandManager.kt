@@ -7,6 +7,7 @@ import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.utils.AylaUtils
+import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import com.github.mrgaabriel.ayla.utils.logger
@@ -94,6 +95,8 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
 
         if (!valid)
             return false
+
+        event.channel.sendTyping().await()
 
         val args = event.message.contentRaw.substring(label.length).split(" ").toMutableList()
         args.removeAt(0)

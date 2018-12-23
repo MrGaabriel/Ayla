@@ -2,7 +2,8 @@ package com.github.mrgaabriel.ayla.managers
 
 import com.github.mrgaabriel.ayla.commands.AylaCommand
 import com.github.mrgaabriel.ayla.commands.AylaCommandContext
-import com.github.mrgaabriel.ayla.commands.developer.ApiTestCommand
+import com.github.mrgaabriel.ayla.commands.developer.MagicCommand
+import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
@@ -39,7 +40,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
     }
 
     init {
-        registerCommand(ApiTestCommand())
+        registerCommands()
 
         commandListeners.addParameterListener { context, command, parameter, stack ->
             val annotation = parameter.findAnnotation<InjectParameterType>()
@@ -68,6 +69,14 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
                 AylaUtils.getTextChannel(pop, context.event.guild)
             }
         )
+    }
+
+    fun registerCommands() {
+        // ===[ UTILS ]===
+        registerCommand(HelpCommand())
+
+        // ==[ DEVELOPER ]==
+        registerCommand(MagicCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {
@@ -117,6 +126,13 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         val context = AylaCommandContext(event, command, args)
 
         val start = System.currentTimeMillis()
+
+        if (command.onlyOwner && context.event.author.id !in ayla.config.ownerIds) {
+            context.reply("Você não tem permissão para fazer isto!")
+            return true
+        }
+
+        // TODO: Verificar permissões
 
         logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${context.event.guild.name} -> #${context.event.channel.name}) ${context.event.author.tag}: ${context.event.message.contentRaw}")
         logger.debug("${t.blue}[COMMAND INFO]${t.reset} command.labels: ${command.labels}, args: $args, isSubCommand: $isSubcommand")

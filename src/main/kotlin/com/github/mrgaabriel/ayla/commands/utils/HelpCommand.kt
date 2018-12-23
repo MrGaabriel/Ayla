@@ -1,48 +1,77 @@
 package com.github.mrgaabriel.ayla.commands.utils
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.AylaCommand
+import com.github.mrgaabriel.ayla.commands.AylaCommandContext
 import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.tables.GuildConfigs
+import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
+import com.github.mrgaabriel.ayla.utils.extensions.tag
+import net.dv8tion.jda.core.EmbedBuilder
+import net.dv8tion.jda.core.exceptions.ErrorResponseException
+import net.perfectdreams.commands.annotation.Subcommand
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.awt.Color
+import java.time.OffsetDateTime
 
-class HelpCommand : AbstractCommand("help", aliases = listOf("ajuda", "comandos", "commands"), category = CommandCategory.UTILS) {
+class HelpCommand : AylaCommand("help", "ajuda", "comandos") {
 
-    override fun getDescription(): String {
-        return "Veja os comandos que a Ayla tem"
-    }
+    override val description: String
+        get() = "Veja os comandos disponíveis da Ayla"
 
-    override suspend fun run(context: CommandContext) {
+    override val category: CommandCategory
+        get() = CommandCategory.UTILS
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
         val config = transaction(ayla.database) {
             GuildConfig.find { GuildConfigs.id eq context.event.guild.id }.first()
         }
 
-        val arg0 = context.args.getOrNull(0)
-        if (arg0 != null) {
-            val command = ayla.commandMap.firstOrNull { it.label == arg0 || arg0 in it.aliases }
+        val commands = ayla.commandManager.getRegisteredCommands()
 
-            if (command != null) {
-                val dummyContext = CommandContext(context.event, command, context.args)
+        val builder = EmbedBuilder()
 
-                dummyContext.explain()
-            } else {
-                context.sendMessage("${context.event.author.asMention} Comando não encontrado!")
-            }
+        builder.setAuthor(context.event.author.tag, null, context.event.author.effectiveAvatarUrl)
+        builder.setTitle("\uD83D\uDCDA Lista de comandos da Ayla")
 
-            return
+        builder.setColor(Color(114, 137, 218))
+
+        builder.setFooter("${commands.size} comandos disponíveis", null)
+        builder.setTimestamp(OffsetDateTime.now())
+
+        for (category in CommandCategory.values().filter { it.showOnHelp && (commands.filter { cmd -> cmd.category == it }.isNotEmpty()) }) {
+            val categoryCommands = commands.filter { it.category == category }
+
+            builder.appendDescription(
+                "**${category.fancyName}** - *${category.description}*\n" + categoryCommands.joinToString(
+                    "\n",
+                    transform = { "**${config.prefix}${it.labels.first()} »** ${it.description}" }) + "\n\n"
+            )
         }
 
-        context.sendMessage(
-            """
-            ```Lista de comandos```
-            Use `${config.prefix}help [comando]` para saber mais sobre um comando.
-            **Comandos disponíveis (${ayla.commandMap.size}):**
+        val commandsEmbed = builder.build()
 
-            ${ayla.commandMap.joinToString(" ", transform = { "`${it.label}`" })}
-            ```Lembre-se de usar o prefixo (${config.prefix}) antes dos comandos!```
-        """.trimIndent()
-        )
+        builder.clear()
+
+        builder.setTitle("\uD83D\uDE4B Me adicione no seu servidor!")
+        builder.setDescription("Clique [aqui](https://ayla.space/invite) para me adicionar no seu servidor para desfrutar do que eu posso fazer!")
+
+        builder.setColor(Color(114, 137, 218))
+
+        try {
+            val channel = context.event.author.openPrivateChannel().await()
+
+            channel.sendMessage(builder.build()).queue()
+            channel.sendMessage(commandsEmbed).queue()
+
+            context.reply("Confira as suas mensagens privadas!")
+        } catch (e: ErrorResponseException) {
+            if (e.errorCode == 50002) {
+                context.reply("As suas mensagens privadas estão desativadas! Considere ativá-las.")
+            }
+        }
     }
+
 }

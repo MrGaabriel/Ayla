@@ -4,6 +4,7 @@ import com.github.mrgaabriel.ayla.commands.AbstractCommand
 import com.github.mrgaabriel.ayla.commands.CommandCategory
 import com.github.mrgaabriel.ayla.commands.CommandContext
 import com.github.mrgaabriel.ayla.config.AylaConfig
+import com.github.mrgaabriel.ayla.managers.AylaCommandManager
 import com.github.mrgaabriel.ayla.utils.Static
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import java.io.File
@@ -15,6 +16,7 @@ class ReloadCommand : AbstractCommand("reload", category = CommandCategory.DEVEL
     override suspend fun run(context: CommandContext) {
         when (context.args[0]) {
             "commands" -> {
+                ayla.commandManager = AylaCommandManager()
                 ayla.loadCommands()
 
                 context.sendMessage("${context.event.author.asMention} Comandos recarregados com sucesso!")

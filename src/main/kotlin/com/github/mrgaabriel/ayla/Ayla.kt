@@ -50,7 +50,7 @@ class Ayla(var config: AylaConfig) {
     lateinit var shardManager: ShardManager
     lateinit var website: Website
 
-    val commandManager by lazy { AylaCommandManager() }
+    var commandManager = AylaCommandManager()
 
     val hikariConfig by lazy {
         val config = HikariConfig()
@@ -150,7 +150,6 @@ class Ayla(var config: AylaConfig) {
 
         // ==[ UTILS ]==
         commandMap.add(PingCommand())
-        commandMap.add(HelpCommand())
 
         // ==[ DEVELOPER ]==
         commandMap.add(ReloadCommand())

@@ -8,5 +8,7 @@ enum class CommandCategory(val fancyName: String, val description: String, val s
     IMAGES("Imagens", "Comandos relacionados a manipulação de imagens"),
     MISC("Miscelânea", "Comandos que não encontraram uma categoria específica"),
     MUSIC("Música", "Comandos relacionados a música"),
-    UTILS("Utilidades", "Comandos relacionados a utilidades")
+    UTILS("Utilidades", "Comandos relacionados a utilidades"),
+
+    NONE("Nenhuma", "Comandos que não estão em nenhuma categoria")
 }

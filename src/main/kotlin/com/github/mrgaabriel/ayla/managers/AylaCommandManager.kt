@@ -10,6 +10,7 @@ import com.github.mrgaabriel.ayla.events.AylaMessageEvent
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
 import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
+import com.github.mrgaabriel.ayla.utils.exceptions.CommandException
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
@@ -17,7 +18,9 @@ import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.utils.t
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import net.perfectdreams.commands.HandlerValueWrapper
 import net.perfectdreams.commands.dsl.BaseDSLCommand
+import net.perfectdreams.commands.manager.CommandContinuationType
 import net.perfectdreams.commands.manager.CommandManager
 import java.util.regex.Pattern
 import kotlin.reflect.full.findAnnotation
@@ -46,10 +49,18 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
             val annotation = parameter.findAnnotation<InjectParameterType>()
 
             if (annotation != null) {
-                when (annotation.type) {
-                    ParameterType.ARGUMENT_LIST -> stack.joinToString(" ")
+                return@addParameterListener when (annotation.type) {
+                    ParameterType.ARGUMENT_LIST -> {
+                        if (stack.empty()) {
+                            return@addParameterListener HandlerValueWrapper(null) // Vamos forçar a retornar null!
+                        }
+
+                        stack.reversed().joinToString(" ")
+                    }
                 }
             }
+
+            return@addParameterListener null
         }
 
         contextManager.registerContext<User>(
@@ -69,6 +80,16 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
                 AylaUtils.getTextChannel(pop, context.event.guild)
             }
         )
+
+        commandListeners.addThrowableListener { context, command, throwable ->
+            if (throwable is CommandException) {
+                context.reply(throwable.reason)
+
+                return@addThrowableListener CommandContinuationType.CANCEL
+            }
+
+            return@addThrowableListener CommandContinuationType.CONTINUE
+        }
     }
 
     fun registerCommands() {

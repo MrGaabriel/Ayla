@@ -153,6 +153,11 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
             return true
         }
 
+        if (!command.canHandle(context) && context.event.author.id !in ayla.config.ownerIds) {
+            context.reply("Você não tem permissão para fazer isto!")
+            return true
+        }
+
         // TODO: Verificar permissões
 
         logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${context.event.guild.name} -> #${context.event.channel.name}) ${context.event.author.tag}: ${context.event.message.contentRaw}")

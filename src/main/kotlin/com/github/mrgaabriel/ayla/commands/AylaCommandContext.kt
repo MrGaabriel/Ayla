@@ -26,6 +26,15 @@ class AylaCommandContext(val event: AylaMessageEvent, val command: AylaCommand, 
         return sendMessage("${event.author.asMention} $content")
     }
 
+    suspend fun reply(embed: MessageEmbed, content: Any? = null): Message {
+        val builder = MessageBuilder()
+
+        builder.setEmbed(embed)
+        builder.setContent("${event.author.asMention} ${content ?: ""}")
+
+        return sendMessage(builder.build())
+    }
+
     suspend fun sendFile(image: BufferedImage, name: String, message: String): Message {
         val outputStream = ByteArrayOutputStream()
         outputStream.use {

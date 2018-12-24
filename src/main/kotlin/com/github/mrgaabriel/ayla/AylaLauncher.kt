@@ -7,6 +7,8 @@ import java.io.File
 import java.nio.file.Paths
 import java.util.jar.Attributes
 import java.util.jar.JarFile
+import javax.script.ScriptEngineManager
+import kotlin.concurrent.thread
 
 object AylaLauncher {
 
@@ -15,6 +17,11 @@ object AylaLauncher {
     @JvmStatic
     fun main(args: Array<String>) {
         try {
+            // Já que o primeiro eval com o Kotlin Engine demora bastante, vamos executar um eval aqui para o próximo não ter demora!
+            thread {
+                val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")
+                scriptEngine.eval("\"owo\"")
+            }
 
             // https://bugs.openjdk.java.net/browse/JDK-7016595
             WebsiteUtils.allowMethods("PATCH")

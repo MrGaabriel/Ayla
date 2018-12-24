@@ -153,7 +153,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
             return true
         }
 
-        if (command.canHandle != null && !command.canHandle!!.invoke(context) && context.event.author.id !in ayla.config.ownerIds) {
+        if (!(command.canHandle.invoke(context))) {
             context.reply("Você não tem permissão para fazer isto!")
             return true
         }

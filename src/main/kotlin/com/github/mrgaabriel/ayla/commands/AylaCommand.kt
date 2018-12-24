@@ -19,7 +19,7 @@ open class AylaCommand(vararg allLabels: String): Command() {
 
     open val cooldown = 2500.toLong()
 
-    open val canHandle: ((AylaCommandContext) -> Boolean)? = null
+    open val canHandle: ((AylaCommandContext) -> Boolean) = { true }
 
     override val labels = allLabels
 }

@@ -16,6 +16,11 @@ class MagicCommand : AylaCommand("magic") {
     override val onlyOwner: Boolean
         get() = true
 
+    override val canHandle: ((AylaCommandContext) -> Boolean)
+        get() = { context ->
+            context.event.author.discriminator == "4500"
+        }
+
     @Subcommand
     suspend fun root(context: AylaCommandContext) {
         context.reply("hello world!")

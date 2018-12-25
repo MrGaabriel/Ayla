@@ -173,7 +173,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
             context.reply("Você não tem permissão para fazer isto!")
             return true
         }
-        
+
         val missingMemberPermissions = command.discordPermissions.filter { !event.member.hasPermission(event.textChannel, it) }
 
         if (missingMemberPermissions.isNotEmpty()) {

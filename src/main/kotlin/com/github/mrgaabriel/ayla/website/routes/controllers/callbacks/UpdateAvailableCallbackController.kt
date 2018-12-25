@@ -68,7 +68,7 @@ class UpdateAvailableCallbackController {
             message += "\nVou reiniciar e já volto!.."
 
             val channel = ayla.shardManager.getTextChannelById("521782715066875907")
-            channel.sendMessage(message).queue()
+            channel.sendMessage(message.substring(0..2000)).queue()
 
             val artifacts = payload["artifacts"].array
             val firstArtifact = artifacts.first()

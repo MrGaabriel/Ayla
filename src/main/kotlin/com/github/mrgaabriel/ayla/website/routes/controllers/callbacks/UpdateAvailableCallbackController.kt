@@ -47,34 +47,20 @@ class UpdateAvailableCallbackController {
         thread {
             Thread.sleep(5000)
 
-            val body = HttpRequest.get("https://jenkins.mrgaabriel.space/job/Ayla/lastSuccessfulBuild/api/json")
+            val body = HttpRequest.get("https://teamcity.mrgaabriel.space/httpAuth/app/rest/builds/status:success/artifacts?guest=1")
                 .userAgent(Constants.USER_AGENT)
+                .accept("application/json")
                 .body()
 
             val payload = Static.JSON_PARSER.parse(body).obj
 
-            val items = payload["changeSet"]["items"].array
-
-            var message = "Chegaram novidades para mim! Novidades:"
-
-            if (items.size() == 0) {
-                message += "\nNada! (apenas um rebuild)..."
-            } else {
-                for (item in items) {
-                    message += "\n - `${item["comment"].string}`"
-                }
-            }
-
-            message += "\nVou reiniciar e já volto!.."
-
-            val channel = ayla.shardManager.getTextChannelById("521782715066875907")
-            channel.sendMessage(message.substring(0..2000)).queue()
-
-            val artifacts = payload["artifacts"].array
+            val artifacts = payload["file"].array
             val firstArtifact = artifacts.first()
-            val relativePath = firstArtifact["relativePath"].string
 
-            val bytes = HttpRequest.get("https://jenkins.mrgaabriel.space/job/Ayla/lastSuccessfulBuild/artifact/$relativePath")
+            val content = firstArtifact["content"].obj
+            val relativePath = content["href"].string
+
+            val bytes = HttpRequest.get("https://teamcity.mrgaabriel.space$relativePath?guest=1")
                 .userAgent(Constants.USER_AGENT)
                 .bytes()
 

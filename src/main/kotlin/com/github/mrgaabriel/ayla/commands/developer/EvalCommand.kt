@@ -1,22 +1,33 @@
 package com.github.mrgaabriel.ayla.commands.developer
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
+import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
+import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
+import net.perfectdreams.commands.annotation.Subcommand
 import java.awt.Color
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.OffsetDateTime
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
+import kotlin.contracts.ExperimentalContracts
 
-class EvalCommand : AbstractCommand("eval", category = CommandCategory.DEVELOPER) {
+class EvalCommand : AylaCommand("eval", "evaluate", "evalkt", "evalkotlin", "evaluatekotlin", "evaluatekt") {
 
-    override fun onlyOwner(): Boolean {
-        return true
-    }
+    override val onlyOwner: Boolean
+        get() = true
 
-    override suspend fun run(context: CommandContext) {
+    override val category: CommandCategory
+        get() = CommandCategory.DEVELOPER
+
+    @Subcommand
+    @ExperimentalContracts
+    suspend fun root(context: AylaCommandContext, @InjectParameterType(ParameterType.ARGUMENT_LIST) script: String?) {
+        if (script == null) {
+            context.explain()
+            return
+        }
+
         val scriptEngine = ScriptEngineManager().getEngineByName("kotlin")
 
         scriptEngine.put("scriptContext", scriptEngine.context)
@@ -31,8 +42,6 @@ class EvalCommand : AbstractCommand("eval", category = CommandCategory.DEVELOPER
                 }
             }
         }
-
-        val script = context.args.joinToString(" ")
 
         val code = """
 import com.github.mrgaabriel.ayla.*
@@ -125,5 +134,4 @@ fun exception(e: Exception) {
             context.sendMessage(builder.build(), context.event.author.asMention)
         }
     }
-
 }

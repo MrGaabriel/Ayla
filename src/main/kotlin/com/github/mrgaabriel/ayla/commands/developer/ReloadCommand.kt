@@ -1,58 +1,70 @@
 package com.github.mrgaabriel.ayla.commands.developer
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.managers.AylaCommandManager
 import com.github.mrgaabriel.ayla.utils.Static
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
+import net.perfectdreams.commands.annotation.Subcommand
 import java.io.File
+import kotlin.contracts.ExperimentalContracts
 
-class ReloadCommand : AbstractCommand("reload", category = CommandCategory.DEVELOPER) {
+class ReloadCommand : AylaCommand("reload") {
 
-    override fun onlyOwner(): Boolean = true
+    override val onlyOwner: Boolean
+        get() = true
 
-    override suspend fun run(context: CommandContext) {
-        when (context.args[0]) {
-            "commands" -> {
-                ayla.commandManager = AylaCommandManager()
-                ayla.loadCommands()
+    override val category: CommandCategory
+        get() = CommandCategory.DEVELOPER
 
-                context.sendMessage("${context.event.author.asMention} Comandos recarregados com sucesso!")
-            }
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        commands(context)
+        config(context)
+        website(context)
+        bot(context)
+    }
 
-            "shard" -> {
-                val arg1 = context.args[1]
-                val shardId = arg1.toInt()
+    @Subcommand(["commands"])
+    suspend fun commands(context: AylaCommandContext) {
+        ayla.commandManager = AylaCommandManager()
 
-                context.sendMessage("${context.event.author.asMention} Reiniciando shard $shardId!!!")
-                ayla.shardManager.restart(shardId)
+        context.reply("Comandos recarregados com sucesso! ${ayla.commandManager.getRegisteredCommands().size} comandos registrados")
+    }
 
-                if (shardId != context.event.jda.shardInfo.shardId) {
-                    context.sendMessage("${context.event.author.asMention} Shard $shardId reiniciada com sucesso!!!")
-                }
-            }
+    @Subcommand(["shard"])
+    @ExperimentalContracts
+    suspend fun shard(context: AylaCommandContext, shardId: Int?) {
+        notNull(shardId, "\"shardId\" is null!")
 
-            "bot" -> {
-                context.sendMessage("${context.event.author.asMention} Reiniciando o bot, gotta go fast!!!")
+        context.reply("Reiniciando shard $shardId!!!")
+        ayla.shardManager.restart(shardId)
 
-                ayla.shardManager.restart()
-            }
+        try {
+            context.reply("Shard $shardId reinicializada com sucesso!")
+        } catch (e: Exception) {}
+    }
 
-            "config" -> {
-                val file = File("config.yml")
-                ayla.config = Static.YAML_MAPPER.readValue(file, AylaConfig::class.java)
+    @Subcommand(["bot"])
+    suspend fun bot(context: AylaCommandContext) {
+        context.sendMessage("${context.event.author.asMention} Reiniciando o bot!!!")
 
-                context.sendMessage("${context.event.author.asMention} Configuração recarregada com sucesso")
-            }
+        ayla.shardManager.restart()
+    }
 
-            "website" -> {
-                Thread.getAllStackTraces().keys.filter { it.name == "Website Thread" }.forEach { it.interrupt() }
+    @Subcommand(["config"])
+    suspend fun config(context: AylaCommandContext) {
+        val file = File("config.yml")
+        ayla.config = Static.YAML_MAPPER.readValue(file, AylaConfig::class.java)
 
-                ayla.initWebsite()
-                context.sendMessage("${context.event.author.asMention} Website recarregado!")
-            }
-        }
+        context.reply("Configuração recarregada com sucesso!!!")
+    }
+
+    @Subcommand(["website"])
+    suspend fun website(context: AylaCommandContext) {
+        ayla.website.stop()
+        ayla.initWebsite()
+
+        context.reply("Website recarregado com sucesso!!!")
     }
 }

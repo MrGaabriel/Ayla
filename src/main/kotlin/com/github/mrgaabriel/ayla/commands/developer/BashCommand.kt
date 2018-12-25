@@ -1,21 +1,35 @@
 package com.github.mrgaabriel.ayla.commands.developer
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
+import com.github.mrgaabriel.ayla.commands.AylaCommand
+import com.github.mrgaabriel.ayla.commands.AylaCommandContext
 import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.notNull
+import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
+import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
+import net.perfectdreams.commands.annotation.Subcommand
+import kotlin.contracts.ExperimentalContracts
 
-class BashCommand : AbstractCommand("bash", category = CommandCategory.DEVELOPER) {
+class BashCommand : AylaCommand("bash") {
 
-    override suspend fun run(context: CommandContext) {
-        // TODO: Temporário
-        if (context.event.author.id != "163401801121529856")
-            return
+    override val category: CommandCategory
+        get() = CommandCategory.DEVELOPER
+
+    override val onlyOwner: Boolean
+        get() = true
+
+    @Subcommand
+    @ExperimentalContracts
+    suspend fun bash(context: AylaCommandContext, @InjectParameterType(ParameterType.ARGUMENT_LIST) command: String?) {
+        notNull(command, "Me dê um comando para ser executado!")
+
+        val message = context.reply("Executando...")
 
         val runtime = Runtime.getRuntime()
+        val process = runtime.exec(command).apply { waitFor() }
 
-        val process = runtime.exec(context.args.joinToString(" "))
         process.inputStream.use {
-            context.reply("````${it.readBytes()}```")
+            message.editMessage("```\u200B${it.reader().readText().replace("`", "")}```").queue()
         }
     }
+
 }

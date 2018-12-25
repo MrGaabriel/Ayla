@@ -151,12 +151,6 @@ class Ayla(var config: AylaConfig) {
         // ==[ UTILS ]==
         commandMap.add(PingCommand())
 
-        // ==[ DEVELOPER ]==
-        commandMap.add(ReloadCommand())
-        commandMap.add(EvalCommand())
-        commandMap.add(BlacklistCommand())
-        commandMap.add(BashCommand())
-
         // ==[ IMAGES ]==
         commandMap.add(IsThisCommand())
 

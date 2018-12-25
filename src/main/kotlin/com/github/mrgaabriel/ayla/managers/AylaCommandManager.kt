@@ -18,6 +18,7 @@ import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.utils.t
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.exceptions.ErrorResponseException
 import net.perfectdreams.commands.HandlerValueWrapper
 import net.perfectdreams.commands.dsl.BaseDSLCommand
 import net.perfectdreams.commands.manager.CommandContinuationType
@@ -151,6 +152,16 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         val context = AylaCommandContext(event, command, args)
 
         val start = System.currentTimeMillis()
+
+        if (profile.blacklisted) {
+            try {
+                val channel = event.author.openPrivateChannel().await()
+
+                channel.sendMessage("${event.author.asMention} Você foi bloqueado de usar os comandos da Ayla **permanentemente**!\n\nMotivo: `${profile.blacklistReason}`\nSe achou este banimento injusto (duvido que foi injusto, 2bj) contate o `MrGaabriel#4500` via DM").queue()
+            } catch (e: ErrorResponseException) { }
+
+            return true
+        }
 
         if (command.onlyOwner && context.event.author.id !in ayla.config.ownerIds) {
             context.reply("Você não tem permissão para fazer isto!")

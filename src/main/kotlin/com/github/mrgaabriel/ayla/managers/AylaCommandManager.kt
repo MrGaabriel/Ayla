@@ -16,6 +16,7 @@ import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import com.github.mrgaabriel.ayla.utils.logger
 import com.github.mrgaabriel.ayla.utils.t
+import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.exceptions.ErrorResponseException
@@ -172,8 +173,41 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
             context.reply("Você não tem permissão para fazer isto!")
             return true
         }
+        
+        val missingMemberPermissions = command.discordPermissions.filter { !event.member.hasPermission(event.textChannel, it) }
 
-        // TODO: Verificar permissões
+        if (missingMemberPermissions.isNotEmpty()) {
+            context.reply("Você não tem permissão para fazer isto!")
+            return true
+        }
+
+        val allBotPermissions = mutableListOf(
+            Permission.MESSAGE_WRITE,
+            Permission.MESSAGE_EXT_EMOJI,
+            Permission.MESSAGE_EMBED_LINKS,
+            Permission.MESSAGE_ATTACH_FILES,
+            Permission.MESSAGE_ADD_REACTION,
+            Permission.MESSAGE_HISTORY
+        )
+
+        allBotPermissions.addAll(command.botPermissions)
+
+        val missingBotPermissions = allBotPermissions.filter { !event.guild.selfMember.hasPermission(event.textChannel, it) }
+
+        if (missingBotPermissions.isNotEmpty()) {
+            if (Permission.MESSAGE_WRITE in missingBotPermissions) {
+                try {
+                    val channel = event.author.openPrivateChannel().await()
+
+                    channel.sendMessage("${event.author.asMention} ...eu não tenho permissão para falar no canal de texto ${event.textChannel.asMention}! Peça a algum administrador ou moderador para me dar permissão! Desculpe pela incoveniência. :sob:").queue()
+                } catch (e: ErrorResponseException) { }
+
+                return true
+            }
+
+            context.reply("Eu queria muito executar este comando, mas eu não tenho as permissões necessárias! Peça a algum administrador ou moderador para me dar as permissões corretas (`${missingBotPermissions.joinToString(", ", transform = { it.name })}`)")
+            return true
+        }
 
         logger.info("${t.yellow}[COMMAND EXECUTED]${t.reset} (${context.event.guild.name} -> #${context.event.channel.name}) ${context.event.author.tag}: ${context.event.message.contentRaw}")
         logger.debug("${t.blue}[COMMAND INFO]${t.reset} command.labels: ${command.labels}, args: $args, isSubCommand: $isSubcommand")

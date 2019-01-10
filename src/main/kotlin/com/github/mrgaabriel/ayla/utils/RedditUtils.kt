@@ -47,6 +47,7 @@ object RedditUtils {
                     }
 
                     val body = HttpRequest.get("https://reddit.com/r/${sub.name}/new/.json")
+                        .connectTimeout(5000)
                         .userAgent(Constants.USER_AGENT)
                         .body()
 

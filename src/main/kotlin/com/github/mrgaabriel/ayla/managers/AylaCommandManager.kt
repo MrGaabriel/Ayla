@@ -2,6 +2,9 @@ package com.github.mrgaabriel.ayla.managers
 
 import com.github.mrgaabriel.ayla.commands.AylaCommand
 import com.github.mrgaabriel.ayla.commands.AylaCommandContext
+import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
+import com.github.mrgaabriel.ayla.commands.config.RedditCommand
+import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.*
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
@@ -104,6 +107,11 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         registerCommand(BlacklistCommand())
         registerCommand(EvalCommand())
         registerCommand(ReloadCommand())
+
+        // ==[ CONFIG ]==
+        registerCommand(PrefixCommand())
+        registerCommand(RedditCommand())
+        registerCommand(WelcomeCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {

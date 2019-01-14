@@ -1,9 +1,7 @@
 package com.github.mrgaabriel.ayla.commands.config
 
 import com.github.kevinsawicki.http.HttpRequest
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.utils.AylaUtils
 import com.github.mrgaabriel.ayla.utils.Constants
 import com.github.mrgaabriel.ayla.utils.RedditUtils
@@ -13,31 +11,36 @@ import com.github.salomonbrys.kotson.bool
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.obj
 import net.dv8tion.jda.core.Permission
+import net.dv8tion.jda.core.entities.TextChannel
+import net.perfectdreams.commands.annotation.Subcommand
 import org.jetbrains.exposed.sql.transactions.transaction
+import kotlin.contracts.ExperimentalContracts
 
-class RedditCommand : AbstractCommand("reddit", category = CommandCategory.CONFIG) {
+class RedditCommand : AylaCommand("reddit") {
 
-    override fun getDescription(): String {
-        return "Gerencia o módulo de sincronização de posts do Reddit"
+    override val category: CommandCategory
+        get() = CommandCategory.CONFIG
+
+    override val description: String
+        get() = "Gerencia o módulo de sincronização de posts do Reddit"
+
+    override val discordPermissions: List<Permission>
+        get() = listOf(Permission.MANAGE_SERVER)
+
+    override val usage: String
+        get() = "(add subreddit channel|remove subreddit channel)"
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        context.explain()
     }
 
-    override fun getMemberPermissions(): List<Permission> {
-        return listOf(Permission.MANAGE_SERVER)
-    }
+    @Subcommand(["add"])
+    @ExperimentalContracts
+    suspend fun add(context: AylaCommandContext, subReddit: String, channel: TextChannel?) {
+        notNull(channel, "Canal não encontrado!")
 
-    override fun getUsage(): String {
-        return "<subreddit> <canal|off>"
-    }
-
-    override suspend fun run(context: CommandContext) {
-        if (context.args.size != 2) {
-            context.explain()
-            return
-        }
-
-        val arg0 = context.args[0]
-
-        val body = HttpRequest.get("https://www.reddit.com/subreddits/search.json?q=$arg0")
+        val body = HttpRequest.get("https://www.reddit.com/subreddits/search.json?q=$subReddit")
             .userAgent(Constants.USER_AGENT)
             .body()
 
@@ -47,11 +50,11 @@ class RedditCommand : AbstractCommand("reddit", category = CommandCategory.CONFI
         val dist = data["dist"].int
 
         if (dist == 0) {
-            context.sendMessage("${context.event.author.asMention} Este sub-reddit não existe!")
+            context.reply("Este sub-reddit não existe!")
             return
         }
 
-        val about = HttpRequest.get("https://reddit.com/r/$arg0/about.json")
+        val about = HttpRequest.get("https://reddit.com/r/$subReddit/about.json")
             .userAgent(Constants.USER_AGENT)
             .body()
 
@@ -60,38 +63,63 @@ class RedditCommand : AbstractCommand("reddit", category = CommandCategory.CONFI
 
         val nsfw = aboutData["over18"].bool
         if (nsfw) {
-            context.sendMessage("${context.event.author.asMention} O sub-reddit `/r/$arg0` está marcado como NSFW... e eu não quero ficar postando coisas desse tipo aqui. :rolling_eyes:")
+            context.reply("O sub-reddit `/r/$subReddit` está marcado como NSFW... e eu não quero ficar postando coisas desse tipo aqui. :rolling_eyes:")
             return
         }
 
-        val sub = RedditUtils.getOrCreateSubReddit(arg0.toLowerCase())
+        val sub = RedditUtils.getOrCreateSubReddit(subReddit)
 
-        val arg1 = context.args[1]
-        if (arg1 == "off") {
-            val list = sub.channels.toMutableList()
-
-            list.removeAll(context.event.guild.textChannels.map { it.id })
-            transaction(ayla.database) {
-                sub.channels = list.toTypedArray()
-            }
-
-            context.sendMessage("${context.event.author.asMention} Agora eu não enviarei mais notificações do sub-reddit `/r/${sub.name}`")
-            return
-        }
-
-        val channel = AylaUtils.getTextChannel(arg1, context.event.guild)
-        if (channel == null) {
-            context.sendMessage("${context.event.author.asMention} Canal não encontrado!")
-            return
-        }
-
-        val list = sub.channels.toMutableList()
-        list.add(channel.id)
+        val channels = sub.channels.toMutableList()
+        channels.add(channel.id)
 
         transaction(ayla.database) {
-            sub.channels = list.toTypedArray()
+            sub.channels = channels.toTypedArray()
         }
 
-        context.sendMessage("${context.event.author.asMention} Agora eu notificarei as novidades do sub-reddit `/r/${sub.name}` no canal ${channel.asMention}")
+        context.reply("Agora eu mandarei notificações de posts do `/r/${sub.name}` no canal ${channel.asMention}!")
+    }
+
+    @Subcommand(["remove"])
+    @ExperimentalContracts
+    suspend fun remove(context: AylaCommandContext, subReddit: String, channel: TextChannel?) {
+        notNull(channel, "Canal não encontrado!")
+
+        val body = HttpRequest.get("https://www.reddit.com/subreddits/search.json?q=$subReddit")
+            .userAgent(Constants.USER_AGENT)
+            .body()
+
+        val payload = Static.JSON_PARSER.parse(body).obj
+        val data = payload["data"].obj
+
+        val dist = data["dist"].int
+
+        if (dist == 0) {
+            context.reply("Este sub-reddit não existe!")
+            return
+        }
+
+        val about = HttpRequest.get("https://reddit.com/r/$subReddit/about.json")
+            .userAgent(Constants.USER_AGENT)
+            .body()
+
+        val aboutPayload = Static.JSON_PARSER.parse(about).obj
+        val aboutData = aboutPayload["data"].obj
+
+        val nsfw = aboutData["over18"].bool
+        if (nsfw) {
+            context.reply("O sub-reddit `/r/$subReddit` está marcado como NSFW... e eu não quero ficar postando coisas desse tipo aqui. :rolling_eyes:")
+            return
+        }
+
+        val sub = RedditUtils.getOrCreateSubReddit(subReddit)
+
+        val channels = sub.channels.toMutableList()
+        channels.remove(channel.id)
+
+        transaction(ayla.database) {
+            sub.channels = channels.toTypedArray()
+        }
+
+        context.reply("Agora eu pararei de mandar notificações de posts do `/r/${sub.name}` no canal ${channel.asMention}!")
     }
 }

@@ -143,11 +143,6 @@ class Ayla(var config: AylaConfig) {
     fun loadCommands() {
         commandMap.clear()
 
-        // ==[ CONFIG ]==
-        commandMap.add(PrefixCommand())
-        commandMap.add(WelcomeCommand())
-        commandMap.add(RedditCommand())
-
         // ==[ UTILS ]==
         commandMap.add(PingCommand())
 

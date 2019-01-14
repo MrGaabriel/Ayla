@@ -11,6 +11,7 @@ open class AylaCommand(vararg allLabels: String): Command() {
     open val category = CommandCategory.NONE
 
     open val description = "Insira descrição do comando aqui"
+    open val usage = ""
 
     open val onlyOwner = false
 

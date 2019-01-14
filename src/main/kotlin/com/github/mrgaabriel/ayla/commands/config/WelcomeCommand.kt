@@ -1,9 +1,6 @@
 package com.github.mrgaabriel.ayla.commands.config
 
-import com.github.mrgaabriel.ayla.commands.AylaCommand
-import com.github.mrgaabriel.ayla.commands.AylaCommandContext
-import com.github.mrgaabriel.ayla.commands.CommandContext
-import com.github.mrgaabriel.ayla.commands.notNull
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.tables.GuildConfigs
 import com.github.mrgaabriel.ayla.utils.AylaUtils
@@ -24,6 +21,9 @@ class WelcomeCommand : AylaCommand("welcome") {
 
     override val discordPermissions: List<Permission>
         get() = listOf(Permission.MANAGE_SERVER)
+
+    override val category: CommandCategory
+        get() = CommandCategory.CONFIG
 
     @Subcommand
     suspend fun root(context: AylaCommandContext) {

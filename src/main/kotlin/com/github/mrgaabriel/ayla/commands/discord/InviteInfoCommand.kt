@@ -1,40 +1,41 @@
 package com.github.mrgaabriel.ayla.commands.discord
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.utils.extensions.await
 import com.github.mrgaabriel.ayla.utils.humanize
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Invite
 import net.dv8tion.jda.core.exceptions.ErrorResponseException
+import net.perfectdreams.commands.annotation.Subcommand
 import java.awt.Color
 
-class InviteInfoCommand : AbstractCommand("inviteinfo", category = CommandCategory.DISCORD) {
+class InviteInfoCommand : AylaCommand("inviteinfo") {
 
-    override fun getDescription(): String {
-        return "Pega as informações de um invite do Discord"
+    override val description: String
+        get() = "Pega as informações de um invite do Discord"
+
+    override val usage: String
+        get() = "invite"
+
+    override val category: CommandCategory
+        get() = CommandCategory.DISCORD
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        context.explain()
     }
 
-    override fun getUsage(): String {
-        return "código do invite"
-    }
-
-    override suspend fun run(context: CommandContext) {
-        if (context.args.isEmpty()) {
-            context.explain()
-            return
-        }
-
-        val code = context.args[0].replace(
+    @Subcommand
+    suspend fun inviteinfo(context: AylaCommandContext, invite: String) {
+        val code = invite.replace(
             Regex("(http(s)?://)?(discord.gg/|discordapp.com/invite/|discord.com/invite/)"),
             ""
         )
 
         try {
-            val invite = Invite.resolve(context.event.jda, code, true).await()
+            val inviteObj = Invite.resolve(context.event.jda, code, true).await()
 
-            val guild = invite.guild
+            val guild = inviteObj.guild
 
             val builder = EmbedBuilder()
 
@@ -52,16 +53,16 @@ class InviteInfoCommand : AbstractCommand("inviteinfo", category = CommandCatego
             if (guild.features.isNotEmpty())
                 builder.addField("✨ Features exclusivas", guild.features.joinToString(", "), true)
 
-            builder.addField("\uD83D\uDEAA Canal de boas-vindas", "#${invite.channel.name} - `${invite.channel.id}`", true)
+            builder.addField("\uD83D\uDEAA Canal de boas-vindas", "#${inviteObj.channel.name} - `${inviteObj.channel.id}`", true)
 
             builder.setColor(Color(114, 137, 218))
 
-            context.sendMessage(builder.build(), context.event.author.asMention)
+            context.reply(builder.build())
         } catch (e: ErrorResponseException) {
             val errCode = e.errorCode
 
             if (errCode == 10006) {
-                context.sendMessage("${context.event.author.asMention} Convite `$code` é inválido!")
+                context.reply("Convite `$code` é inválido!")
             }
         }
     }

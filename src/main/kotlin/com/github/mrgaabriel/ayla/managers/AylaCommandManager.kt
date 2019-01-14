@@ -6,6 +6,7 @@ import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
 import com.github.mrgaabriel.ayla.commands.config.RedditCommand
 import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.*
+import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
@@ -112,6 +113,9 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
         registerCommand(PrefixCommand())
         registerCommand(RedditCommand())
         registerCommand(WelcomeCommand())
+
+        // ==[ DISCORD ]==
+        registerCommand(InviteInfoCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {

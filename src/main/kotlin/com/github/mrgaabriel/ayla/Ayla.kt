@@ -159,10 +159,5 @@ class Ayla(var config: AylaConfig) {
         commandMap.add(PlayNowCommand())
         commandMap.add(VolumeCommand())
         commandMap.add(PlayingCommand())
-
-        // ==[ DISCORD ]==
-        commandMap.add(InviteInfoCommand())
-
-
     }
 }

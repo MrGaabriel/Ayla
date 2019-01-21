@@ -1,37 +1,40 @@
 package com.github.mrgaabriel.ayla.commands.images
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.utils.AylaUtils
+import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
+import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import com.github.mrgaabriel.ayla.utils.makeRoundedCorner
 import com.github.mrgaabriel.ayla.utils.resize
+import net.dv8tion.jda.core.entities.User
+import net.perfectdreams.commands.annotation.Subcommand
 import java.awt.Color
 import java.awt.Font
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.contracts.ExperimentalContracts
 
-class IsThisCommand : AbstractCommand("isthis", aliases = listOf("isthat"), category = CommandCategory.IMAGES) {
+class IsThisCommand : AylaCommand("isthis", "isthat") {
 
-    override fun getDescription(): String {
-        return "Is this a butterfly?"
+    override val description: String
+        get() = "Cria uma mensagem do meme \"is this a butterfly?\""
+
+    override val category: CommandCategory
+        get() = CommandCategory.IMAGES
+
+    override val usage: String
+        get() = "usuário frase"
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        context.explain()
     }
 
-    override suspend fun run(context: CommandContext) {
-        if (context.args.isEmpty()) {
-            context.explain()
-            return
-        }
-
-        val user = AylaUtils.getUser(context.args[0], context.event.guild!!)
-        if (user == null) {
-            context.sendMessage("${context.event.author.asMention} Usuário não encontrado!")
-            return
-        }
-
-        context.args.removeAt(0)
-        val text = context.args.joinToString(" ")
+    @Subcommand
+    @ExperimentalContracts
+    suspend fun isthis(context: AylaCommandContext, user: User?, @InjectParameterType(ParameterType.ARGUMENT_LIST) text: String) {
+        notNull(user, "Usuário não encontrado!")
 
         val file = File("assets", "isthis.png")
         val image = ImageIO.read(file)
@@ -53,7 +56,7 @@ class IsThisCommand : AbstractCommand("isthis", aliases = listOf("isthat"), cate
         graphics.color = Color.WHITE
 
         val vowels = listOf('a', 'e', 'i', 'o', 'u')
-        val article = "a${if (vowels.any { text[0] == it }) "n" else ""}"
+        val article = "a${if (vowels.any { text[0].equals(it, true) }) "n" else ""}"
 
         graphics.drawString("Is this $article $text?", 0, 150)
 

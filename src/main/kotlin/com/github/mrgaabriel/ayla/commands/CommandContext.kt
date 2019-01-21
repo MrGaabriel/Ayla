@@ -8,8 +8,7 @@ import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.MessageBuilder
-import net.dv8tion.jda.core.entities.Message
-import net.dv8tion.jda.core.entities.MessageEmbed
+import net.dv8tion.jda.core.entities.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -20,11 +19,38 @@ import javax.imageio.ImageIO
 
 class CommandContext(val event: AylaMessageEvent, val command: AbstractCommand, val args: MutableList<String>) {
 
+    val message: Message
+        get() = event.message
+
+    val author: User
+        get() = event.author
+
+    val channel: MessageChannel
+        get() = event.channel
+
+    val textChannel: TextChannel
+        get() = event.textChannel
+
+    val member: Member
+        get() = event.member
+
+    val guild: Guild
+        get() = event.guild
+
     suspend fun sendMessage(content: Any) = event.channel.sendMessage(content.toString()).await()
     suspend fun sendMessage(embed: MessageEmbed, content: Any? = null): Message {
         val message = MessageBuilder()
             .setEmbed(embed)
             .setContent(content?.toString() ?: "")
+            .build()
+
+        return event.channel.sendMessage(message).await()
+    }
+
+    suspend fun reply(embed: MessageEmbed, content: Any? = null): Message {
+        val message = MessageBuilder()
+            .setEmbed(embed)
+            .setContent("${event.author.asMention} ${content?.toString() ?: ""}")
             .build()
 
         return event.channel.sendMessage(message).await()

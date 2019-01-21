@@ -1,29 +1,32 @@
 package com.github.mrgaabriel.ayla.commands.music
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
+import com.github.mrgaabriel.ayla.utils.annotation.InjectParameterType
+import com.github.mrgaabriel.ayla.utils.annotation.ParameterType
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
+import net.perfectdreams.commands.annotation.Subcommand
 
-class PlayCommand : AbstractCommand("play", listOf("tocar"), category = CommandCategory.MUSIC) {
+class PlayCommand : AylaCommand("play", "tocar") {
 
-    override fun getDescription(): String {
-        return "Reproduz uma música em um canal de voz"
+    override val description: String
+        get() = "Reproduz uma música em um canal de voz"
+
+    override val category: CommandCategory
+        get() = CommandCategory.MUSIC
+
+    override val usage: String
+        get() = "música"
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        context.explain()
     }
 
-    override fun getUsage(): String {
-        return "música"
-    }
-
-    override suspend fun run(context: CommandContext) {
-        if (context.args.isEmpty()) {
-            context.explain()
-            return
-        }
-
+    @Subcommand
+    suspend fun play(context: AylaCommandContext, @InjectParameterType(ParameterType.ARGUMENT_LIST) music: String) {
         val channel = context.event.member.voiceState.channel
         if (channel == null) {
-            context.sendMessage("${context.event.author.asMention} Você precisa estar em um canal de voz!")
+            context.reply("Você precisa estar em um canal de voz!")
             return
         }
 

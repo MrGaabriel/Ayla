@@ -1,50 +1,44 @@
 package com.github.mrgaabriel.ayla.commands.music
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import net.dv8tion.jda.core.Permission
+import net.perfectdreams.commands.annotation.Subcommand
 
-class VolumeCommand : AbstractCommand("volume", category = CommandCategory.MUSIC) {
+class VolumeCommand : AylaCommand("volume") {
 
-    override fun getDescription(): String {
-        return "Muda o volume da música que está sendo reproduzida"
+    override val description: String
+        get() = "Muda o volume da música que está sendo reproduzida atualmente"
+
+    override val discordPermissions: List<Permission>
+        get() = listOf(Permission.VOICE_MUTE_OTHERS)
+
+    override val category: CommandCategory
+        get() = CommandCategory.MUSIC
+
+    override val usage: String
+        get() = "volume"
+
+    @Subcommand
+    suspend fun root(context: AylaCommandContext) {
+        context.explain()
     }
 
-    override fun getMemberPermissions(): List<Permission> {
-        return listOf(Permission.VOICE_MOVE_OTHERS)
-    }
-
-    override fun getUsage(): String {
-        return "volume"
-    }
-
-    override suspend fun run(context: CommandContext) {
-        if (context.args.isEmpty()) {
-            context.explain()
-            return
-        }
-
+    @Subcommand
+    suspend fun volume(context: AylaCommandContext, volume: Int) {
         val playing = ayla.audioManager.getAudioPlayer(context.event.guild).playingTrack
 
         if (playing == null) {
-            context.sendMessage("${context.event.author.asMention} Nenhuma música está sendo reproduzida neste momento!")
-            return
-        }
-
-        val volume = context.args[0].toIntOrNull()
-        if (volume == null) {
-            context.explain()
+            context.reply("Nenhuma música está sendo reproduzida neste momento!")
             return
         }
 
         if (volume > 150) {
-            context.sendMessage("${context.event.author.asMention} Você quer ficar surdo? Eu só posso colocar o volume até `150`!!")
+            context.reply("Você quer ficar surdo? Eu só posso colocar o volume até `150`!")
             return
         }
 
         ayla.audioManager.getAudioPlayer(context.event.guild).volume = volume
-        context.sendMessage("${context.event.author.asMention} Volume da música mudado para `$volume`")
+        context.reply("Volume da música mudado para `$volume`")
     }
 }

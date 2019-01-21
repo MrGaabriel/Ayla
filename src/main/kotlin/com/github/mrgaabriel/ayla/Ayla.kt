@@ -95,7 +95,6 @@ class Ayla(var config: AylaConfig) {
         shardManager.addEventListener(audioManager.lavalink)
 
         initPostgre()
-        loadCommands()
         initWebsite()
 
         GiveawayUtils.spawnTasks()
@@ -125,16 +124,5 @@ class Ayla(var config: AylaConfig) {
                 website
             })
         }
-    }
-
-    fun loadCommands() {
-        commandMap.clear()
-
-        // ==[ MUSIC ]==
-        commandMap.add(PlayCommand())
-        commandMap.add(SkipCommand())
-        commandMap.add(PlayNowCommand())
-        commandMap.add(VolumeCommand())
-        commandMap.add(PlayingCommand())
     }
 }

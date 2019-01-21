@@ -1,6 +1,6 @@
 package com.github.mrgaabriel.ayla.audio
 
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.AylaCommandContext
 import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.youtube.TemmieYouTube
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
@@ -41,7 +41,7 @@ class AudioManager {
         return getMusicPlayer(guild).player
     }
 
-    fun loadAndPlay(context: CommandContext, identifier: String, channel: VoiceChannel, override: Boolean = false) {
+    fun loadAndPlay(context: AylaCommandContext, identifier: String, channel: VoiceChannel, override: Boolean = false) {
         val musicPlayer = getMusicPlayer(context.event.guild)
         val textChannel = context.event.channel
 

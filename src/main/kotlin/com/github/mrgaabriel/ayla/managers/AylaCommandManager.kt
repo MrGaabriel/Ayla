@@ -9,6 +9,7 @@ import com.github.mrgaabriel.ayla.commands.developer.*
 import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
+import com.github.mrgaabriel.ayla.commands.music.*
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
@@ -102,7 +103,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
     }
 
     fun registerCommands() {
-        // ===[ UTILS ]===
+        // ==[ UTILS ]==
         registerCommand(HelpCommand())
         registerCommand(PingCommand())
 
@@ -126,6 +127,13 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
 
         // ==[ MISC ]==
         registerCommand(VideoChatCommand())
+
+        // ==[ MUSIC ]==
+        registerCommand(PlayCommand())
+        registerCommand(SkipCommand())
+        registerCommand(PlayNowCommand())
+        registerCommand(VolumeCommand())
+        registerCommand(PlayingCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {

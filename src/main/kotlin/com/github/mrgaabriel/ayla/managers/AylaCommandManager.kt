@@ -7,6 +7,7 @@ import com.github.mrgaabriel.ayla.commands.config.RedditCommand
 import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.*
 import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
+import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
@@ -116,6 +117,9 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
 
         // ==[ DISCORD ]==
         registerCommand(InviteInfoCommand())
+
+        // ==[ IMAGES ]==
+        registerCommand(IsThisCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {

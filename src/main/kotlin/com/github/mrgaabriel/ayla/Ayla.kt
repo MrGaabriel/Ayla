@@ -146,9 +146,6 @@ class Ayla(var config: AylaConfig) {
         // ==[ UTILS ]==
         commandMap.add(PingCommand())
 
-        // ==[ IMAGES ]==
-        commandMap.add(IsThisCommand())
-
         // ==[ MISC ]==
         commandMap.add(GiveawayCommand())
         commandMap.add(VideoChatCommand())

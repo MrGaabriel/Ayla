@@ -2,20 +2,8 @@ package com.github.mrgaabriel.ayla
 
 import com.github.mrgaabriel.ayla.audio.AudioManager
 import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.config.PrefixCommand
-import com.github.mrgaabriel.ayla.commands.config.RedditCommand
-import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
-import com.github.mrgaabriel.ayla.commands.developer.BashCommand
-import com.github.mrgaabriel.ayla.commands.developer.BlacklistCommand
-import com.github.mrgaabriel.ayla.commands.developer.EvalCommand
-import com.github.mrgaabriel.ayla.commands.developer.ReloadCommand
-import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
-import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
-import com.github.mrgaabriel.ayla.commands.misc.GiveawayCommand
 import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
 import com.github.mrgaabriel.ayla.commands.music.*
-import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
-import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.config.AylaConfig
 import com.github.mrgaabriel.ayla.debug.DebugLog
 import com.github.mrgaabriel.ayla.listeners.DiscordListeners
@@ -37,7 +25,6 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.OnlineStatus
-import net.perfectdreams.commands.manager.CommandManager
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -142,10 +129,6 @@ class Ayla(var config: AylaConfig) {
 
     fun loadCommands() {
         commandMap.clear()
-
-        // ==[ MISC ]==
-        commandMap.add(GiveawayCommand())
-        commandMap.add(VideoChatCommand())
 
         // ==[ MUSIC ]==
         commandMap.add(PlayCommand())

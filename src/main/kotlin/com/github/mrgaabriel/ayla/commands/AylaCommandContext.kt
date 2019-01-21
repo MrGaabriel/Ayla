@@ -8,8 +8,7 @@ import com.github.mrgaabriel.ayla.utils.extensions.ayla
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.MessageBuilder
-import net.dv8tion.jda.core.entities.Message
-import net.dv8tion.jda.core.entities.MessageEmbed
+import net.dv8tion.jda.core.entities.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.transactions.transactionScope
 import java.awt.Color
@@ -21,6 +20,24 @@ import javax.imageio.ImageIO
 
 class AylaCommandContext(val event: AylaMessageEvent, val command: AylaCommand, val args: MutableList<String>) {
 
+    val message: Message
+        get() = event.message
+
+    val author: User
+        get() = event.author
+
+    val channel: MessageChannel
+        get() = event.channel
+
+    val textChannel: TextChannel
+        get() = event.textChannel
+
+    val member: Member
+        get() = event.member
+
+    val guild: Guild
+        get() = event.guild
+
     suspend fun sendMessage(content: Any) = event.channel.sendMessage(content.toString()).await()
     suspend fun sendMessage(embed: MessageEmbed, content: Any? = null): Message {
         val message = MessageBuilder()
@@ -31,10 +48,6 @@ class AylaCommandContext(val event: AylaMessageEvent, val command: AylaCommand, 
         return event.channel.sendMessage(message).await()
     }
 
-    suspend fun reply(content: Any): Message {
-        return sendMessage("${event.author.asMention} $content")
-    }
-
     suspend fun reply(embed: MessageEmbed, content: Any? = null): Message {
         val builder = MessageBuilder()
 
@@ -42,6 +55,10 @@ class AylaCommandContext(val event: AylaMessageEvent, val command: AylaCommand, 
         builder.setContent("${event.author.asMention} ${content ?: ""}")
 
         return sendMessage(builder.build())
+    }
+
+    suspend fun reply(content: Any): Message {
+        return sendMessage("${event.author.asMention} $content")
     }
 
     suspend fun sendFile(image: BufferedImage, name: String, message: String): Message {

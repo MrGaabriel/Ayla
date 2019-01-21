@@ -1,36 +1,38 @@
 package com.github.mrgaabriel.ayla.commands.misc
 
-import com.github.mrgaabriel.ayla.commands.AbstractCommand
-import com.github.mrgaabriel.ayla.commands.CommandCategory
-import com.github.mrgaabriel.ayla.commands.CommandContext
+import com.github.mrgaabriel.ayla.commands.*
 import com.github.mrgaabriel.ayla.utils.extensions.tag
 import net.dv8tion.jda.core.EmbedBuilder
+import net.perfectdreams.commands.annotation.Subcommand
 import java.awt.Color
 import java.time.OffsetDateTime
 
-class VideoChatCommand : AbstractCommand("videochat", category = CommandCategory.MISC) {
+class VideoChatCommand : AylaCommand("videochat") {
 
-    override fun getDescription(): String {
-        return "Experimental"
-    }
+    override val description: String
+        get() = "Dá o link para o chat de vídeo em um canal de voz (experimental)"
 
-    override suspend fun run(context: CommandContext) {
-        val channel = context.event.member.voiceState.channel
+    override val category: CommandCategory
+        get() = CommandCategory.MISC
+
+    @Subcommand
+    suspend fun videochat(context: AylaCommandContext) {
+        val channel = context.member.voiceState.channel
 
         if (channel == null) {
-            context.sendMessage("${context.event.author.asMention} Você precisa estar em um canal de voz!")
+            context.reply("Você precisa estar em um canal de voz!")
             return
         }
 
-        val link = "https://discordapp.com/channels/${context.event.guild.id}/${channel.id}"
+        val link = "https://discordapp.com/channels/${context.guild.id}/${channel.id}"
         val builder = EmbedBuilder()
 
         builder.setDescription("Clique [aqui]($link) para entrar no chat de vídeo do canal `${channel.name}`, lembrando que você precisa estar nele antes.")
         builder.setColor(Color.BLUE)
 
-        builder.setFooter(context.event.author.tag, null)
+        builder.setFooter(context.author.tag, context.author.effectiveAvatarUrl)
         builder.setTimestamp(OffsetDateTime.now())
 
-        context.sendMessage(builder.build())
+        context.reply(builder.build())
     }
 }

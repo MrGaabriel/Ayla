@@ -8,6 +8,7 @@ import com.github.mrgaabriel.ayla.commands.config.WelcomeCommand
 import com.github.mrgaabriel.ayla.commands.developer.*
 import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
+import com.github.mrgaabriel.ayla.commands.misc.VideoChatCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
 import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
@@ -122,6 +123,9 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
 
         // ==[ IMAGES ]==
         registerCommand(IsThisCommand())
+
+        // ==[ MISC ]==
+        registerCommand(VideoChatCommand())
     }
 
     suspend fun dispatch(event: AylaMessageEvent, config: GuildConfig, profile: UserProfile): Boolean {

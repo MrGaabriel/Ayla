@@ -9,6 +9,7 @@ import com.github.mrgaabriel.ayla.commands.developer.*
 import com.github.mrgaabriel.ayla.commands.discord.InviteInfoCommand
 import com.github.mrgaabriel.ayla.commands.images.IsThisCommand
 import com.github.mrgaabriel.ayla.commands.utils.HelpCommand
+import com.github.mrgaabriel.ayla.commands.utils.PingCommand
 import com.github.mrgaabriel.ayla.dao.GuildConfig
 import com.github.mrgaabriel.ayla.dao.UserProfile
 import com.github.mrgaabriel.ayla.events.AylaMessageEvent
@@ -102,6 +103,7 @@ class AylaCommandManager : CommandManager<AylaCommandContext, AylaCommand, BaseD
     fun registerCommands() {
         // ===[ UTILS ]===
         registerCommand(HelpCommand())
+        registerCommand(PingCommand())
 
         // ==[ DEVELOPER ]==
         registerCommand(MagicCommand())

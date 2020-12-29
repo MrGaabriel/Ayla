@@ -180,7 +180,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>kotlin-css</artifactId>
-            <version>1.0.0-pre.65-kotlin-1.3.11</version>
+            <version>1.0.0-pre.134-kotlin-1.4.21</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
